@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/title_buy_card"
+        style="@style/ClickableCardStyle"
+        app:layout_heightPercent="40%"
+        app:layout_marginPercent="5%"
+        app:layout_widthPercent="40%">
+
+        <TextView
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/activity_vertical_margin"
+            android:drawableBottom="@drawable/ic_buy_48dp"
+            android:gravity="center"
+            android:padding="@dimen/activity_vertical_margin"
+            android:text="@string/buy" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/title_sell_card"
+        style="@style/ClickableCardStyle"
+        android:layout_toEndOf="@id/title_buy_card"
+        android:layout_toRightOf="@id/title_buy_card"
+        app:layout_heightPercent="40%"
+        app:layout_marginPercent="5%"
+        app:layout_widthPercent="40%">
+
+        <TextView
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/activity_vertical_margin"
+            android:drawableBottom="@drawable/ic_price_tag_usd_48dp"
+            android:gravity="center"
+            android:padding="@dimen/activity_vertical_margin"
+            android:text="@string/sell" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/title_trade_card"
+        style="@style/ClickableCardStyle"
+        android:layout_below="@id/title_buy_card"
+        app:layout_heightPercent="40%"
+        app:layout_marginPercent="5%"
+        app:layout_widthPercent="40%">
+
+        <TextView
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/activity_vertical_margin"
+            android:drawableBottom="@drawable/ic_handshake_48dp"
+            android:gravity="center"
+            android:padding="@dimen/activity_vertical_margin"
+            android:text="@string/trade" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/title_account_card"
+        style="@style/ClickableCardStyle"
+        android:layout_below="@id/title_buy_card"
+        android:layout_toEndOf="@id/title_trade_card"
+        android:layout_toRightOf="@id/title_trade_card"
+        app:layout_heightPercent="40%"
+        app:layout_marginPercent="5%"
+        app:layout_widthPercent="40%">
+
+        <TextView
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/activity_vertical_margin"
+            android:drawableBottom="@drawable/ic_contacts_48dp"
+            android:gravity="center"
+            android:padding="@dimen/activity_vertical_margin"
+            android:text="@string/my_account" />
+
+    </android.support.v7.widget.CardView>
+
+
+</android.support.percent.PercentRelativeLayout>

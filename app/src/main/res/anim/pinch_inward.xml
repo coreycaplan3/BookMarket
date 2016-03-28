@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/anticipate">
+
+    <!-- Used 50%p to which means starting at 50% of the parent -->
+
+    <scale
+        android:duration="@integer/dialog_animation_time"
+        android:fromXScale="100%"
+        android:fromYScale="100%"
+        android:pivotX="50%p"
+        android:pivotY="50%p"
+        android:toXScale="0%"
+        android:toYScale="0%" />
+
+</set>

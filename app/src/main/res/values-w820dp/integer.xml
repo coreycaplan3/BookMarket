@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="dialog_animation_time">300</integer>
+    <integer name="fragment_slide_animation_time">250</integer>
+    <integer name="toolbar_menu_slide_animation_time">500</integer>
+    <integer name="tab_layout_translate_time">250</integer>
+    <integer name="tab_layout_alpha_time">250</integer>
+    <integer name="written_location_max_length">50</integer>
+    <integer name="title_max_length">50</integer>
+    <integer name="description_max_length">200</integer>
+    <integer name="tag_max_length">15</integer>
+
+</resources>
