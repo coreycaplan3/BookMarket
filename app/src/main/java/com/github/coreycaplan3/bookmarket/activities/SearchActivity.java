@@ -1,12 +1,13 @@
 package com.github.coreycaplan3.bookmarket.activities;
 
-import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
+import android.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,7 +30,9 @@ import java.util.ArrayList;
  * Purpose of Class:
  */
 public class SearchActivity extends AppCompatActivity implements OnSearchCompleteListener,
-        OnItemClickListener {
+        OnItemClickListener, SearchView.OnQueryTextListener {
+
+    private static final String TAG = SearchActivity.class.getSimpleName();
 
     private ArrayList<TextBook> mBookData = new ArrayList<>();
     private boolean mIsBuyingBook = false;
@@ -46,6 +49,13 @@ public class SearchActivity extends AppCompatActivity implements OnSearchComplet
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.search_bar));
+        SearchView searchView = (SearchView) findViewById(R.id.search_view);
+        if (searchView != null) {
+            searchView.setOnQueryTextListener(this);
+            searchView.setIconifiedByDefault(false);
+        }
 
         mListView = (ListView) findViewById(R.id.activity_search_list);
         Intent intent = getIntent();
@@ -99,6 +109,17 @@ public class SearchActivity extends AppCompatActivity implements OnSearchComplet
         mBookData = queryResults;
         BookAdapter adapter = new BookAdapter(queryResults);
         mListView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Log.e(TAG, "onQueryTextSubmit: " + query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     @Override

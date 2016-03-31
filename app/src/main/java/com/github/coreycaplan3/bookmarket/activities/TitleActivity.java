@@ -9,15 +9,13 @@ import android.view.View;
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.TitleFragment;
+import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
 
 import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
 
 public class TitleActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = TitleActivity.class.getSimpleName();
-
-    private boolean mIsBuying = false;
-    private boolean mIsTrading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +37,11 @@ public class TitleActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.title_buy_card) {
-            mIsBuying = true;
-            mIsTrading = false;
-            onSearchRequested();
+            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+            intent.putExtra(IntentExtra.ACTIVITY_BUY, true);
+            startActivity(intent);
         } else if (id == R.id.title_trade_card) {
-            mIsBuying = false;
-            mIsTrading = true;
-            onSearchRequested();
+
         } else if (id == R.id.title_sell_card) {
 
         } else if (id == R.id.title_account_card) {

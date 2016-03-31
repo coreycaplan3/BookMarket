@@ -2,6 +2,10 @@
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
+        <item name="android:colorActivatedHighlight">@color/colorHighlight</item>
+        <item name="android:colorPressedHighlight">@color/colorHighlight</item>
+        <item name="android:colorAccent">@color/colorHighlight</item>
+        <item name="android:colorControlHighlight">@color/colorHighlight</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
