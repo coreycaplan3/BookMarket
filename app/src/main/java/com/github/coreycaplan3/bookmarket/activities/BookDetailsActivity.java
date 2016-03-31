@@ -1,15 +1,16 @@
 package com.github.coreycaplan3.bookmarket.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.github.coreycaplan3.bookmarket.R;
+import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
+import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants;
+import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
 
-public class BookDetailsActivity extends AppCompatActivity {
+public class BookDetailsActivity extends AppCompatActivity implements GetNetworkCommunicator {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +19,18 @@ public class BookDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupFragment(savedInstanceState);
     }
 
+    private void setupFragment(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            FragmentCreator.createNetworks(getSupportFragmentManager());
+        }
+    }
+
+    @Override
+    public void onGetNetworkTaskComplete(Bundle result,
+                                         @GetNetworkConstraints String getConstraints) {
+
+    }
 }

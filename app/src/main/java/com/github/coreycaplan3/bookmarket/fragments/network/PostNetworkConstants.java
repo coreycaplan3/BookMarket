@@ -15,7 +15,9 @@ import java.lang.annotation.RetentionPolicy;
 
 public interface PostNetworkConstants {
 
-    @StringDef({CONSTRAINT_LOGIN, CONSTRAINT_SILENT_LOGIN})
+    @StringDef({CONSTRAINT_LOGIN, CONSTRAINT_SILENT_LOGIN, CONSTRAINT_POST_BOOK,
+            CONSTRAINT_EDIT_BOOK, CONSTRAINT_BUY_BOOK, CONSTRAINT_TRADE_BOOK,
+            CONSTRAINT_POST_TRADE_LIST})
     @Retention(RetentionPolicy.SOURCE)
     @interface PostNetworkConstraints {
     }
@@ -29,4 +31,10 @@ public interface PostNetworkConstants {
      * Constraint for performing a silent login using the user's cached login token.
      */
     String CONSTRAINT_SILENT_LOGIN = "getNetworkConstraintSilentLogin";
+
+    String CONSTRAINT_POST_BOOK = "getNetworkConstraintPostBook";
+    String CONSTRAINT_EDIT_BOOK = "getNetworkConstraintPostBook";
+    String CONSTRAINT_BUY_BOOK = "getNetworkConstraintPostBook";
+    String CONSTRAINT_TRADE_BOOK = "getNetworkConstraintPostBook";
+    String CONSTRAINT_POST_TRADE_LIST = "getNetworkConstraintPostBook";
 }
