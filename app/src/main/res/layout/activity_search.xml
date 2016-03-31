@@ -9,10 +9,16 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/colorPrimary" />
 
-
     <ListView
         android:id="@+id/activity_search_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:id="@+id/activity_search_progress"/>
 
 </LinearLayout>

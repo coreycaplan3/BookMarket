@@ -40,4 +40,6 @@
     <string name="search_for_book">Search for a Book</string>
     <string name="enter_title_or_isbn">Enter a Title or ISBN</string>
     <string name="no_results">No Results Found</string>
+    <string name="search_for_book_buy">Search for a book to buy</string>
+    <string name="search_trade_for">Search for a book you are trading for</string>
 </resources>

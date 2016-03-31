@@ -5,11 +5,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
+import com.github.coreycaplan3.bookmarket.database.DatabaseApi;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
+
+import static com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.*;
 
 /**
  * Created by Corey on 3/19/2016.
@@ -47,6 +49,12 @@ public class GetNetworkFragment extends Fragment {
         } catch (ClassCastException e) {
             Log.e(TAG, "onAttach: ", e);
         }
+    }
+
+    public void startSearchTask(String query) {
+        NetworkTask task = new NetworkTask();
+        task.performSearch(query);
+        startTask(task);
     }
 
     private void startTask(NetworkTask task) {
@@ -88,10 +96,18 @@ public class GetNetworkFragment extends Fragment {
         private final long STABLE_ID;
         @GetNetworkConstraints
         private String mNetworkConstraint;
+
+        private String mQuery;
+
         private final String TAG = getClass().getSimpleName();
 
         private NetworkTask() {
             STABLE_ID = stableIdCounter++;
+        }
+
+        private void performSearch(String query) {
+            mNetworkConstraint = GET_CONSTRAINT_SEARCH;
+            mQuery = query;
         }
 
 
@@ -99,12 +115,21 @@ public class GetNetworkFragment extends Fragment {
         protected Bundle doInBackground(Void... params) {
             Bundle bundle = new Bundle();
             //TODO implement logic for each api call
+            DatabaseApi databaseApi = new DatabaseApi();
             switch (mNetworkConstraint) {
+                case GET_CONSTRAINT_SEARCH:
+                    bundle = getSearchResults(databaseApi);
+                    break;
                 default:
                     Log.e(TAG, "doInBackground: ", new IllegalArgumentException("Invalid network " +
                             "constraint: " + mNetworkConstraint));
             }
             return bundle;
+        }
+
+        private Bundle getSearchResults(DatabaseApi databaseApi) {
+            //TODO implement me
+            return null;
         }
 
         @Override
