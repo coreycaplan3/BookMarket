@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.dialogs.DialogCallback;
 import com.github.coreycaplan3.bookmarket.dialogs.SignOutDialog;
-import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.account.ProfileFragment;
 import com.github.coreycaplan3.bookmarket.fragments.marketplace.DesiredBooksFormFragment;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;

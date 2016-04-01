@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.github.coreycaplan3.bookmarket.R;
-import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.TitleFragment;
 import com.github.coreycaplan3.bookmarket.fragments.marketplace.TradeTitleFragment;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;

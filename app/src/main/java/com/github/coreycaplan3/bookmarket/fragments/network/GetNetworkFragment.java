@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.github.coreycaplan3.bookmarket.database.DatabaseApi;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
+import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 
 import static com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.*;
 
@@ -74,6 +75,30 @@ public class GetNetworkFragment extends Fragment {
         startTask(task);
     }
 
+    public void startGetNewSellListingsTask(UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performGetNewSellListings(userProfile);
+        startTask(task);
+    }
+
+    public void startGetOldSellListingsTask(UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performGetOldSellListings(userProfile);
+        startTask(task);
+    }
+
+    public void startGetNewTradeListingsTask(UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performGetNewTradeListings(userProfile);
+        startTask(task);
+    }
+
+    public void startGetOldTradeListingsTask(UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performGetOldTradeListings(userProfile);
+        startTask(task);
+    }
+
     private void startTask(NetworkTask task) {
         mRunningTasks.put(task.STABLE_ID, task);
         task.execute();
@@ -114,6 +139,7 @@ public class GetNetworkFragment extends Fragment {
         @GetNetworkConstraints
         private String mNetworkConstraint;
 
+        private UserProfile mUserProfile;
         private String mQuery;
         private String mIsbn;
         private String mUserId;
@@ -130,13 +156,33 @@ public class GetNetworkFragment extends Fragment {
         }
 
         private void performGetBooks(String isbn) {
-            mNetworkConstraint = GET_CONSTRAINT_GET_BOOKS;
+            mNetworkConstraint = GET_CONSTRAINT_GET_SELLING_BOOKS;
             mIsbn = isbn;
         }
 
         private void performGetTradedBooks(String userId) {
-            mNetworkConstraint = GET_CONSTRAINT_GET_TRADED_BOOKS;
+            mNetworkConstraint = GET_CONSTRAINT_GET_TRADING_BOOKS;
             mUserId = userId;
+        }
+
+        private void performGetNewSellListings(UserProfile userProfile) {
+            mNetworkConstraint = GET_CONSTRAINT_GET_NEW_SELL_LISTINGS;
+            mUserProfile = userProfile;
+        }
+
+        private void performGetOldSellListings(UserProfile userProfile) {
+            mNetworkConstraint = GET_CONSTRAINT_GET_OLD_SELL_LISTINGS;
+            mUserProfile = userProfile;
+        }
+
+        private void performGetNewTradeListings(UserProfile userProfile) {
+            mNetworkConstraint = GET_CONSTRAINT_GET_NEW_TRADE_LISTINGS;
+            mUserProfile = userProfile;
+        }
+
+        private void performGetOldTradeListings(UserProfile userProfile) {
+            mNetworkConstraint = GET_CONSTRAINT_GET_OLD_TRADE_LISTINGS;
+            mUserProfile = userProfile;
         }
 
         @Override
@@ -146,12 +192,26 @@ public class GetNetworkFragment extends Fragment {
             DatabaseApi databaseApi = new DatabaseApi();
             switch (mNetworkConstraint) {
                 case GET_CONSTRAINT_SEARCH:
-                    bundle = getSearchResults(databaseApi);
+                    getSearchResults(databaseApi, bundle);
                     break;
-                case GET_CONSTRAINT_GET_BOOKS:
-                    bundle = getIsbnResults(databaseApi);
-                case GET_CONSTRAINT_GET_TRADED_BOOKS:
-                    bundle = getTradedBooks(databaseApi);
+                case GET_CONSTRAINT_GET_SELLING_BOOKS:
+                    getSellingResults(databaseApi, bundle);
+                    break;
+                case GET_CONSTRAINT_GET_TRADING_BOOKS:
+                    getTradingBooks(databaseApi, bundle);
+                    break;
+                case GET_CONSTRAINT_GET_NEW_SELL_LISTINGS:
+                    getNewSellListings(databaseApi, bundle);
+                    break;
+                case GET_CONSTRAINT_GET_OLD_SELL_LISTINGS:
+                    getOldSellListings(databaseApi, bundle);
+                    break;
+                case GET_CONSTRAINT_GET_NEW_TRADE_LISTINGS:
+                    getNewTradeListings(databaseApi, bundle);
+                    break;
+                case GET_CONSTRAINT_GET_OLD_TRADE_LISTINGS:
+                    getOldTradeListings(databaseApi, bundle);
+                    break;
                 default:
                     Log.e(TAG, "doInBackground: ", new IllegalArgumentException("Invalid network " +
                             "constraint: " + mNetworkConstraint));
@@ -159,18 +219,32 @@ public class GetNetworkFragment extends Fragment {
             return bundle;
         }
 
-        private Bundle getSearchResults(DatabaseApi databaseApi) {
-            //TODO implement me
-            return null;
+        private void getSearchResults(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle getIsbnResults(DatabaseApi databaseApi) {
-            return null;
+        private void getSellingResults(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle getTradedBooks(DatabaseApi databaseApi) {
-            //TODO implement me
-            return null;
+        private void getTradingBooks(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
+        private void getNewSellListings(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
+        private void getOldSellListings(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
+        private void getNewTradeListings(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
+        private void getOldTradeListings(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
         @Override

@@ -14,6 +14,7 @@ public interface FragmentKeys {
     String TITLE_FRAGMENT = "Book Mart";
     String BOOKS_MARKET_LIST_FRAGMENT = "fragmentBooksMarketList";
     String BOOK_DETAILS_FRAGMENT = "fragmentBookDetails";
+    String MY_BOOK_DETAILS_FRAGMENT = "fragmentMyBookDetails";
     String TRADE_TITLE_FRAGMENT = "Trade";
     String TRADE_FORM_FRAGMENT = "Trade a Book";
     String SELL_FORM_FRAGMENT = "Sell a Textbook";
@@ -33,7 +34,7 @@ public interface FragmentKeys {
             TRADE_TITLE_FRAGMENT, TRADE_FORM_FRAGMENT, SELL_FORM_FRAGMENT, REGISTER_FRAGMENT,
             NOTIFICATIONS_FRAGMENT, PROFILE_FRAGMENT, NEW_SELL_LISTINGS_FRAGMENT,
             OLD_SELL_LISTINGS_FRAGMENT, NEW_TRADE_LISTINGS_FRAGMENT, OLD_TRADE_LISTINGS_FRAGMENT,
-            ADD_DESIRED_TRADE_FRAGMENT})
+            ADD_DESIRED_TRADE_FRAGMENT, MY_BOOK_DETAILS_FRAGMENT})
     @interface FragmentTag {
     }
 

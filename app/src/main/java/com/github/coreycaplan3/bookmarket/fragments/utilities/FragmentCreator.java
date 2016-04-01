@@ -1,4 +1,4 @@
-package com.github.coreycaplan3.bookmarket.fragments;
+package com.github.coreycaplan3.bookmarket.fragments.utilities;
 
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;

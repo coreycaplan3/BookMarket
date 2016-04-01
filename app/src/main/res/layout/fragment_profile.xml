@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_vertical_margin">
@@ -48,7 +48,7 @@
                 android:drawableStart="@drawable/ic_book_black_24dp"
                 android:gravity="center"
                 android:padding="@dimen/activity_vertical_margin"
-                android:text="@string/my_book_listings" />
+                android:text="@string/my_sell_listings" />
 
         </android.support.v7.widget.CardView>
 
@@ -69,7 +69,28 @@
                 android:drawableStart="@drawable/ic_hand_shake_24dp"
                 android:gravity="center"
                 android:padding="@dimen/activity_vertical_margin"
-                android:text="@string/my_trades" />
+                android:text="@string/my_trade_listings" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/fragment_profile_desired_trade_card"
+            style="@style/ClickableCardStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small">
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_swap_arrows_black_24dp"
+                android:drawablePadding="@dimen/activity_vertical_margin"
+                android:drawableStart="@drawable/ic_swap_arrows_black_24dp"
+                android:gravity="center"
+                android:padding="@dimen/activity_vertical_margin"
+                android:text="@string/my_desired_trades" />
 
         </android.support.v7.widget.CardView>
 
@@ -118,4 +139,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</android.support.v4.widget.NestedScrollView>

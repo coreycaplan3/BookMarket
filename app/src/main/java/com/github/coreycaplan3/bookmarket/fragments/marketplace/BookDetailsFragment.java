@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,7 @@ import com.github.coreycaplan3.bookmarket.utilities.UiUtility;
 public class BookDetailsFragment extends Fragment implements View.OnClickListener,
         Dialog.OnCancelListener {
 
-    private boolean mIsProgressShowing = false;
+    private boolean mIsProgressShowing;
     private boolean mIsSelling;
     private TextBook mTextBook;
     private UserProfile mUserProfile;
@@ -72,6 +71,7 @@ public class BookDetailsFragment extends Fragment implements View.OnClickListene
             mIsSelling = getArguments().getBoolean(BUNDLE_IS_SELLING);
             mUserProfile = getArguments().getParcelable(BUNDLE_PROFILE);
             mSeller = getArguments().getParcelable(BUNDLE_SELLER);
+            mIsProgressShowing = false;
         }
     }
 
@@ -116,9 +116,9 @@ public class BookDetailsFragment extends Fragment implements View.OnClickListene
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setOnCancelListener(this);
         if (mIsSelling) {
-            mProgressDialog.setMessage(getString(R.string.notify_seller));
+            mProgressDialog.setMessage(getString(R.string.notifying_seller));
         } else {
-            mProgressDialog.setMessage(getString(R.string.notify_trader));
+            mProgressDialog.setMessage(getString(R.string.notifying_trader));
         }
         if (mIsProgressShowing) {
             mProgressDialog.show();
@@ -129,31 +129,31 @@ public class BookDetailsFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.fragment_book_details_submit_button) {
-            mIsProgressShowing = true;
-            mProgressDialog.show();
             PostNetworkFragment fragment = (PostNetworkFragment) getFragmentManager()
                     .findFragmentByTag(FragmentKeys.POST_NETWORK_FRAGMENT);
             if (mIsSelling) {
-                fragment.startTradeBookTask(mTextBook, mUserProfile, mSeller);
-            } else {
                 fragment.startBuyBookTask(mTextBook, mUserProfile, mSeller);
+            } else {
+                fragment.startTradeBookTask(mTextBook, mUserProfile, mSeller);
             }
+            mIsProgressShowing = true;
+            mProgressDialog.show();
+        }
+    }
+
+    public void onNotificationComplete() {
+        mProgressDialog.dismiss();
+        mIsProgressShowing = false;
+        if (mIsSelling) {
+            UiUtility.toast(getContext(), R.string.seller_notified);
+        } else {
+            UiUtility.toast(getContext(), R.string.trader_notified);
         }
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
         mIsProgressShowing = false;
-    }
-
-    public void onNotificationComplete() {
-        mIsProgressShowing = false;
-        mProgressDialog.dismiss();
-        if (mIsSelling) {
-            UiUtility.snackbar(getView(), R.string.seller_notified, null);
-        } else {
-            UiUtility.snackbar(getView(), R.string.trader_notified, null);
-        }
     }
 
     @Override

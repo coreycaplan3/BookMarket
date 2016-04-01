@@ -2,20 +2,17 @@ package com.github.coreycaplan3.bookmarket.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.github.coreycaplan3.bookmarket.R;
-import com.github.coreycaplan3.bookmarket.adapters.BookMarketListAdapter;
-import com.github.coreycaplan3.bookmarket.adapters.BookMarketListAdapter.TextBookClickListener;
-import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
-import com.github.coreycaplan3.bookmarket.fragments.marketplace.BooksMarketListFragment;
+import com.github.coreycaplan3.bookmarket.adapters.TextBookClickListener;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.marketplace.BookMarketListFragment;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkCommunicator;
-import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.PostNetworkConstraints;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
@@ -24,7 +21,7 @@ import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
 
 import java.util.ArrayList;
 
-public class BookMarketplaceActivity extends AppCompatActivity implements TextBookClickListener,
+public class BookMarketListActivity extends AppCompatActivity implements TextBookClickListener,
         GetNetworkCommunicator, PostNetworkCommunicator {
 
     private boolean mIsBuyingBooks;
@@ -61,7 +58,7 @@ public class BookMarketplaceActivity extends AppCompatActivity implements TextBo
             mBookIsbn = intent.getStringExtra(IntentExtra.ISBN);
 
             FragmentCreator.createNetworks(getSupportFragmentManager());
-            BooksMarketListFragment fragment = BooksMarketListFragment.newInstance(mBookIsbn,
+            BookMarketListFragment fragment = BookMarketListFragment.newInstance(mBookIsbn,
                     mTextBookList, mUserProfile, mIsBuyingBooks);
             FragmentCreator.create(fragment, FragmentKeys.BOOKS_MARKET_LIST_FRAGMENT,
                     R.id.book_marketplace_container, getSupportFragmentManager());
@@ -105,9 +102,9 @@ public class BookMarketplaceActivity extends AppCompatActivity implements TextBo
     @Override
     public void onGetNetworkTaskComplete(Bundle result,
                                          @GetNetworkConstraints String getConstraints) {
-        if (getConstraints.equals(GetNetworkConstants.GET_CONSTRAINT_GET_BOOKS)) {
+        if (getConstraints.equals(GetNetworkConstants.GET_CONSTRAINT_GET_SELLING_BOOKS)) {
             mTextBookList = result.getParcelableArrayList(getConstraints);
-            BooksMarketListFragment fragment = (BooksMarketListFragment)
+            BookMarketListFragment fragment = (BookMarketListFragment)
                     getSupportFragmentManager().findFragmentById(R.id.book_marketplace_container);
             fragment.onBooksRefreshed(mTextBookList);
         }

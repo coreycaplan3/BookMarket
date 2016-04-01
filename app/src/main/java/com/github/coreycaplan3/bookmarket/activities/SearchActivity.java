@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.coreycaplan3.bookmarket.R;
-import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
@@ -98,7 +98,7 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getApplicationContext(), BookMarketplaceActivity.class);
+        Intent intent = new Intent(getApplicationContext(), BookMarketListActivity.class);
         intent.putExtra(IntentExtra.PROFILE, mUserProfile);
         intent.putExtra(IntentExtra.ISBN, mBookData.get(position).getIsbn());
         intent.putExtra(IntentExtra.ACTIVITY_BUY, mIsBuyingBook);

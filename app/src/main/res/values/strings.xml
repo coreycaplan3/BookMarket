@@ -24,11 +24,12 @@
     <string name="university">University</string>
     <string name="lehigh_university">Lehigh University</string>
     <string name="notifications">Notifications</string>
-    <string name="my_book_listings">My Book Listings</string>
-    <string name="my_trades">My Trades</string>
+    <string name="my_sell_listings">My Sell Listings</string>
+    <string name="my_trade_listings">My Trade Listings</string>
+    <string name="my_desired_trades">My Desired Trades</string>
     <string name="sell">SELL</string>
     <string name="my_account">My Account</string>
-    <string name="trade">Trade</string>
+    <string name="trade">TRADE</string>
     <string name="find_a_book">Find a Book</string>
     <string name="post_a_book">Post a Book</string>
     <string name="price">Price</string>
@@ -46,7 +47,7 @@
     <string name="error_required">This field is required</string>
     <string name="error_too_short">This field is too short</string>
     <string name="error_too_long">This field is too long</string>
-    <string name="posting_book">Posting your Textbook</string>
+    <string name="posting_book">Posting your textbook…</string>
 
     <string-array name="book_conditions">
         <item>New</item>
@@ -62,19 +63,33 @@
     <string name="error_email_or_password">Invalid email or password</string>
     <string name="signing_in">Signing in…</string>
     <string name="registering">Registering…</string>
+    <string name="updating_listing">Updating your listing…</string>
     <string name="error_passwords_match">The two passwords must match</string>
     <string name="error_email_in_use">This email is already in use</string>
-    <string name="notify_seller">Notifying Seller…</string>
-    <string name="notify_trader">Notifying Trader…</string>
+    <string name="notifying_seller">Notifying Seller…</string>
+    <string name="notifying_trader">Notifying Trader…</string>
     <string name="adding_to_my_trades">Adding textbook to my trades…</string>
     <string name="seller_notified">Seller notified!</string>
     <string name="trader_notified">Trader notified!</string>
     <string name="sign_out">Sign Out</string>
     <string name="title_activity_my_listings">MyListingsActivity</string>
     <string name="sign_out_message">Are you sure you want to sign out from Book Mart?</string>
-    <string name="add_to_my_tades">Add to My Tades</string>
+    <string name="add_to_my_tades">Add to My Desired Tades</string>
     <string name="sign_out_title">Sign Out?</string>
     <string name="sign_out_successful">Successfully signed out!</string>
     <string name="post_successful">Post successful!</string>
+    <string name="edit_successful">Edit successful!</string>
+    <string name="edit">EDIT</string>
+    <string name="edit_sell_listing">Edit your Sell Listing</string>
+    <string name="create_sell_listing">Create a Sell Listing</string>
+    <string name="edit_trade_listing">Edit your Trade Listing</string>
+    <string name="create_trade_listing">Create a Trade Listing</string>
+    <string name="update">UPDATE</string>
+
+    <string name="nothing_new_sell_listings">You have no new sell listings to show</string>
+    <string name="nothing_new_trade_listings">You have no new trade listings to show</string>
+    <string name="nothing_old_sell_listings">You have no sell listings to show</string>
+    <string name="nothing_old_trade_listings">You have no trade listings to show</string>
+    <string name="aid_no_listings">An image representing having no new listings</string>
 
 </resources>

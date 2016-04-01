@@ -22,7 +22,6 @@ public class TextBookViewHolder extends ViewHolder implements View.OnClickListen
         void onViewHolderClicked(int layoutPosition);
     }
 
-    private CardView mBackgroundCardView;
     private TextView mTitleTextView;
     private TextView mAuthorTextView;
     private TextView mConditionTextView;
@@ -32,21 +31,24 @@ public class TextBookViewHolder extends ViewHolder implements View.OnClickListen
     @Nullable
     private OnViewHolderClickListener mClickListener;
 
-    public TextBookViewHolder(View itemView, @Nullable OnViewHolderClickListener listener) {
+    public TextBookViewHolder(View itemView, @Nullable OnViewHolderClickListener listener,
+                              boolean isBuyingBooks) {
         super(itemView);
         mClickListener = listener;
-        mBackgroundCardView = (CardView) itemView.findViewById(R.id.recycler_book_background_card);
+        CardView backgroundCardView = (CardView) itemView
+                .findViewById(R.id.recycler_book_background_card);
         mTitleTextView = (TextView) itemView.findViewById(R.id.recycler_book_title_text_view);
         mAuthorTextView = (TextView) itemView.findViewById(R.id.recycler_book_author_text_view);
         mConditionTextView = (TextView) itemView.findViewById(R.id.recycler_book_condition_text_view);
         mPriceTextView = (TextView) itemView.findViewById(R.id.recycler_book_price_text_view);
+        if (isBuyingBooks) {
+            mPriceTextView.setVisibility(View.VISIBLE);
+        } else {
+            mPriceTextView.setVisibility(View.GONE);
+        }
         mBookImageView = (ImageView) itemView.findViewById(R.id.recycler_book_image_view);
 
-        mBackgroundCardView.setOnClickListener(this);
-    }
-
-    public CardView getBackgroundCardView() {
-        return mBackgroundCardView;
+        backgroundCardView.setOnClickListener(this);
     }
 
     public TextView getTitleTextView() {

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
@@ -13,28 +12,35 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.github.coreycaplan3.bookmarket.R;
-import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.adapters.MyTextBookClickListener;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.account.MyNewSellListingsFragment;
 import com.github.coreycaplan3.bookmarket.fragments.account.MyNewTradeListingsFragment;
 import com.github.coreycaplan3.bookmarket.fragments.account.MyOldSellListingsFragment;
 import com.github.coreycaplan3.bookmarket.fragments.account.MyOldTradeListingsFragment;
+import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
+import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
+import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkCommunicator;
+import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.PostNetworkConstraints;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentStatePagerAdapter;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
-import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
 import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
 
 import java.util.ArrayList;
 
+import static com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.*;
 import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
 
-public class MyListingsActivity extends AppCompatActivity implements OnPageChangeListener {
+public class MyListingsActivity extends AppCompatActivity implements OnPageChangeListener,
+        MyTextBookClickListener, GetNetworkCommunicator, PostNetworkCommunicator {
 
     private static final String TAG = MyListingsActivity.class.getSimpleName();
-    private boolean mIsSelling;
 
+    private boolean mIsSelling;
     private UserProfile mUserProfile;
-    private ArrayList<TextBook> mOldTextBooks;
     private ArrayList<TextBook> mNewTextBooks;
+    private ArrayList<TextBook> mOldTextBooks;
 
     private static final String BUNDLE_PROFILE = "bundleProfile";
     private static final String BUNDLE_NEW_BOOKS = "bundleNewBooks";
@@ -111,6 +117,16 @@ public class MyListingsActivity extends AppCompatActivity implements OnPageChang
     }
 
     @Override
+    public void onTextBookClicked(TextBook textBook, boolean isNewTextBook) {
+        Intent intent = new Intent(getApplicationContext(), MyBookDetailsActivity.class);
+        intent.putExtra(IntentExtra.PROFILE, mUserProfile);
+        intent.putExtra(IntentExtra.BOOK, textBook);
+        intent.putExtra(IntentExtra.ACTIVITY_SELLING, mIsSelling);
+        intent.putExtra(IntentExtra.ACTIVITY_NEW, isNewTextBook);
+        startActivity(intent);
+    }
+
+    @Override
     public void onPageSelected(int position) {
         if (getSupportActionBar() == null) {
             Log.e(TAG, "onPageSelected: ", new NullPointerException("NULL!"));
@@ -136,6 +152,64 @@ public class MyListingsActivity extends AppCompatActivity implements OnPageChang
 
     }
 
+
+    @Override
+    public void onGetNetworkTaskComplete(Bundle result,
+                                         @GetNetworkConstraints String getConstraints) {
+        switch (getConstraints) {
+            case GET_CONSTRAINT_GET_NEW_SELL_LISTINGS:
+                getNewSellListings(result, getConstraints);
+                break;
+            case GET_CONSTRAINT_GET_OLD_SELL_LISTINGS:
+                getOldSellListings(result, getConstraints);
+                break;
+            case GET_CONSTRAINT_GET_NEW_TRADE_LISTINGS:
+                getNewTradeListings(result, getConstraints);
+                break;
+            case GET_CONSTRAINT_GET_OLD_TRADE_LISTINGS:
+                getOldTradeListings(result, getConstraints);
+                break;
+            default:
+                Log.e(TAG, "onGetNetworkTaskComplete: ", new IllegalArgumentException("Found: " +
+                        getConstraints));
+                break;
+        }
+    }
+
+    private void getNewSellListings(Bundle result, String getConstraints) {
+        MyNewSellListingsFragment fragment = (MyNewSellListingsFragment)
+                getSupportFragmentManager().findFragmentByTag(NEW_SELL_LISTINGS_FRAGMENT);
+        ArrayList<TextBook> textBooks = result.getParcelableArrayList(getConstraints);
+        fragment.onTextBooksRefreshed(textBooks);
+    }
+
+    private void getOldSellListings(Bundle result, String getConstraints) {
+        MyOldSellListingsFragment fragment = (MyOldSellListingsFragment)
+                getSupportFragmentManager().findFragmentByTag(OLD_SELL_LISTINGS_FRAGMENT);
+        ArrayList<TextBook> textBooks = result.getParcelableArrayList(getConstraints);
+        fragment.onTextBooksRefreshed(textBooks);
+    }
+
+    private void getNewTradeListings(Bundle result, String getConstraints) {
+        MyNewTradeListingsFragment fragment = (MyNewTradeListingsFragment)
+                getSupportFragmentManager().findFragmentByTag(NEW_TRADE_LISTINGS_FRAGMENT);
+        ArrayList<TextBook> textBooks = result.getParcelableArrayList(getConstraints);
+        fragment.onTextBooksRefreshed(textBooks);
+    }
+
+    private void getOldTradeListings(Bundle result, String getConstraints) {
+        MyOldTradeListingsFragment fragment = (MyOldTradeListingsFragment)
+                getSupportFragmentManager().findFragmentByTag(OLD_TRADE_LISTINGS_FRAGMENT);
+        ArrayList<TextBook> textBooks = result.getParcelableArrayList(getConstraints);
+        fragment.onTextBooksRefreshed(textBooks);
+    }
+
+    @Override
+    public void onPostNetworkTaskComplete(Bundle result,
+                                          @PostNetworkConstraints String postConstraints) {
+
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -145,7 +219,7 @@ public class MyListingsActivity extends AppCompatActivity implements OnPageChang
         outState.putBoolean(BUNDLE_IS_SELLING, mIsSelling);
     }
 
-    private class PagerAdapter extends FragmentPagerAdapter {
+    private class PagerAdapter extends FragmentStatePagerAdapter {
 
         public PagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -155,17 +229,35 @@ public class MyListingsActivity extends AppCompatActivity implements OnPageChang
         public Fragment getItem(int position) {
             if (mIsSelling) {
                 if (position == 0) {
-                    return MyNewSellListingsFragment.newInstance(mUserProfile);
+                    return MyNewSellListingsFragment.newInstance(mUserProfile, mNewTextBooks);
                 } else {
-                    return MyOldSellListingsFragment.newInstance(mUserProfile);
+                    return MyOldSellListingsFragment.newInstance(mUserProfile, mOldTextBooks);
                 }
             } else {
                 if (position == 0) {
-                    return MyNewTradeListingsFragment.newInstance(mUserProfile);
+                    return MyNewTradeListingsFragment.newInstance(mUserProfile, mNewTextBooks);
                 } else {
-                    return MyOldTradeListingsFragment.newInstance(mUserProfile);
+                    return MyOldTradeListingsFragment.newInstance(mUserProfile, mOldTextBooks);
                 }
             }
+        }
+
+        @Override
+        public String getTag(int position) {
+            if (mIsSelling) {
+                if (position == 0) {
+                    return NEW_SELL_LISTINGS_FRAGMENT;
+                } else {
+                    return OLD_SELL_LISTINGS_FRAGMENT;
+                }
+            } else {
+                if (position == 0) {
+                    return NEW_TRADE_LISTINGS_FRAGMENT;
+                } else {
+                    return OLD_TRADE_LISTINGS_FRAGMENT;
+                }
+            }
+
         }
 
         @Override

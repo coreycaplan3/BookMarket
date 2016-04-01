@@ -9,11 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.github.coreycaplan3.bookmarket.R;
-import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.account.LoginFragment;
 import com.github.coreycaplan3.bookmarket.fragments.account.RegisterFragment;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
-import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkCommunicator;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants;

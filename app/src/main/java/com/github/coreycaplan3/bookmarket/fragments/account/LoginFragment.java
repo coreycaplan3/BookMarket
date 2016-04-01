@@ -1,10 +1,8 @@
 package com.github.coreycaplan3.bookmarket.fragments.account;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -18,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.github.coreycaplan3.bookmarket.R;
-import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkFragment;
 import com.github.coreycaplan3.bookmarket.utilities.FormValidation;

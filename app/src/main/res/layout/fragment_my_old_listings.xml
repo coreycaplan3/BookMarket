@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/fragment_my_old_listings_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/fragment_my_old_listings_nothing_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_vertical_margin"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/fragment_my_old_listings_nothing_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:alpha="0.27"
+            android:contentDescription="@string/aid_no_listings"
+            android:src="@drawable/ic_book_cover"
+            app:layout_marginTopPercent="25%" />
+
+        <TextView
+            android:id="@+id/fragment_my_old_listings_nothing_text_view"
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_my_new_listings_nothing_image_view"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/nothing_new_sell_listings" />
+
+    </android.support.percent.PercentRelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_my_old_listings_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

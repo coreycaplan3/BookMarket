@@ -211,7 +211,7 @@ public class DatabaseApi {
      * @return ArrayList of TextBooks
      * @throws Exception
      */
-    public ArraList<TextBook> textbookLookup(String lookupString) throws Exception {
+    public ArrayList<TextBook> textbookLookup(String lookupString) throws Exception {
         args = new String[1];
         args[0] = lookupString;
         command = "textbookLookup";

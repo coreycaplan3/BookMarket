@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.adapters.BookMarketListAdapter;
-import com.github.coreycaplan3.bookmarket.adapters.BookMarketListAdapter.TextBookClickListener;
+import com.github.coreycaplan3.bookmarket.adapters.TextBookClickListener;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkFragment;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
@@ -31,9 +31,9 @@ import java.util.ArrayList;
  * <p></p>
  * Purpose of Class:
  */
-public class BooksMarketListFragment extends Fragment implements OnRefreshListener {
+public class BookMarketListFragment extends Fragment implements OnRefreshListener {
 
-    private static final String TAG = BooksMarketListFragment.class.getSimpleName();
+    private static final String TAG = BookMarketListFragment.class.getSimpleName();
     private boolean mIsBuyingBooks;
     private String mBookIsbn;
     private UserProfile mUserProfile;
@@ -50,10 +50,10 @@ public class BooksMarketListFragment extends Fragment implements OnRefreshListen
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
 
-    public static BooksMarketListFragment newInstance(String bookIsbn,
-                                                      @Nullable ArrayList<TextBook> textBookList,
-                                                      UserProfile userProfile, boolean isBuyingBooks) {
-        BooksMarketListFragment fragment = new BooksMarketListFragment();
+    public static BookMarketListFragment newInstance(String bookIsbn,
+                                                     @Nullable ArrayList<TextBook> textBookList,
+                                                     UserProfile userProfile, boolean isBuyingBooks) {
+        BookMarketListFragment fragment = new BookMarketListFragment();
         Bundle arguments = new Bundle();
         arguments.putParcelableArrayList(BUNDLE_BOOKS, textBookList);
         arguments.putString(BUNDLE_BOOKS_ISBN, bookIsbn);
@@ -104,7 +104,7 @@ public class BooksMarketListFragment extends Fragment implements OnRefreshListen
             mRecyclerView.setVisibility(View.GONE);
         } else {
             Adapter adapter = new BookMarketListAdapter(getContext(), mTextBookList,
-                    mTextBookClickListener);
+                    mTextBookClickListener, mIsBuyingBooks);
             mProgressBar.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
             mRecyclerView.setAdapter(adapter);
@@ -126,7 +126,7 @@ public class BooksMarketListFragment extends Fragment implements OnRefreshListen
         mTextBookList = textBookList;
         mProgressBar.setVisibility(View.GONE);
         Adapter adapter = new BookMarketListAdapter(getContext(), mTextBookList,
-                mTextBookClickListener);
+                mTextBookClickListener, mIsBuyingBooks);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setVisibility(View.VISIBLE);
         mRefreshLayout.setRefreshing(false);

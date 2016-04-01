@@ -82,6 +82,47 @@ public class TextBook implements Parcelable {
     }
 
     /**
+     * Constructor for editing a selling a textbook
+     */
+    @SuppressWarnings("NullableProblems")
+    public TextBook(String title, String author, String isbn, double price, @Condition int condition,
+                    Bitmap picture, String sellingId) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.price = price;
+        this.condition = condition;
+        this.picture = picture;
+        this.sellingId = sellingId;
+    }
+
+    /**
+     * Constructor for trading a textbook
+     */
+    public TextBook(String title, String author, String isbn, @Condition int condition,
+                    Bitmap picture) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.condition = condition;
+        this.picture = picture;
+    }
+
+    /**
+     * Constructor for editing a trading textbook
+     */
+    @SuppressWarnings("NullableProblems")
+    public TextBook(String title, String author, String isbn, @Condition int condition,
+                    Bitmap picture, String tradeId) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.condition = condition;
+        this.picture = picture;
+        this.tradingId = tradeId;
+    }
+
+    /**
      * Constructor for posting a textbook to your trades
      */
     public TextBook(String title, String author, String isbn) {

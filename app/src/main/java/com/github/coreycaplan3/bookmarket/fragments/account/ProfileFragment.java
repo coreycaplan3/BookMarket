@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.activities.MyListingsActivity;
 import com.github.coreycaplan3.bookmarket.dialogs.SignOutDialog;
-import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.marketplace.DesiredBooksFormFragment;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
@@ -90,7 +90,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             Intent intent = new Intent(getContext(), MyListingsActivity.class);
             intent.putExtra(IntentExtra.PROFILE, mUserProfile);
             startActivity(intent);
-        } else if (id == R.id.fragment_profile_add_trade_card) {
+        } else if(id == R.id.fragment_profile_desired_trade_card) {
+
+        }
+        else if (id == R.id.fragment_profile_add_trade_card) {
             DesiredBooksFormFragment fragment = DesiredBooksFormFragment.newInstance(mUserProfile);
             FragmentCreator.create(fragment, FragmentKeys.ADD_DESIRED_TRADE_FRAGMENT,
                     R.id.profile_container, getFragmentManager());

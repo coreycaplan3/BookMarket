@@ -30,6 +30,7 @@ import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 import com.github.coreycaplan3.bookmarket.utilities.FormValidation;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
+import com.github.coreycaplan3.bookmarket.utilities.UiUtility;
 
 /**
  * Created by Corey on 3/31/2016.
@@ -41,15 +42,20 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         Dialog.OnCancelListener, Spinner.OnItemSelectedListener {
 
     private static final String TAG = SellingFormFragment.class.getSimpleName();
+
+    private boolean mIsProgressShowing;
+    private boolean mIsEditingBook;
     private String mPrice;
     private String mTitle;
     private String mAuthor;
     private String mIsbn;
     private Bitmap mImage;
+    private String mSellId;
     private int mSpinnerPosition;
 
     private String[] mConditionData;
 
+    private ProgressDialog mProgressDialog;
     private UserProfile mUserProfile;
 
     private TextInputLayout mPriceTextInputLayout;
@@ -72,22 +78,25 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
     private static final String BUNDLE_ISBN = "bundleIsbn";
     private static final String BUNDLE_PRICE = "bundlePrice";
     private static final String BUNDLE_CONDITION = "bundleCondition";
+    private static final String BUNDLE_SELL_ID = "bundleSellId";
     private static final String BUNDLE_SPINNER_POSITION = "bundlePosition";
+    private static final String BUNDLE_IS_PROGRESS_SHOWING = "bundleIsProgressShowing";
+    private static final String BUNDLE_IS_EDITING_BOOK = "bundleIsEditingBook";
 
     private static final int MINIMUM_LENGTH = 3;
 
-    public static DesiredBooksFormFragment newInstance(UserProfile userProfile) {
-        DesiredBooksFormFragment fragment = new DesiredBooksFormFragment();
+    public static SellingFormFragment newInstance(UserProfile userProfile) {
+        SellingFormFragment fragment = new SellingFormFragment();
         Bundle arguments = new Bundle();
         arguments.putParcelable(BUNDLE_PROFILE, userProfile);
         fragment.setArguments(arguments);
         return fragment;
     }
 
-    public static DesiredBooksFormFragment newInstance(UserProfile userProfile, String title,
-                                                       String author, String isbn, Bitmap image,
-                                                       double price, String condition) {
-        DesiredBooksFormFragment fragment = new DesiredBooksFormFragment();
+    public static SellingFormFragment newInstance(UserProfile userProfile, String title,
+                                                  String author, String isbn, Bitmap image,
+                                                  double price, String condition, String sellId) {
+        SellingFormFragment fragment = new SellingFormFragment();
         Bundle arguments = new Bundle();
         arguments.putParcelable(BUNDLE_PROFILE, userProfile);
         arguments.putString(BUNDLE_TITLE, title);
@@ -96,6 +105,7 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         arguments.putParcelable(BUNDLE_IMAGE, image);
         arguments.putString(BUNDLE_PRICE, price + "");
         arguments.putString(BUNDLE_CONDITION, condition);
+        arguments.putString(BUNDLE_SELL_ID, sellId);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -103,6 +113,7 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mConditionData = getContext().getResources().getStringArray(R.array.book_conditions);
         if (savedInstanceState != null) {
             mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
             mTitle = savedInstanceState.getString(BUNDLE_TITLE);
@@ -112,6 +123,9 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
             mImage = savedInstanceState.getParcelable(BUNDLE_IMAGE);
             mPrice = savedInstanceState.getString(BUNDLE_PRICE);
             mSpinnerPosition = savedInstanceState.getInt(BUNDLE_SPINNER_POSITION);
+            mSellId = savedInstanceState.getString(BUNDLE_SELL_ID);
+            mIsProgressShowing = savedInstanceState.getBoolean(BUNDLE_IS_PROGRESS_SHOWING);
+            mIsEditingBook = savedInstanceState.getBoolean(BUNDLE_IS_EDITING_BOOK);
         } else if (getArguments() != null) {
             mUserProfile = getArguments().getParcelable(BUNDLE_PROFILE);
             mTitle = getArguments().getString(BUNDLE_TITLE);
@@ -119,29 +133,25 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
             mIsbn = getArguments().getString(BUNDLE_ISBN);
             mImage = getArguments().getParcelable(BUNDLE_IMAGE);
             mPrice = getArguments().getString(BUNDLE_PRICE);
+            mSellId = getArguments().getString(BUNDLE_SELL_ID);
+            mIsProgressShowing = false;
 
             String condition = getArguments().getString(BUNDLE_CONDITION);
-            String conditionNew = getResources().getString(R.string.string_new);
-            String conditionLikeNew = getResources().getString(R.string.string_new);
-            String conditionGood = getResources().getString(R.string.good);
-            String conditionBad = getResources().getString(R.string.bad);
             if (condition != null) {
-                if (condition.equals(conditionNew)) {
-                    mSpinnerPosition = 0;
-                } else if (condition.equals(conditionLikeNew)) {
-                    mSpinnerPosition = 1;
-                } else if (condition.equals(conditionGood)) {
-                    mSpinnerPosition = 2;
-                } else if (condition.equals(conditionBad)) {
-                    mSpinnerPosition = 3;
-                } else {
-                    Log.e(TAG, "onCreate: ", new IllegalArgumentException("Invalid Condition!"));
+                mIsEditingBook = true; //Easiest way to check if a book is being edited
+                mSpinnerPosition = -1;
+                for (int i = 0; i < mConditionData.length; i++) {
+                    if (condition.equals(mConditionData[i])) {
+                        mSpinnerPosition = i;
+                        break;
+                    }
                 }
-            } else {
-                Log.e(TAG, "onCreate: ", new NullPointerException("Condition was null!"));
+                if (mSpinnerPosition == -1) {
+                    Log.e(TAG, "onCreate: ", new IllegalStateException("SpinnerPosition should" +
+                            "not be -1!"));
+                }
             }
 
-            mSpinnerPosition = getArguments().getInt(BUNDLE_SPINNER_POSITION, 0);
         }
     }
 
@@ -149,7 +159,7 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_desired_form, container, false);
+        View view = inflater.inflate(R.layout.default_book_form, container, false);
 
         mTitleTextInputLayout = (TextInputLayout) view
                 .findViewById(R.id.default_book_form_title_text_layout);
@@ -160,30 +170,37 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         Spinner conditionSpinner = (Spinner) view
                 .findViewById(R.id.default_book_form_condition_spinner);
 
-        mConditionData = getContext().getResources().getStringArray(R.array.book_conditions);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_dropdown_item_1line, mConditionData);
         conditionSpinner.setAdapter(adapter);
+        conditionSpinner.setSelection(mSpinnerPosition);
 
         mPriceTextInputLayout = (TextInputLayout) view
-                .findViewById(R.id.default_book_form_price_text_layout);
+                .findViewById(R.id.default_book_form_price_layout);
 
         mTitleEditText = (EditText) view.findViewById(R.id.default_book_form_title_edit_text);
         mAuthorEditText = (EditText) view.findViewById(R.id.default_book_form_author_edit_text);
         mIsbnEditText = (EditText) view.findViewById(R.id.default_book_form_isbn_edit_text);
+        mPriceEditText = (EditText) view.findViewById(R.id.default_book_form_price_edit_text);
         mAddImageTextView = (TextView) view
                 .findViewById(R.id.default_book_form_add_picture_text_view);
         mBookImageView = (ImageView) view.findViewById(R.id.default_book_form_image_view);
+
         mImageContainer = (CardView) view.findViewById(R.id.default_book_form_image_container);
 
         Button button = (Button) view.findViewById(R.id.default_book_form_submit_button);
-        button.setText(R.string.sell);
+        if (mIsEditingBook) {
+            button.setText(R.string.update);
+        } else {
+            button.setText(R.string.sell);
+        }
         button.setOnClickListener(this);
         setListeners();
 
         mTitleEditText.setText(mTitle == null ? "" : mTitle);
         mAuthorEditText.setText(mAuthor == null ? "" : mAuthor);
         mIsbnEditText.setText(mIsbn == null ? "" : mIsbn);
+        mPriceEditText.setText(mPrice == null ? "" : mPrice);
         if (mImage != null) {
             mBookImageView.setVisibility(View.VISIBLE);
             mBookImageView.setImageBitmap(mImage);
@@ -192,6 +209,19 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
             mBookImageView.setVisibility(View.GONE);
             mAddImageTextView.setVisibility(View.VISIBLE);
         }
+
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setOnCancelListener(this);
+        if (mIsEditingBook) {
+            mProgressDialog.setMessage(getString(R.string.updating_listing));
+        } else {
+            mProgressDialog.setMessage(getString(R.string.posting_book));
+        }
+        if (mIsProgressShowing) {
+            mProgressDialog.show();
+        }
+
         return view;
     }
 
@@ -244,6 +274,22 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
                 mIsbn = s.toString();
             }
         });
+        mPriceEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mPrice = s.toString();
+            }
+        });
     }
 
     @Override
@@ -251,23 +297,29 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         int id = v.getId();
         if (id == R.id.default_book_form_submit_button) {
             if (isValid()) {
-                ProgressDialog dialog = new ProgressDialog(getContext());
-                dialog.setMessage(getContext().getString(R.string.posting_book));
-                dialog.setIndeterminate(true);
-                dialog.setOnCancelListener(this);
                 PostNetworkFragment fragment = (PostNetworkFragment) getFragmentManager()
                         .findFragmentByTag(FragmentKeys.POST_NETWORK_FRAGMENT);
                 @TextBook.Condition int condition = getCondition();
-                TextBook textBook = new TextBook(mTitle, mAuthor, mIsbn, Double.parseDouble(mPrice),
-                        condition, mImage);
-                fragment.startPostSellBookTask(textBook, mUserProfile);
-                dialog.show();
+                TextBook textBook;
+                if (mIsEditingBook) {
+                    textBook = new TextBook(mTitle, mAuthor, mIsbn, Double.parseDouble(mPrice),
+                            condition, mImage, mSellId);
+                    fragment.startEditBookTask(textBook, mUserProfile);
+                } else {
+                    textBook = new TextBook(mTitle, mAuthor, mIsbn, Double.parseDouble(mPrice),
+                            condition, mImage);
+                    fragment.startPostSellBookTask(textBook, mUserProfile);
+                }
+
+                mIsProgressShowing = true;
+                mProgressDialog.show();
             }
         } else {
             Log.e(TAG, "onClick: ", new IllegalArgumentException("Invalid Id!"));
         }
     }
 
+    @SuppressWarnings("deprecation")
     private boolean isValid() {
         mTitleTextInputLayout.setError(null);
         mAuthorTextInputLayout.setError(null);
@@ -331,6 +383,8 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onCancel(DialogInterface dialog) {
+        mIsProgressShowing = false;
+        mProgressDialog.dismiss();
         PostNetworkFragment fragment = (PostNetworkFragment) getFragmentManager()
                 .findFragmentByTag(FragmentKeys.POST_NETWORK_FRAGMENT);
         fragment.cancelTask(PostNetworkConstants.CONSTRAINT_POST_SELL_BOOK);
@@ -348,6 +402,18 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         mImageContainer.setCardBackgroundColor(white);
         mAddImageTextView.setVisibility(View.GONE);
         mBookImageView.setImageBitmap(image);
+    }
+
+    public void onPostSuccessful() {
+        mIsProgressShowing = false;
+        mProgressDialog.dismiss();
+        UiUtility.toast(getContext(), R.string.post_successful);
+    }
+
+    public void onEditSuccessful() {
+        mIsProgressShowing = false;
+        mProgressDialog.dismiss();
+        UiUtility.toast(getContext(), R.string.edit_successful);
     }
 
     @Override
@@ -371,6 +437,9 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         outState.putString(BUNDLE_ISBN, mIsbn);
         outState.putString(BUNDLE_PRICE, mPrice);
         outState.putInt(BUNDLE_SPINNER_POSITION, mSpinnerPosition);
+        outState.putString(BUNDLE_SELL_ID, mSellId);
+        outState.putBoolean(BUNDLE_IS_PROGRESS_SHOWING, mIsProgressShowing);
+        outState.putBoolean(BUNDLE_IS_EDITING_BOOK, mIsEditingBook);
     }
 
 }
