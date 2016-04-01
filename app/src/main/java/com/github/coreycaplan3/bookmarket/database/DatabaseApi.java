@@ -107,8 +107,8 @@ public class DatabaseApi {
     public String getId(String email) throws Exception {
         args = new String[1];
         command = "getID";
-        args[0] = "";
-        token = email;
+        args[0] = email;
+        token = "none";
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
         JsonObject jObject = jElement.getAsJsonObject();
 
