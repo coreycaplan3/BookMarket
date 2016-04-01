@@ -42,4 +42,22 @@
     <string name="no_results">No Results Found</string>
     <string name="search_for_book_buy">Search for a book to buy</string>
     <string name="search_trade_for">Search for a book you are trading for</string>
+    <string name="title_activity_form">FormActivity</string>
+    <string name="error_required">This field is required</string>
+    <string name="error_too_short">This field is too short</string>
+    <string name="error_too_long">This field is too long</string>
+    <string name="posting_book">Posting your Textbook</string>
+
+    <string-array name="book_conditions">
+        <item>New</item>
+        <item>Like New</item>
+        <item>Good</item>
+        <item>Bad</item>
+    </string-array>
+
+    <string name="string_new">New</string>
+    <string name="like_new">Like New</string>
+    <string name="good">Good</string>
+    <string name="bad">Bad</string>
+
 </resources>

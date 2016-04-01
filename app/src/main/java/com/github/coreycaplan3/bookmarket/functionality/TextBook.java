@@ -14,13 +14,12 @@ import android.support.annotation.Nullable;
  */
 public class TextBook implements Parcelable {
 
-    private String name;
+    private String title;
     private String author;
     private String isbn;
     private double price;
     @Condition
     int condition;
-    @Nullable
     private Bitmap picture;
 
     public static final int CONDITION_NEW = 0x000000;
@@ -32,9 +31,18 @@ public class TextBook implements Parcelable {
     public @interface Condition {
     }
 
-    public TextBook(String name, String author, String isbn, double price, @Condition int condition,
-                    @Nullable Bitmap picture) {
-        this.name = name;
+    public static TextBook getDummyTextbook() {
+        return new TextBook("Database System Concepts 6th Edition",
+                "Abraham Silberschatz, Henry F. Korth, S. Sudarshan",
+                "978–0–07–352332–3", 129.95, CONDITION_NEW, null);
+    }
+
+    /**
+     * Constructor for selling a textbook
+     */
+    public TextBook(String title, String author, String isbn, double price, @Condition int condition,
+                    Bitmap picture) {
+        this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.price = price;
@@ -42,8 +50,15 @@ public class TextBook implements Parcelable {
         this.picture = picture;
     }
 
-    public String getName() {
-        return name;
+    public TextBook(String title, String author, String isbn, Bitmap picture) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.picture = picture;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getAuthor() {
@@ -63,14 +78,13 @@ public class TextBook implements Parcelable {
         return condition;
     }
 
-    @Nullable
     public Bitmap getPicture() {
         return picture;
     }
 
     @SuppressWarnings("WrongConstant")
     protected TextBook(Parcel in) {
-        name = in.readString();
+        title = in.readString();
         author = in.readString();
         isbn = in.readString();
         price = in.readDouble();
@@ -85,7 +99,7 @@ public class TextBook implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
+        dest.writeString(title);
         dest.writeString(author);
         dest.writeString(isbn);
         dest.writeDouble(price);

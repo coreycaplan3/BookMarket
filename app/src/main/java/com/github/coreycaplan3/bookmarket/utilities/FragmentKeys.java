@@ -8,21 +8,22 @@ import android.support.annotation.StringDef;
  * <p></p>
  * Purpose of Class:
  */
-public final class FragmentKeys {
+public interface FragmentKeys {
 
-    private static final String TAG = FragmentKeys.class.getSimpleName();
+    String LOGIN_FRAGMENT = "Login";
+    String TITLE_FRAGMENT = "Book Mart";
+    String BOOKS_MARKET_LIST_FRAGMENT = "fragmentBooksMarketList";
+    String BOOK_DETAILS_FRAGMENT = "fragmentBookDetails";
+    String TRADE_TITLE_FRAGMENT = "Trade";
+    String TRADE_FORM_FRAGMENT = "Trade a Book";
+    String SELL_FORM_FRAGMENT = "Sell a Textbook";
 
-    public static final String LOGIN_FRAGMENT = "fragmentLogin";
-    public static final String TITLE_FRAGMENT = "fragmentTitle";
+    String POST_NETWORK_FRAGMENT = "postNetworkFragment";
+    String GET_NETWORK_FRAGMENT = "getNetworkFragment";
 
-    public static final String POST_NETWORK_FRAGMENT = TAG + "postNetworkFragment";
-    public static final String GET_NETWORK_FRAGMENT = TAG + "getNetworkFragment";
-
-    @StringDef({LOGIN_FRAGMENT, TITLE_FRAGMENT})
-    public @interface FragmentTag {
-    }
-
-    private FragmentKeys() {
+    @StringDef({LOGIN_FRAGMENT, TITLE_FRAGMENT, BOOKS_MARKET_LIST_FRAGMENT, BOOK_DETAILS_FRAGMENT,
+            TRADE_TITLE_FRAGMENT, TRADE_FORM_FRAGMENT, SELL_FORM_FRAGMENT})
+    @interface FragmentTag {
     }
 
 }

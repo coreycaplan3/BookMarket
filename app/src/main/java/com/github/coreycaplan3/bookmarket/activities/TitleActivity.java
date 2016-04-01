@@ -9,6 +9,11 @@ import android.view.View;
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.TitleFragment;
+import com.github.coreycaplan3.bookmarket.fragments.marketplace.SellingFormFragment;
+import com.github.coreycaplan3.bookmarket.fragments.marketplace.TradeTitleFragment;
+import com.github.coreycaplan3.bookmarket.fragments.marketplace.TradeFormFragment;
+import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
+import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
 import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
 
 import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
@@ -16,6 +21,10 @@ import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
 public class TitleActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = TitleActivity.class.getSimpleName();
+
+    private UserProfile mUserProfile;
+
+    private static final String BUNDLE_PROFILE = TAG + "profile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +35,12 @@ public class TitleActivity extends AppCompatActivity implements View.OnClickList
 
     private void initiateFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            mUserProfile = intent.getParcelableExtra(IntentExtra.PROFILE);
             FragmentCreator.create(TitleFragment.newInstance(), TITLE_FRAGMENT,
                     R.id.title_container, getSupportFragmentManager());
         } else {
-
+            mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
         }
     }
 
@@ -41,14 +52,35 @@ public class TitleActivity extends AppCompatActivity implements View.OnClickList
             intent.putExtra(IntentExtra.ACTIVITY_BUY, true);
             startActivity(intent);
         } else if (id == R.id.title_trade_card) {
-
+            TradeTitleFragment fragment = TradeTitleFragment.newInstance();
+            FragmentCreator.create(fragment, FragmentKeys.TRADE_TITLE_FRAGMENT,
+                    R.id.title_container, getSupportFragmentManager());
         } else if (id == R.id.title_sell_card) {
-
+            Intent intent = new Intent(getApplicationContext(), FormActivity.class);
+            intent.putExtra(IntentExtra.PROFILE, mUserProfile);
+            intent.putExtra(IntentExtra.ACTIVITY_SELL, true);
+            startActivity(intent);
         } else if (id == R.id.title_account_card) {
-
+            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            intent.putExtra(IntentExtra.PROFILE, mUserProfile);
+            startActivity(intent);
+        } else if (id == R.id.trade_title_post_card) {
+            getSupportFragmentManager().popBackStack();
+            Intent intent = new Intent(getApplicationContext(), FormActivity.class);
+            intent.putExtra(IntentExtra.PROFILE, mUserProfile);
+            startActivity(intent);
+        } else if (id == R.id.trade_title_find_card) {
+            getSupportFragmentManager().popBackStack();
+            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+            startActivity(intent);
         } else {
             Log.e(TAG, "onClick: ", new IllegalArgumentException("INVALID ARG"));
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_PROFILE, mUserProfile);
+    }
 }

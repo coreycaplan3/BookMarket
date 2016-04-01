@@ -11,13 +11,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.coreycaplan3.bookmarket.R;
+import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
+import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkFragment;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
+import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
+import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
 import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
 
 import java.util.ArrayList;
@@ -29,17 +34,18 @@ import java.util.ArrayList;
  * Purpose of Class:
  */
 public class SearchActivity extends AppCompatActivity implements GetNetworkCommunicator,
-        OnItemClickListener {
+        OnItemClickListener, SearchView.OnQueryTextListener {
 
-    private ArrayList<TextBook> mBookData = new ArrayList<>();
     private boolean mIsBuyingBook = false;
-    private boolean mIsTradingBook = false;
+    private UserProfile mUserProfile;
+    private ArrayList<TextBook> mBookData = new ArrayList<>();
 
     private ListView mListView;
     private SearchView mSearchView;
+    private ProgressBar mProgressBar;
 
+    private static final String BUNDLE_PROFILE = "bundleProfile";
     private static final String BUNDLE_BOOKS = "bundleBooks";
-    private static final String BUNDLE_IS_TRADING = "bundleIsTrading";
     private static final String BUNDLE_IS_BUYING = "bundleIsBuying";
 
     @Override
@@ -48,30 +54,43 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         setContentView(R.layout.activity_search);
 
         mListView = (ListView) findViewById(R.id.activity_search_list);
-//        mSearchView = findViewById(R.)
-        Intent intent = getIntent();
+        mSearchView = (SearchView) findViewById(R.id.search_view);
+        if (mSearchView != null) {
+            mSearchView.setOnQueryTextListener(this);
+        }
+        mProgressBar = (ProgressBar) findViewById(R.id.search_progress_bar);
+
+        restoreInstance(savedInstanceState);
+    }
+
+    private void restoreInstance(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
+            FragmentCreator.createNetworks(getSupportFragmentManager());
+            Intent intent = getIntent();
+            mUserProfile = intent.getParcelableExtra(IntentExtra.PROFILE);
             mIsBuyingBook = intent.getBooleanExtra(IntentExtra.ACTIVITY_BUY, false);
-            mIsTradingBook = intent.getBooleanExtra(IntentExtra.ACTIVITY_TRADE, false);
             if (mIsBuyingBook) {
                 String hint = getString(R.string.search_for_book_buy);
                 mSearchView.setQueryHint(hint);
-            } else if(mIsTradingBook) {
+            } else {
                 String hint = getString(R.string.search_trade_for);
                 mSearchView.setQueryHint(hint);
             }
         } else {
+            mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
             mBookData = savedInstanceState.getParcelableArrayList(BUNDLE_BOOKS);
             mListView.setAdapter(new BookAdapter(mBookData));
+            mIsBuyingBook = savedInstanceState.getBoolean(BUNDLE_IS_BUYING);
         }
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getApplicationContext(), BookMarketplaceActivity.class);
-        intent.putExtra(IntentExtra.BOOK, mBookData.get(position));
+        intent.putExtra(IntentExtra.PROFILE, mUserProfile);
+        intent.putExtra(IntentExtra.ISBN, mBookData.get(position).getIsbn());
         intent.putExtra(IntentExtra.ACTIVITY_BUY, mIsBuyingBook);
-        intent.putExtra(IntentExtra.ACTIVITY_TRADE, mIsTradingBook);
         startActivity(intent);
         finish();
     }
@@ -79,9 +98,9 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_PROFILE, mUserProfile);
         outState.putParcelableArrayList(BUNDLE_BOOKS, mBookData);
         outState.putBoolean(BUNDLE_IS_BUYING, mIsBuyingBook);
-        outState.putBoolean(BUNDLE_IS_TRADING, mIsTradingBook);
     }
 
     @Override
@@ -97,6 +116,23 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         mBookData = result.getParcelableArrayList(getConstraints);
         BookAdapter adapter = new BookAdapter(mBookData);
         mListView.setAdapter(adapter);
+        mProgressBar.setVisibility(View.GONE);
+        mListView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        GetNetworkFragment fragment = (GetNetworkFragment) getSupportFragmentManager()
+                .findFragmentByTag(FragmentKeys.GET_NETWORK_FRAGMENT);
+        fragment.startSearchTask(query);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mListView.setVisibility(View.GONE);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
 
@@ -163,7 +199,7 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
                 textView.setText(R.string.no_results);
                 return textView;
             } else {
-                textView.setText(mListData.get(position).getName());
+                textView.setText(mListData.get(position).getTitle());
                 return textView;
             }
         }

@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
-import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
 
 public class BookDetailsActivity extends AppCompatActivity implements GetNetworkCommunicator {

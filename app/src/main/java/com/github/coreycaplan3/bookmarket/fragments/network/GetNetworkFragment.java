@@ -57,6 +57,23 @@ public class GetNetworkFragment extends Fragment {
         startTask(task);
     }
 
+    public void startGetBooksTask(String isbn) {
+        NetworkTask task = new NetworkTask();
+        task.performGetBooks(isbn);
+        startTask(task);
+    }
+
+    /**
+     * Gets a user's books for which he/she is trading
+     *
+     * @param userId The user id of the person whose books need to be found
+     */
+    public void startGetTradedBooksTask(String userId) {
+        NetworkTask task = new NetworkTask();
+        task.performGetTradedBooks(userId);
+        startTask(task);
+    }
+
     private void startTask(NetworkTask task) {
         mRunningTasks.put(task.STABLE_ID, task);
         task.execute();
@@ -98,6 +115,8 @@ public class GetNetworkFragment extends Fragment {
         private String mNetworkConstraint;
 
         private String mQuery;
+        private String mIsbn;
+        private String mUserId;
 
         private final String TAG = getClass().getSimpleName();
 
@@ -110,6 +129,15 @@ public class GetNetworkFragment extends Fragment {
             mQuery = query;
         }
 
+        private void performGetBooks(String isbn) {
+            mNetworkConstraint = GET_CONSTRAINT_GET_BOOKS;
+            mIsbn = isbn;
+        }
+
+        private void performGetTradedBooks(String userId) {
+            mNetworkConstraint = GET_CONSTRAINT_GET_TRADED_BOOKS;
+            mUserId = userId;
+        }
 
         @Override
         protected Bundle doInBackground(Void... params) {
@@ -120,6 +148,10 @@ public class GetNetworkFragment extends Fragment {
                 case GET_CONSTRAINT_SEARCH:
                     bundle = getSearchResults(databaseApi);
                     break;
+                case GET_CONSTRAINT_GET_BOOKS:
+                    bundle = getIsbnResults(databaseApi);
+                case GET_CONSTRAINT_GET_TRADED_BOOKS:
+                    bundle = getTradedBooks(databaseApi);
                 default:
                     Log.e(TAG, "doInBackground: ", new IllegalArgumentException("Invalid network " +
                             "constraint: " + mNetworkConstraint));
@@ -128,6 +160,15 @@ public class GetNetworkFragment extends Fragment {
         }
 
         private Bundle getSearchResults(DatabaseApi databaseApi) {
+            //TODO implement me
+            return null;
+        }
+
+        private Bundle getIsbnResults(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle getTradedBooks(DatabaseApi databaseApi) {
             //TODO implement me
             return null;
         }

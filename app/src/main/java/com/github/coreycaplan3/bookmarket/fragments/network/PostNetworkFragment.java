@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
+import com.github.coreycaplan3.bookmarket.database.DatabaseApi;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.PostNetworkConstraints;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import static com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.*;
 
 /**
- * Created by Corey on 3/19/2016.
+ * Created by Corey on 3/31/2016.
  * Project: MeetUp
  * <p></p>
  * Purpose of Class: To provide a worker fragment that is responsible for handling all POST network
@@ -68,7 +69,7 @@ public class PostNetworkFragment extends Fragment {
 
     public void startPostBookTask(TextBook textBook, UserProfile userProfile) {
         NetworkTask task = new NetworkTask();
-        task.performPostBookTask(textBook, userProfile);
+        task.performPostSellBookTask(textBook, userProfile);
         startTask(task);
     }
 
@@ -87,6 +88,18 @@ public class PostNetworkFragment extends Fragment {
     public void startTradeBookTask(TextBook textBook, UserProfile userProfile, String otherUserId) {
         NetworkTask task = new NetworkTask();
         task.performTradeBookTask(textBook, userProfile, otherUserId);
+        startTask(task);
+    }
+
+    public void startPostTradeBookTask(TextBook textBook, UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performPostTradeBookTask(textBook, userProfile);
+        startTask(task);
+    }
+
+    public void startPostSellBookTask(TextBook textBook, UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performPostTradeBookTask(textBook, userProfile);
         startTask(task);
     }
 
@@ -169,12 +182,6 @@ public class PostNetworkFragment extends Fragment {
             mConnectionToken = connectionToken;
         }
 
-        private void performPostBookTask(TextBook textBook, UserProfile userProfile) {
-            mNetworkConstraint = CONSTRAINT_POST_BOOK;
-            mTextBook = textBook;
-            mUserProfile = userProfile;
-        }
-
         private void performEditBookTask(TextBook textBook, UserProfile userProfile) {
             mNetworkConstraint = CONSTRAINT_EDIT_BOOK;
             mTextBook = textBook;
@@ -197,6 +204,18 @@ public class PostNetworkFragment extends Fragment {
             mOtherUserId = otherUserId;
         }
 
+        private void performPostTradeBookTask(TextBook textBook, UserProfile userProfile) {
+            mNetworkConstraint = CONSTRAINT_POST_TRADE_BOOK;
+            mTextBook = textBook;
+            mUserProfile = userProfile;
+        }
+
+        private void performPostSellBookTask(TextBook textBook, UserProfile userProfile) {
+            mNetworkConstraint = CONSTRAINT_POST_SELL_BOOK;
+            mTextBook = textBook;
+            mUserProfile = userProfile;
+        }
+
         private void performPostTradeListTask(ArrayList<TextBook> textBookList,
                                               UserProfile userProfile) {
             mNetworkConstraint = CONSTRAINT_POST_TRADE_LIST;
@@ -207,13 +226,73 @@ public class PostNetworkFragment extends Fragment {
         @Override
         protected Bundle doInBackground(Void... params) {
             Bundle bundle = new Bundle();
-            //TODO implement logic for each api call
+            DatabaseApi databaseApi = new DatabaseApi();
             switch (mNetworkConstraint) {
+                case CONSTRAINT_LOGIN:
+                    bundle = startLogin(databaseApi);
+                    break;
+                case CONSTRAINT_SILENT_LOGIN:
+                    bundle = startSilentLogin(databaseApi);
+                    break;
+                case CONSTRAINT_POST_SELL_BOOK:
+                    bundle = startPostSellBook(databaseApi);
+                    break;
+                case CONSTRAINT_BUY_BOOK:
+                    bundle = startBuyBook(databaseApi);
+                    break;
+                case CONSTRAINT_EDIT_BOOK:
+                    bundle = startEditBook(databaseApi);
+                    break;
+                case CONSTRAINT_TRADE_BOOK:
+                    bundle = startTradeBook(databaseApi);
+                    break;
+                case CONSTRAINT_POST_TRADE_BOOK:
+                    bundle = startPostTradeBook(databaseApi);
+                    break;
+                case CONSTRAINT_POST_TRADE_LIST:
+                    bundle = startPostTradeList(databaseApi);
+                    break;
                 default:
                     Log.e(TAG, "doInBackground: ", new IllegalArgumentException("Invalid network " +
                             "constraint: " + mNetworkConstraint));
             }
             return bundle;
+        }
+
+        private Bundle startLogin(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle startSilentLogin(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle startPostSellBook(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle startPostTradeBook(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle startPostTradeList(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle startBuyBook(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle startEditBook(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle startTradeBook(DatabaseApi databaseApi) {
+            return null;
+        }
+
+        private Bundle startSellBook(DatabaseApi databaseApi) {
+            return null;
         }
 
         @Override

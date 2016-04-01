@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.github.coreycaplan3.bookmarket.activities.FormActivity">
+
+    <include layout="@layout/app_bar" />
+
+    <FrameLayout
+        android:id="@+id/form_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/form_floating_action_button"
+        android:layout_width="wrap_content"
+        app:layout_anchorGravity="top|end"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/toolbar"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_barcode_scan_white_36dp" />
+
+</android.support.design.widget.CoordinatorLayout>

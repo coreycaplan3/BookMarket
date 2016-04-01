@@ -12,7 +12,9 @@ public final class IntentExtra {
 
     public static final String BOOK = TAG + "book";
     public static final String ACTIVITY_BUY = TAG + "activityBuy";
-    public static final String ACTIVITY_TRADE = TAG + "activityTrade";
+    public static final String PROFILE = TAG + "profile";
+    public static final String ISBN = TAG + "ISBN";
+    public static final String ACTIVITY_SELL = TAG + "SELL";
 
     private IntentExtra() {
     }

@@ -15,9 +15,9 @@ import java.lang.annotation.RetentionPolicy;
 
 public interface PostNetworkConstants {
 
-    @StringDef({CONSTRAINT_LOGIN, CONSTRAINT_SILENT_LOGIN, CONSTRAINT_POST_BOOK,
+    @StringDef({CONSTRAINT_LOGIN, CONSTRAINT_SILENT_LOGIN,
             CONSTRAINT_EDIT_BOOK, CONSTRAINT_BUY_BOOK, CONSTRAINT_TRADE_BOOK,
-            CONSTRAINT_POST_TRADE_LIST})
+            CONSTRAINT_POST_TRADE_LIST, CONSTRAINT_POST_TRADE_BOOK, CONSTRAINT_POST_SELL_BOOK})
     @Retention(RetentionPolicy.SOURCE)
     @interface PostNetworkConstraints {
     }
@@ -25,16 +25,22 @@ public interface PostNetworkConstants {
     /**
      * Constraint for performing a traditional login (involving email and password)
      */
-    String CONSTRAINT_LOGIN = "getNetworkConstraintLogin";
+    String CONSTRAINT_LOGIN = "postNetworkConstraintLogin";
 
     /**
      * Constraint for performing a silent login using the user's cached login token.
      */
-    String CONSTRAINT_SILENT_LOGIN = "getNetworkConstraintSilentLogin";
+    String CONSTRAINT_SILENT_LOGIN = "postNetworkConstraintSilentLogin";
 
-    String CONSTRAINT_POST_BOOK = "getNetworkConstraintPostBook";
-    String CONSTRAINT_EDIT_BOOK = "getNetworkConstraintPostBook";
-    String CONSTRAINT_BUY_BOOK = "getNetworkConstraintPostBook";
-    String CONSTRAINT_TRADE_BOOK = "getNetworkConstraintPostBook";
-    String CONSTRAINT_POST_TRADE_LIST = "getNetworkConstraintPostBook";
+    String CONSTRAINT_EDIT_BOOK = "postNetworkConstraintEditBook";
+
+    String CONSTRAINT_BUY_BOOK = "postNetworkConstraintBuyBook";
+
+    String CONSTRAINT_TRADE_BOOK = "postNetworkConstraintTradeBook";
+
+    String CONSTRAINT_POST_TRADE_BOOK = "postNetworkConstraintPostTradeBook";
+
+    String CONSTRAINT_POST_TRADE_LIST = "postNetworkConstraintPostTradeList";
+
+    String CONSTRAINT_POST_SELL_BOOK = "postNetworkConstraintPostSellBook";
 }

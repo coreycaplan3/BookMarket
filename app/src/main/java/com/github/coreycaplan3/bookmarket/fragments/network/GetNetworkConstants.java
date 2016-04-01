@@ -12,11 +12,12 @@ import android.support.annotation.StringDef;
 
 public interface GetNetworkConstants {
 
-    @StringDef({GET_CONSTRAINT_SEARCH, GET_CONSTRAINT_GET_TRADED_BOOKS})
+    @StringDef({GET_CONSTRAINT_SEARCH, GET_CONSTRAINT_GET_TRADED_BOOKS, GET_CONSTRAINT_GET_BOOKS})
     @interface GetNetworkConstraints {
     }
 
     String GET_CONSTRAINT_SEARCH = "GetNetworkSearch";
+    String GET_CONSTRAINT_GET_BOOKS = "GetNetworkGetBooks";
     String GET_CONSTRAINT_GET_TRADED_BOOKS = "GetTradedBooks";
 
 }
