@@ -11,7 +11,7 @@ import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.FragmentTag;
 
 /**
- * Created by Corey on 3/26/2016.
+ * Created by Corey on 3/31/2016.
  * Project: BookMarket
  * <p></p>
  * Purpose of Class: To streamline fragment creation in a uniform way and reduce code bloat whenever
@@ -31,6 +31,7 @@ public final class FragmentCreator {
                              FragmentManager fragmentManager) {
         return fragmentManager.beginTransaction()
                 .replace(containerId, fragment, tag)
+                .addToBackStack(tag)
                 .setCustomAnimations(ENTER_ANIMATION, EXIT_ANIMATION, POP_ENTER_ANIMATION,
                         POP_EXIT_ANIMATION)
                 .commit();

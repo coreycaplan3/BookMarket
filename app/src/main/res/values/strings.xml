@@ -59,5 +59,14 @@
     <string name="like_new">Like New</string>
     <string name="good">Good</string>
     <string name="bad">Bad</string>
+    <string name="error_email_or_password">Invalid email or password</string>
+    <string name="signing_in">Signing in…</string>
+    <string name="registering">Registering…</string>
+    <string name="error_passwords_match">The two passwords must match</string>
+    <string name="error_email_in_use">This email is already in use</string>
+    <string name="notify_seller">Notifying Seller…</string>
+    <string name="notify_trader">Notifying Trader…</string>
+    <string name="seller_notified">Seller notified!</string>
+    <string name="trader_notified">Trader notified!</string>
 
 </resources>

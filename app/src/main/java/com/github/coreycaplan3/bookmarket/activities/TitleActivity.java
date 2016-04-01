@@ -1,24 +1,26 @@
 package com.github.coreycaplan3.bookmarket.activities;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.TitleFragment;
-import com.github.coreycaplan3.bookmarket.fragments.marketplace.SellingFormFragment;
 import com.github.coreycaplan3.bookmarket.fragments.marketplace.TradeTitleFragment;
-import com.github.coreycaplan3.bookmarket.fragments.marketplace.TradeFormFragment;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
 import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
 
 import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
 
-public class TitleActivity extends AppCompatActivity implements View.OnClickListener {
+public class TitleActivity extends AppCompatActivity implements View.OnClickListener,
+        FragmentManager.OnBackStackChangedListener {
 
     private static final String TAG = TitleActivity.class.getSimpleName();
 
@@ -30,7 +32,17 @@ public class TitleActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_title);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
+
         initiateFragment(savedInstanceState);
+
+        if (getSupportActionBar() != null) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.title_container);
+            if (fragment != null) {
+                getSupportActionBar().setTitle(fragment.getTag());
+            }
+        }
     }
 
     private void initiateFragment(Bundle savedInstanceState) {
@@ -41,6 +53,16 @@ public class TitleActivity extends AppCompatActivity implements View.OnClickList
                     R.id.title_container, getSupportFragmentManager());
         } else {
             mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
+        }
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        if (getSupportActionBar() != null) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.title_container);
+            if (fragment != null) {
+                getSupportActionBar().setTitle(fragment.getTag());
+            }
         }
     }
 

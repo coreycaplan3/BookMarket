@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Corey on 3/27/2016.
+ * Created by Corey on 3/31/2016.
  * Project: BookMarket
  * <p></p>
  * Purpose of Class:
@@ -28,6 +28,22 @@ public class GeneralUser implements Parcelable {
         email = in.readString();
         userId = in.readString();
         university = in.readString();
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getUniversity() {
+        return university;
     }
 
     @Override

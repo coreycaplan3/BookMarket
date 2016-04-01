@@ -86,6 +86,17 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        onSupportNavigateUp();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getApplicationContext(), BookMarketplaceActivity.class);
         intent.putExtra(IntentExtra.PROFILE, mUserProfile);
@@ -93,14 +104,6 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         intent.putExtra(IntentExtra.ACTIVITY_BUY, mIsBuyingBook);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(BUNDLE_PROFILE, mUserProfile);
-        outState.putParcelableArrayList(BUNDLE_BOOKS, mBookData);
-        outState.putBoolean(BUNDLE_IS_BUYING, mIsBuyingBook);
     }
 
     @Override
@@ -135,6 +138,13 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         return false;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_PROFILE, mUserProfile);
+        outState.putParcelableArrayList(BUNDLE_BOOKS, mBookData);
+        outState.putBoolean(BUNDLE_IS_BUYING, mIsBuyingBook);
+    }
 
     private class BookAdapter implements ListAdapter {
 

@@ -3,8 +3,8 @@ package com.github.coreycaplan3.bookmarket.utilities;
 import android.os.Build;
 
 /**
- * Created by Corey on 2/7/2016.
- * Project: MeetUp
+ * Created by Corey on 3/31/2016.
+ * Project: BookMarket
  * <p></p>
  * Purpose of Class: To easily check the various versions of the user's device.
  */

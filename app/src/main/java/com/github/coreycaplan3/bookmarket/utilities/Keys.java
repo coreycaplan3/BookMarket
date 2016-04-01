@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
 /**
- * Created by Corey on 3/26/2016.
+ * Created by Corey on 3/31/2016.
  * Project: BookMarket
  * <p></p>
  * Purpose of Class: Load and save information to {@link SharedPreferences}.

@@ -14,8 +14,8 @@ import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.
 import static com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.*;
 
 /**
- * Created by Corey on 3/19/2016.
- * Project: MeetUp
+ * Created by Corey on 3/31/2016.
+ * Project: BookMarket
  * <p></p>
  * Purpose of Class: To provide a worker fragment that is responsible for handling all POST network
  * requests. This fragment retains its instance whenever the corresponding activity is destroyed.

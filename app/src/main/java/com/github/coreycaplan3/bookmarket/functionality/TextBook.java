@@ -7,7 +7,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 
 /**
- * Created by Corey on 3/27/2016.
+ * Created by Corey on 3/31/2016.
  * Project: BookMarket
  * <p></p>
  * Purpose of Class:
@@ -50,11 +50,10 @@ public class TextBook implements Parcelable {
         this.picture = picture;
     }
 
-    public TextBook(String title, String author, String isbn, Bitmap picture) {
+    public TextBook(String title, String author, String isbn) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
-        this.picture = picture;
     }
 
     public String getTitle() {

@@ -6,8 +6,8 @@ import android.support.v4.util.LruCache;
 import com.android.volley.toolbox.ImageLoader;
 
 /**
- * Created by Corey on 3/21/2016.
- * Project: MeetUp
+ * Created by Corey on 3/31/2016.
+ * Project: BookMarket
  * <p></p>
  * Purpose of Class: To create a cache that can store the user's profile pictures on the device.
  * This way, the picture doesn't have to be downloaded every time the user signs into his/her

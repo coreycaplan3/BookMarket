@@ -6,8 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by Corey on 3/19/2016.
- * Project: MeetUp
+ * Created by Corey on 3/31/2016.
+ * Project: BookMarket
  * <p></p>
  * Purpose of Class: An annotation for distinguishing between which type of networking action the
  * {@link PostNetworkFragment} should perform.
@@ -15,7 +15,7 @@ import java.lang.annotation.RetentionPolicy;
 
 public interface PostNetworkConstants {
 
-    @StringDef({CONSTRAINT_LOGIN, CONSTRAINT_SILENT_LOGIN,
+    @StringDef({CONSTRAINT_LOGIN, CONSTRAINT_SILENT_LOGIN, CONSTRAINT_REGISTER,
             CONSTRAINT_EDIT_BOOK, CONSTRAINT_BUY_BOOK, CONSTRAINT_TRADE_BOOK,
             CONSTRAINT_POST_TRADE_LIST, CONSTRAINT_POST_TRADE_BOOK, CONSTRAINT_POST_SELL_BOOK})
     @Retention(RetentionPolicy.SOURCE)
@@ -31,6 +31,8 @@ public interface PostNetworkConstants {
      * Constraint for performing a silent login using the user's cached login token.
      */
     String CONSTRAINT_SILENT_LOGIN = "postNetworkConstraintSilentLogin";
+
+    String CONSTRAINT_REGISTER = "postNetworkConstraintRegister";
 
     String CONSTRAINT_EDIT_BOOK = "postNetworkConstraintEditBook";
 

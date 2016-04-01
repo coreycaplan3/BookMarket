@@ -5,8 +5,8 @@ import android.os.Bundle;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
 
 /**
- * Created by Corey on 1/14/2016.
- * Project: MeetUp
+ * Created by Corey on 3/31/2016.
+ * Project: BookMarket
  * <p></p>
  * Purpose of Class: A listener used for passing the results of the operations in the
  * {@link GetNetworkFragment} to the corresponding activity.

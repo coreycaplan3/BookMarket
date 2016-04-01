@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.ViewGroup;
 
 /**
- * Created by Corey on 3/26/2016.
+ * Created by Corey on 3/31/2016.
  * Project: BookMarket
  * <p></p>
  * Purpose of Class:

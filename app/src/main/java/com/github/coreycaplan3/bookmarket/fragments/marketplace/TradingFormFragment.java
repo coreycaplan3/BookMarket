@@ -37,10 +37,10 @@ import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
  * <p></p>
  * Purpose of Class:
  */
-public class SellingFormFragment extends Fragment implements View.OnClickListener,
+public class TradingFormFragment extends Fragment implements View.OnClickListener,
         Dialog.OnCancelListener, Spinner.OnItemSelectedListener {
 
-    private static final String TAG = SellingFormFragment.class.getSimpleName();
+    private static final String TAG = TradingFormFragment.class.getSimpleName();
     private String mPrice;
     private String mTitle;
     private String mAuthor;
@@ -76,8 +76,8 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
 
     private static final int MINIMUM_LENGTH = 3;
 
-    public static DesiredBooksForm newInstance(UserProfile userProfile) {
-        DesiredBooksForm fragment = new DesiredBooksForm();
+    public static TradingFormFragment newInstance(UserProfile userProfile) {
+        TradingFormFragment fragment = new TradingFormFragment();
         Bundle arguments = new Bundle();
         arguments.putParcelable(BUNDLE_PROFILE, userProfile);
         fragment.setArguments(arguments);
@@ -177,7 +177,7 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         mImageContainer = (CardView) view.findViewById(R.id.default_book_form_image_container);
 
         Button button = (Button) view.findViewById(R.id.default_book_form_submit_button);
-        button.setText(R.string.sell);
+        button.setText(R.string.trade);
         button.setOnClickListener(this);
         setListeners();
 

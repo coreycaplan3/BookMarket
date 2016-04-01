@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.github.coreycaplan3.bookmarket.database.DatabaseApi;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.PostNetworkConstraints;
+import com.github.coreycaplan3.bookmarket.functionality.GeneralUser;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 
@@ -19,7 +20,7 @@ import static com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkCo
 
 /**
  * Created by Corey on 3/31/2016.
- * Project: MeetUp
+ * Project: BookMarket
  * <p></p>
  * Purpose of Class: To provide a worker fragment that is responsible for handling all POST network
  * requests. This fragment retains its instance whenever the corresponding activity is destroyed.
@@ -67,9 +68,9 @@ public class PostNetworkFragment extends Fragment {
         startTask(task);
     }
 
-    public void startPostBookTask(TextBook textBook, UserProfile userProfile) {
+    public void startRegisterTask(String name, String email, String password, String university) {
         NetworkTask task = new NetworkTask();
-        task.performPostSellBookTask(textBook, userProfile);
+        task.performRegisterTask(name, email, password, university);
         startTask(task);
     }
 
@@ -79,15 +80,16 @@ public class PostNetworkFragment extends Fragment {
         startTask(task);
     }
 
-    public void startBuyBookTask(TextBook textBook, UserProfile userProfile, String otherUserId) {
+    public void startBuyBookTask(TextBook textBook, UserProfile userProfile, GeneralUser seller) {
         NetworkTask task = new NetworkTask();
-        task.performBuyBookTask(textBook, userProfile, otherUserId);
+        task.performBuyBookTask(textBook, userProfile, seller);
         startTask(task);
     }
 
-    public void startTradeBookTask(TextBook textBook, UserProfile userProfile, String otherUserId) {
+    public void startTradeBookTask(TextBook textBook, UserProfile userProfile,
+                                   GeneralUser seller) {
         NetworkTask task = new NetworkTask();
-        task.performTradeBookTask(textBook, userProfile, otherUserId);
+        task.performTradeBookTask(textBook, userProfile, seller);
         startTask(task);
     }
 
@@ -157,10 +159,12 @@ public class PostNetworkFragment extends Fragment {
         @PostNetworkConstraints
         private String mNetworkConstraint;
 
+        private String mName;
         private String mEmail;
         private String mPassword;
+        private String mUniversity;
         private String mConnectionToken;
-        private String mOtherUserId;
+        private GeneralUser mSeller;
         private TextBook mTextBook;
         private UserProfile mUserProfile;
         private ArrayList<TextBook> mTextBookList;
@@ -182,6 +186,15 @@ public class PostNetworkFragment extends Fragment {
             mConnectionToken = connectionToken;
         }
 
+        private void performRegisterTask(String name, String email, String password,
+                                         String university) {
+            mNetworkConstraint = CONSTRAINT_REGISTER;
+            mName = name;
+            mEmail = email;
+            mPassword = password;
+            mUniversity = university;
+        }
+
         private void performEditBookTask(TextBook textBook, UserProfile userProfile) {
             mNetworkConstraint = CONSTRAINT_EDIT_BOOK;
             mTextBook = textBook;
@@ -189,19 +202,19 @@ public class PostNetworkFragment extends Fragment {
         }
 
         private void performBuyBookTask(TextBook textBook, UserProfile userProfile,
-                                        String otherUserId) {
+                                        GeneralUser seller) {
             mNetworkConstraint = CONSTRAINT_BUY_BOOK;
             mTextBook = textBook;
             mUserProfile = userProfile;
-            mOtherUserId = otherUserId;
+            mSeller = seller;
         }
 
         private void performTradeBookTask(TextBook textBook, UserProfile userProfile,
-                                          String otherUserId) {
+                                          GeneralUser seller) {
             mNetworkConstraint = CONSTRAINT_TRADE_BOOK;
             mTextBook = textBook;
             mUserProfile = userProfile;
-            mOtherUserId = otherUserId;
+            mSeller = seller;
         }
 
         private void performPostTradeBookTask(TextBook textBook, UserProfile userProfile) {
@@ -229,28 +242,31 @@ public class PostNetworkFragment extends Fragment {
             DatabaseApi databaseApi = new DatabaseApi();
             switch (mNetworkConstraint) {
                 case CONSTRAINT_LOGIN:
-                    bundle = startLogin(databaseApi);
+                    startLogin(databaseApi, bundle);
                     break;
                 case CONSTRAINT_SILENT_LOGIN:
-                    bundle = startSilentLogin(databaseApi);
+                    startSilentLogin(databaseApi, bundle);
+                    break;
+                case CONSTRAINT_REGISTER:
+                    startRegistration(databaseApi, bundle);
                     break;
                 case CONSTRAINT_POST_SELL_BOOK:
-                    bundle = startPostSellBook(databaseApi);
+                    startPostSellBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_BUY_BOOK:
-                    bundle = startBuyBook(databaseApi);
+                    startBuyBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_EDIT_BOOK:
-                    bundle = startEditBook(databaseApi);
+                    startEditBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_TRADE_BOOK:
-                    bundle = startTradeBook(databaseApi);
+                    startTradeBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_POST_TRADE_BOOK:
-                    bundle = startPostTradeBook(databaseApi);
+                    startPostTradeBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_POST_TRADE_LIST:
-                    bundle = startPostTradeList(databaseApi);
+                    startPostTradeList(databaseApi, bundle);
                     break;
                 default:
                     Log.e(TAG, "doInBackground: ", new IllegalArgumentException("Invalid network " +
@@ -259,45 +275,54 @@ public class PostNetworkFragment extends Fragment {
             return bundle;
         }
 
-        private Bundle startLogin(DatabaseApi databaseApi) {
-            return null;
+        private void startLogin(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle startSilentLogin(DatabaseApi databaseApi) {
-            return null;
+        private void startSilentLogin(DatabaseApi databaseApi, Bundle bundle) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
-        private Bundle startPostSellBook(DatabaseApi databaseApi) {
-            return null;
+        private void startRegistration(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle startPostTradeBook(DatabaseApi databaseApi) {
-            return null;
+        private void startPostSellBook(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle startPostTradeList(DatabaseApi databaseApi) {
-            return null;
+        private void startPostTradeBook(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle startBuyBook(DatabaseApi databaseApi) {
-            return null;
+        private void startPostTradeList(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle startEditBook(DatabaseApi databaseApi) {
-            return null;
+        private void startBuyBook(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle startTradeBook(DatabaseApi databaseApi) {
-            return null;
+        private void startEditBook(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
-        private Bundle startSellBook(DatabaseApi databaseApi) {
-            return null;
+        private void startTradeBook(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
+        private void startSellBook(DatabaseApi databaseApi, Bundle bundle) {
+
         }
 
         @Override
         protected void onCancelled(Bundle bundle) {
             if (mPostNetworkCommunicator != null) {
+                bundle = new Bundle();
                 mPostNetworkCommunicator.onPostNetworkTaskComplete(bundle, mNetworkConstraint);
                 onTaskComplete(STABLE_ID);
             } else {
