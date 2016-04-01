@@ -1,7 +1,7 @@
 package com.github.coreycaplan3.bookmarket.database;
 
 import android.util.Log;
- 
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -29,6 +29,7 @@ import innovations.leavitt.meetup.functionality.GeneralUser;
 import innovations.leavitt.meetup.functionality.PlannedEvent;
 import innovations.leavitt.meetup.functionality.UserProfile;
 import innovations.leavitt.meetup.util.ParseDate;
+
 /**
  * Created by Corey on 3/31/2016.
  * Project: BookMarket
