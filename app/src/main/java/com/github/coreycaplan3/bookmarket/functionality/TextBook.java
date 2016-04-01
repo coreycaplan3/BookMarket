@@ -22,6 +22,7 @@ public class TextBook implements Parcelable {
     private String title;
     private String author;
     private String isbn;
+    private String imageUrl;
     private double price;
     @Nullable
     private String sellingId;
@@ -38,13 +39,6 @@ public class TextBook implements Parcelable {
 
     @IntDef({CONDITION_NEW, CONDITION_LIKE_NEW, CONDITION_GOOD, CONDITION_BAD})
     public @interface Condition {
-    }
-
-    @SuppressWarnings("unused")
-    public static TextBook getDummyTextbook() {
-        return new TextBook("Database System Concepts 6th Edition",
-                "Abraham Silberschatz, Henry F. Korth, S. Sudarshan",
-                "978–0–07–352332–3", 129.95, CONDITION_NEW, null);
     }
 
     public static String getCondition(@Condition int condition, Context context) {
@@ -82,6 +76,19 @@ public class TextBook implements Parcelable {
     }
 
     /**
+     * Constructor for selling a textbook
+     */
+    public TextBook(String title, String author, String isbn, double price, @Condition int condition,
+                    String imageUrl) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.price = price;
+        this.condition = condition;
+        this.imageUrl = imageUrl;
+    }
+
+    /**
      * Constructor for editing a selling a textbook
      */
     @SuppressWarnings("NullableProblems")
@@ -96,6 +103,18 @@ public class TextBook implements Parcelable {
         this.sellingId = sellingId;
     }
 
+    @SuppressWarnings("NullableProblems")
+    public TextBook(String title, String author, String isbn, double price, @Condition int condition,
+                    String imageUrl, String sellingId) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.price = price;
+        this.condition = condition;
+        this.imageUrl = imageUrl;
+        this.sellingId = sellingId;
+    }
+
     /**
      * Constructor for trading a textbook
      */
@@ -106,6 +125,18 @@ public class TextBook implements Parcelable {
         this.isbn = isbn;
         this.condition = condition;
         this.picture = picture;
+    }
+
+    /**
+     * Constructor for trading a textbook
+     */
+    public TextBook(String title, String author, String isbn, @Condition int condition,
+                    String imageUrl) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.condition = condition;
+        this.imageUrl = imageUrl;
     }
 
     /**
@@ -123,12 +154,48 @@ public class TextBook implements Parcelable {
     }
 
     /**
+     * Constructor for editing a trading textbook
+     */
+    @SuppressWarnings("NullableProblems")
+    public TextBook(String title, String author, String isbn, @Condition int condition,
+                    String imageUrl, String tradeId) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.condition = condition;
+        this.imageUrl = imageUrl;
+        this.tradingId = tradeId;
+    }
+
+    /**
+     * Constructor for editing a trading textbook
+     */
+    @SuppressWarnings("NullableProblems")
+    public TextBook(String title, String author, String isbn, @Condition int condition,
+                    Bitmap picture, String imageUrl, String tradeId) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.condition = condition;
+        this.picture = picture;
+        this.tradingId = tradeId;
+        this.imageUrl = imageUrl;
+    }
+
+    /**
      * Constructor for posting a textbook to your desired trades
      */
     public TextBook(String title, String author, String isbn) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+    }
+
+    public TextBook(String title, String author, String isbn, String url, boolean isUrl) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.imageUrl = url;
     }
 
     /**
@@ -139,6 +206,13 @@ public class TextBook implements Parcelable {
         this.author = author;
         this.isbn = isbn;
         this.tradingId = tradingId;
+    }
+
+    public TextBook(String title, String author, String isbn, Bitmap picture) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.picture = picture;
     }
 
     /**
@@ -202,6 +276,10 @@ public class TextBook implements Parcelable {
         return picture;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     @SuppressWarnings("WrongConstant")
     protected TextBook(Parcel in) {
         title = in.readString();
@@ -212,6 +290,7 @@ public class TextBook implements Parcelable {
         picture = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
         sellingId = in.readString();
         tradingId = in.readString();
+        imageUrl = in.readString();
     }
 
     @Override
@@ -229,6 +308,7 @@ public class TextBook implements Parcelable {
         dest.writeValue(picture);
         dest.writeString(sellingId);
         dest.writeString(tradingId);
+        dest.writeString(imageUrl);
     }
 
     @SuppressWarnings("unused")
@@ -244,4 +324,8 @@ public class TextBook implements Parcelable {
         }
     };
 
+    @Override
+    public String toString() {
+        return "Title: " + title + " Author: " + author;
+    }
 }

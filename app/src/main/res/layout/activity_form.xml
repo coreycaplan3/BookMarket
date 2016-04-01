@@ -38,6 +38,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_barcode_scan_white_36dp"
         app:layout_anchor="@id/toolbar"
-        app:layout_anchorGravity="top|end" />
+        app:layout_anchorGravity="center|end"
+        app:layout_behavior="com.github.coreycaplan3.bookmarket.custom.FloatingActionButtonBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

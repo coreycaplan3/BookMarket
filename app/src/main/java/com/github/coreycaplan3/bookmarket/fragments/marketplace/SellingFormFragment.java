@@ -357,10 +357,6 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
             isValid = false;
         }
 
-//        if (mImage == null) {
-//            int color = getContext().getResources().getColor(android.R.color.holo_red_light);
-//            mImageContainer.setCardBackgroundColor(color);
-//        }
         return isValid;
     }
 
@@ -394,6 +390,7 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         mTitleEditText.setText(textBook.getTitle());
         mAuthorEditText.setText(textBook.getAuthor());
         mIsbnEditText.setText(textBook.getIsbn());
+        onImageTaken(textBook.getPicture());
     }
 
     public void onImageTaken(Bitmap image) {
@@ -402,6 +399,7 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         mImageContainer.setCardBackgroundColor(white);
         mAddImageTextView.setVisibility(View.GONE);
         mBookImageView.setImageBitmap(image);
+        mBookImageView.setVisibility(View.VISIBLE);
     }
 
     public void onPostSuccessful() {
@@ -440,6 +438,7 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
         outState.putString(BUNDLE_SELL_ID, mSellId);
         outState.putBoolean(BUNDLE_IS_PROGRESS_SHOWING, mIsProgressShowing);
         outState.putBoolean(BUNDLE_IS_EDITING_BOOK, mIsEditingBook);
+        outState.putParcelable(BUNDLE_IMAGE, mImage);
     }
 
 }

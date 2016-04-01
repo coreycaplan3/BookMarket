@@ -1,8 +1,10 @@
 package com.github.coreycaplan3.bookmarket.custom;
 
+import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
+import android.util.AttributeSet;
 import android.view.View;
 
 /**
@@ -12,6 +14,10 @@ import android.view.View;
  * Purpose of Class:
  */
 public class FloatingActionButtonBehavior extends FloatingActionButton.Behavior {
+
+    public FloatingActionButtonBehavior(Context context, AttributeSet attrs) {
+        super();
+    }
 
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout,

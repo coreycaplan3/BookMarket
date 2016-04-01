@@ -9,6 +9,7 @@ import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
 import com.github.coreycaplan3.bookmarket.database.DatabaseApi;
+import com.github.coreycaplan3.bookmarket.database.IsbnApi;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
@@ -102,6 +103,12 @@ public class GetNetworkFragment extends Fragment {
         startTask(task);
     }
 
+    public void getTextbookFromIsbn(String isbn) {
+        NetworkTask task = new NetworkTask();
+        task.performGetTextbookFromIsbn(isbn);
+        startTask(task);
+    }
+
     private void startTask(NetworkTask task) {
         mRunningTasks.put(task.STABLE_ID, task);
         task.execute();
@@ -188,6 +195,11 @@ public class GetNetworkFragment extends Fragment {
             mUserProfile = userProfile;
         }
 
+        private void performGetTextbookFromIsbn(String isbn) {
+            mNetworkConstraint = GET_CONSTRAINT_BARCODE_AUTOCOMPLETE;
+            mIsbn = isbn;
+        }
+
         @Override
         protected Bundle doInBackground(Void... params) {
             Bundle bundle = new Bundle();
@@ -214,6 +226,9 @@ public class GetNetworkFragment extends Fragment {
                     break;
                 case GET_CONSTRAINT_GET_OLD_TRADE_LISTINGS:
                     getOldTradeListings(databaseApi, bundle);
+                    break;
+                case GET_CONSTRAINT_BARCODE_AUTOCOMPLETE:
+                    getBookInformationFromIsbn(bundle);
                     break;
                 default:
                     Log.e(TAG, "doInBackground: ", new IllegalArgumentException("Invalid network " +
@@ -254,6 +269,17 @@ public class GetNetworkFragment extends Fragment {
 
         private void getOldTradeListings(DatabaseApi databaseApi, Bundle bundle) {
 
+        }
+
+        private void getBookInformationFromIsbn(Bundle bundle) {
+            IsbnApi isbnApi = new IsbnApi();
+            TextBook textBook = null;
+            try {
+                textBook = isbnApi.getTextBookFromIsbn(mIsbn);
+            } catch (Exception e) {
+                Log.e(TAG, "getBookInformationFromIsbn: ", e);
+            }
+            bundle.putParcelable(mNetworkConstraint, textBook);
         }
 
         @Override

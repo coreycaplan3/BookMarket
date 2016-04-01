@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -32,7 +34,7 @@ import static com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkCo
 import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
 
 public class ProfileActivity extends AppCompatActivity implements DialogCallback,
-        GetNetworkCommunicator, PostNetworkCommunicator {
+        GetNetworkCommunicator, PostNetworkCommunicator, OnBackStackChangedListener {
 
     private UserProfile mUserProfile;
 
@@ -44,9 +46,11 @@ public class ProfileActivity extends AppCompatActivity implements DialogCallback
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
         restoreInstance(savedInstanceState);
@@ -67,12 +71,20 @@ public class ProfileActivity extends AppCompatActivity implements DialogCallback
     }
 
     @Override
+    public void onBackStackChanged() {
+        if(getSupportActionBar() != null) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.profile_container);
+            getSupportActionBar().setTitle(fragment.getTag());
+        }
+    }
+
+    @Override
     public void onDialogClick(String dialogTag, DialogInterface dialog, int which) {
         if (dialogTag.equals(SignOutDialog.DIALOG_TAG) && which == Dialog.BUTTON_POSITIVE) {
-            Keys.saveUserInformation(this, null);
+            Keys.wipeUserInformation(this);
+            UiUtility.toast(getApplicationContext(), R.string.sign_out_successful);
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
-            UiUtility.toast(getApplicationContext(), R.string.sign_out_successful);
             finish();
         }
     }
@@ -80,11 +92,11 @@ public class ProfileActivity extends AppCompatActivity implements DialogCallback
     @Override
     public void onGetNetworkTaskComplete(Bundle result,
                                          @GetNetworkConstraints String getConstraints) {
-        if(getConstraints.equals(GET_CONSTRAINT_GET_DESIRED_TRADING_BOOKS)) {
+        if (getConstraints.equals(GET_CONSTRAINT_GET_DESIRED_TRADING_BOOKS)) {
             DesiredBooksFragment fragment = (DesiredBooksFragment) getSupportFragmentManager()
                     .findFragmentByTag(FragmentKeys.VIEW_DESIRED_TRADES_FRAGMENT);
             ArrayList<TextBook> bookList = result.getParcelableArrayList(getConstraints);
-            if(fragment != null) {
+            if (fragment != null) {
                 fragment.onDesiredTextbooksLoaded(bookList);
             }
         }
@@ -135,4 +147,5 @@ public class ProfileActivity extends AppCompatActivity implements DialogCallback
         super.onSaveInstanceState(outState);
         outState.putParcelable(BUNDLE_PROFILE, mUserProfile);
     }
+
 }

@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.SearchView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.coreycaplan3.bookmarket.R;
+import com.github.coreycaplan3.bookmarket.adapters.SearchAdapter;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkCommunicator;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.PostNetworkConstraints;
 import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
@@ -43,7 +47,7 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
     private UserProfile mUserProfile;
     private ArrayList<TextBook> mBookData = new ArrayList<>();
 
-    private ListView mListView;
+    private RecyclerView mRecyclerView;
     private SearchView mSearchView;
     private ProgressBar mProgressBar;
 
@@ -57,7 +61,8 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        mListView = (ListView) findViewById(R.id.activity_search_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.activity_search_recycler);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mSearchView = (SearchView) findViewById(R.id.search_view);
         if (mSearchView != null) {
             mSearchView.setOnQueryTextListener(this);
@@ -81,7 +86,7 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         } else {
             mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
             mBookData = savedInstanceState.getParcelableArrayList(BUNDLE_BOOKS);
-            mListView.setAdapter(new BookAdapter(mBookData));
+            mRecyclerView.setAdapter(new SearchAdapter(mBookData));
             mIsBuyingBook = savedInstanceState.getBoolean(BUNDLE_IS_BUYING);
             mIsProgressShowing = savedInstanceState.getBoolean(BUNDLE_IS_PROGRESS_SHOWING);
         }
@@ -131,11 +136,13 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
 
     private void onSearchComplete(Bundle result, @GetNetworkConstraints String getConstraints) {
         mBookData = result.getParcelableArrayList(getConstraints);
-        BookAdapter adapter = new BookAdapter(mBookData);
-        mListView.setAdapter(adapter);
+        if(mBookData == null) {
+            Log.e("onSearchComplete: ", "NULL!!!" );
+        }
+        mRecyclerView.setAdapter(new SearchAdapter(mBookData));
         mProgressBar.setVisibility(View.GONE);
         mIsProgressShowing = false;
-        mListView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -145,7 +152,7 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         fragment.startSearchTask(query);
         mProgressBar.setVisibility(View.VISIBLE);
         mIsProgressShowing = true;
-        mListView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.GONE);
         return true;
     }
 
@@ -161,91 +168,6 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         outState.putParcelableArrayList(BUNDLE_BOOKS, mBookData);
         outState.putBoolean(BUNDLE_IS_BUYING, mIsBuyingBook);
         outState.putBoolean(BUNDLE_IS_PROGRESS_SHOWING, mIsProgressShowing);
-    }
-
-    private class BookAdapter implements ListAdapter {
-
-        private final ArrayList<TextBook> mListData;
-
-        private BookAdapter(ArrayList<TextBook> mListData) {
-            this.mListData = mListData;
-        }
-
-        @Override
-        public boolean areAllItemsEnabled() {
-            return true;
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            return true;
-        }
-
-        @Override
-        public void registerDataSetObserver(DataSetObserver observer) {
-
-        }
-
-        @Override
-        public void unregisterDataSetObserver(DataSetObserver observer) {
-
-        }
-
-        @Override
-        public int getCount() {
-            if (mListData == null) {
-                return 0;
-            } else {
-                return mListData.size();
-            }
-        }
-
-        @Override
-        public Object getItem(int position) {
-            if (mListData == null) {
-                return null;
-            } else {
-                return mListData.get(position);
-            }
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView textView = new TextView(getApplicationContext());
-            if (mListData == null) {
-                textView.setText(R.string.no_results);
-                return textView;
-            } else {
-                textView.setText(mListData.get(position).getTitle());
-                return textView;
-            }
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return 0;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return 1;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return mListData == null || mListData.size() == 0;
-        }
-
     }
 
 }

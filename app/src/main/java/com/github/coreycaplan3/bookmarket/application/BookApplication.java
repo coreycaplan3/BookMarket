@@ -23,7 +23,7 @@ public class BookApplication extends Application {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
-    private static Application sInstance;
+    private static BookApplication sInstance;
 
     @Override
     public void onCreate() {
@@ -34,7 +34,7 @@ public class BookApplication extends Application {
     /**
      * @return An instance of this application.
      */
-    public static synchronized Application getInstance() {
+    public static synchronized BookApplication getInstance() {
         return sInstance;
     }
 

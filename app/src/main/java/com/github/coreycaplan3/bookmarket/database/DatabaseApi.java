@@ -6,8 +6,10 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,15 +148,16 @@ public class DatabaseApi {
      * @return the sell_id, in case you need it for something.
      * @throws Exception
      */
-    public String postSellListing(String isbn, String price, String condition, String title, String author, Bitmap image, String userToken) throws Exception {
+    public String postSellListing(String isbn, String price, String condition, String title,
+                                  String author, Bitmap image, String userToken) throws Exception {
         args = new String[6];
         args[0] = isbn;
-        args[1] = price;
-        args[2] = condition;
-        args[3] = title;
-        args[4] = author;
+        args[1] = author;
+        args[2] = title;
+        args[3] = price;
+        args[4] = condition;
         args[5] = image.toString();
-        command = "postSell";
+        command = "postSellListing";
         token = userToken;
 
         JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
@@ -181,7 +184,7 @@ public class DatabaseApi {
         args[1] = condition;
         args[2] = title;
         args[3] = author;
-        command = "postTrade";
+        command = "postTradeListing";
         token = userToken;
 
         JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
@@ -631,8 +634,17 @@ public class DatabaseApi {
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        String urlParameters = "command=" + command + "&args=" + formatArgs(args) + "&token=" + token; //parameters
-
+        String urlParameters = "?command=" + command + "&args=" + formatArgs(args) + "&token=" + token; //parameters
+        StringBuilder buffer = new StringBuilder();
+        for (int i = 0; i < urlParameters.length(); i++) {
+            if (urlParameters.charAt(i) == ' ') {
+                buffer.append("%20");
+            } else {
+                buffer.append(urlParameters.charAt(i));
+            }
+        }
+        urlParameters = BASE_URL + buffer.toString();
+        Log.e(TAG, "sendPost: " + urlParameters);
         // Send post request
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -666,7 +678,8 @@ public class DatabaseApi {
         return jobject.get("translatedText").toString();
     }
 
-    private String assembleURL(String command, String[] args, String token) {
+    private String assembleURL(String command, String[] args, String token)
+            throws UnsupportedEncodingException {
         return (BASE_URL + "?command=" + command + "&args=" + formatArgs(args) + "&token=" + token);
     }
 

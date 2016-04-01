@@ -70,6 +70,7 @@
     <string name="notifying_trader">Notifying Trader…</string>
     <string name="adding_to_my_trades">Adding textbook to my trades…</string>
     <string name="editing_my_trade">Editing trade…</string>
+    <string name="retrieving_book_information">Retrieving book information…</string>
     <string name="seller_notified">Seller notified!</string>
     <string name="trader_notified">Trader notified!</string>
     <string name="sign_out">Sign Out</string>
@@ -94,6 +95,7 @@
     <string name="aid_no_listings">An image representing having no new listings</string>
     <string name="registration_successful">Registration successful!</string>
     <string name="error_deleting_book">There was en error deleting the book</string>
+    <string name="error_retrieving_book_info">There was en error retrieving the book\'s information</string>
     <string name="title_activity_camera">CameraActivity</string>
 
     <string name="ok">OK</string>

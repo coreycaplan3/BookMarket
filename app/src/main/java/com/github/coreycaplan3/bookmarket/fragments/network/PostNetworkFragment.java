@@ -367,6 +367,8 @@ public class PostNetworkFragment extends Fragment {
                     isValid = databaseApi.isValidToken(mConnectionToken);
                     if (isValid) {
                         userProfile = Keys.getSavedLoginInformation(getContext());
+                    } else {
+                        Log.e(TAG, "startSilentLogin: " + false);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "startSilentLogin: ", e);
@@ -387,9 +389,16 @@ public class PostNetworkFragment extends Fragment {
         }
 
         private void startPostSellBook(DatabaseApi databaseApi, Bundle bundle) {
-//            try {
-//                databaseApi.postSellListing(mTextBook.getIsbn(), )
-//            }
+            String sellId = null;
+            try {
+                sellId = databaseApi.postSellListing(mTextBook.getIsbn(), mTextBook.getPrice() + "",
+                        mTextBook.getCondition() + "", mTextBook.getTitle(), mTextBook.getAuthor(),
+                        mTextBook.getPicture(),
+                        mUserProfile.getConnectionToken());
+            } catch (Exception e) {
+                Log.e(TAG, "startPostSellBook: ", e);
+            }
+            bundle.putString(mNetworkConstraint, sellId);
         }
 
         private void startEditSellBook(DatabaseApi databaseApi, Bundle bundle) {
@@ -397,7 +406,15 @@ public class PostNetworkFragment extends Fragment {
         }
 
         private void startPostTradeBook(DatabaseApi databaseApi, Bundle bundle) {
-
+            String tradeId = null;
+            try {
+                tradeId = databaseApi.postTradeListing(mTextBook.getIsbn(),
+                        mTextBook.getCondition() + "", mTextBook.getTitle(), mTextBook.getAuthor(),
+                        mTextBook.getPicture(), mUserProfile.getConnectionToken());
+            } catch (Exception e) {
+                Log.e(TAG, "startPostTradeBook: ", e);
+            }
+            bundle.putString(mNetworkConstraint, tradeId);
         }
 
         private void startEditTradeBook(DatabaseApi databaseApi, Bundle bundle) {

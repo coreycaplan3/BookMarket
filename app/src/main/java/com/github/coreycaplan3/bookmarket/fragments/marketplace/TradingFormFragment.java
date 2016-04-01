@@ -357,6 +357,7 @@ public class TradingFormFragment extends Fragment implements View.OnClickListene
         mTitleEditText.setText(textBook.getTitle());
         mAuthorEditText.setText(textBook.getAuthor());
         mIsbnEditText.setText(textBook.getIsbn());
+        onImageTaken(textBook.getPicture());
     }
 
     @SuppressWarnings("deprecation")
@@ -366,6 +367,7 @@ public class TradingFormFragment extends Fragment implements View.OnClickListene
         mImageContainer.setCardBackgroundColor(white);
         mAddImageTextView.setVisibility(View.GONE);
         mBookImageView.setImageBitmap(image);
+        mBookImageView.setVisibility(View.VISIBLE);
     }
 
     public void onPostSuccessful() {

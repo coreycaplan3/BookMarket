@@ -35,6 +35,14 @@ public final class Keys {
         writeToPreferences(context, PROFILE_UNIVERSITY, userProfile.getUniversity());
     }
 
+    public static void wipeUserInformation(Context context) {
+        writeToPreferences(context, PROFILE_NAME, null);
+        writeToPreferences(context, PROFILE_EMAIL, null);
+        writeToPreferences(context, PROFILE_CONNECTION_TOKEN, null);
+        writeToPreferences(context, PROFILE_USER_ID, null);
+        writeToPreferences(context, PROFILE_UNIVERSITY, null);
+    }
+
     @Nullable
     public static String getUserLoginToken(Context context) {
         return readPreferences(context, PROFILE_CONNECTION_TOKEN, null);
