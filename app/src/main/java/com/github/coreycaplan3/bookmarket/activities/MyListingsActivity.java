@@ -3,6 +3,7 @@ package com.github.coreycaplan3.bookmarket.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayout.TabLayoutOnPageChangeListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -51,7 +52,7 @@ public class MyListingsActivity extends AppCompatActivity implements OnPageChang
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_listings);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_listings_toolbar);
         setSupportActionBar(toolbar);
 
         restoreInstance(savedInstanceState);
@@ -73,6 +74,9 @@ public class MyListingsActivity extends AppCompatActivity implements OnPageChang
                 tabLayout.addTab(tabLayout.newTab().setText(OLD_TRADE_LISTINGS_FRAGMENT));
             }
             tabLayout.setupWithViewPager(viewPager);
+            if (viewPager != null) {
+                viewPager.addOnPageChangeListener(new TabLayoutOnPageChangeListener(tabLayout));
+            }
         } else {
             Log.e(TAG, "onCreate: ", new NullPointerException("TabLayout"));
         }

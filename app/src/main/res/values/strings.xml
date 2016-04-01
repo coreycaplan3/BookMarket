@@ -41,8 +41,7 @@
     <string name="search_for_book">Search for a Book</string>
     <string name="enter_title_or_isbn">Enter a Title or ISBN</string>
     <string name="no_results">No Results Found</string>
-    <string name="search_for_book_buy">Search for a book to buy</string>
-    <string name="search_trade_for">Search for a book you are trading for</string>
+    <string name="search_for_book_hint">Enter a title or ISBN</string>
     <string name="title_activity_form">FormActivity</string>
     <string name="error_required">This field is required</string>
     <string name="error_too_short">This field is too short</string>
@@ -91,5 +90,6 @@
     <string name="nothing_old_sell_listings">You have no sell listings to show</string>
     <string name="nothing_old_trade_listings">You have no trade listings to show</string>
     <string name="aid_no_listings">An image representing having no new listings</string>
+    <string name="registration_successful">Registration successful!</string>
 
 </resources>

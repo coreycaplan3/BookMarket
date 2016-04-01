@@ -33,7 +33,7 @@ public class DatabaseApi {
     private final String TAG = getClass().getSimpleName();
     private final String USER_AGENT = "Mozilla/5.0";
 
-    private static final String BASE_URL = "https://book-mart.mybluemix.com/api.php/";
+    private static final String BASE_URL = "https://book-mart.mybluemix.net/api.php/";
     private String command;
     private String[] args;
     private String token;
@@ -52,6 +52,7 @@ public class DatabaseApi {
         args[0] = email;
         args[1] = password;
         token = "none";
+        Log.e(TAG, "connect: " + assembleURL(command, args, token));
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
         JsonObject jObject = jElement.getAsJsonObject();
         Log.e(TAG, "connect: " + jObject.get("token").getAsString());
@@ -74,8 +75,9 @@ public class DatabaseApi {
         ArrayList<String> result = new ArrayList<>();
 
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        Log.e(TAG, "getUserInfo: " + assembleURL(command, args, token));
         JsonObject jObject = jElement.getAsJsonObject();
-        return new GeneralUser(jObject.get("u_id").getAsString(), jObject.get("name").getAsString(),
+        return new GeneralUser(jObject.get("u_id").getAsString(), jObject.get("full_name").getAsString(),
                 jObject.get("email").getAsString(), jObject.get("school").getAsString());
     }
 
@@ -90,7 +92,7 @@ public class DatabaseApi {
     public UserProfile logIn(String email, String password) throws Exception {
         String userToken = connect(email, password);
         String userId = getId(email);
-        GeneralUser user = getUserInfo(email);
+        GeneralUser user = getUserInfo(userId);
         return new UserProfile(user.getDisplayName(), email, userToken, userId,
                 user.getUniversity());
     }
@@ -138,9 +140,9 @@ public class DatabaseApi {
      * @param price     the price the user wishes to list the book at
      * @param condition the physical condition of the book
      * @param userToken token of the user who will be making the sell listing
-     * @param title the title of the book
-     * @param author the author of the book
-     * @param image a photo of the book
+     * @param title     the title of the book
+     * @param author    the author of the book
+     * @param image     a photo of the book
      * @return the sell_id, in case you need it for something.
      * @throws Exception
      */
@@ -167,9 +169,9 @@ public class DatabaseApi {
      * @param isbn      the isbn of the book you want to list for trade
      * @param condition the physical condition of the book you want to sell
      * @param userToken token of the user who will be making the sell listing
-     * @param title the title of the book
-     * @param author the author of the book
-     * @param image a photo of the book
+     * @param title     the title of the book
+     * @param author    the author of the book
+     * @param image     a photo of the book
      * @return t_id the id of the trade in case you need
      * @throws Exception
      */
@@ -201,8 +203,8 @@ public class DatabaseApi {
     public String register(String full_name, String email, String password, String school) throws Exception {
         args = new String[4];
         args[0] = full_name;
-        args[1] = email;
-        args[2] = password;
+        args[1] = password;
+        args[2] = email;
         args[3] = school;
         command = "makeUser";
         token = "none";
@@ -260,7 +262,7 @@ public class DatabaseApi {
     /**
      * Searches in Trading for the book you want to lookup
      *
-     * @param isbn the isbn of the book you want to lookup
+     * @param isbn   the isbn of the book you want to lookup
      * @param school (optional) if no school is selected, give an empty String (""), and we will return every book of that isbn listed
      * @return ArrayList of Textbooks (restricted to the optional location)
      * @throws Exception
@@ -370,8 +372,7 @@ public class DatabaseApi {
      * @param sellingID the selling_id of the listing
      * @param userToken the token of the user
      * @return the id of the buyer
-     *
-    */
+     */
     public String makeSale(String sellingID, String userToken) throws Exception {
         args = new String[1];
         args[0] = sellingID;
@@ -407,8 +408,8 @@ public class DatabaseApi {
     /**
      * Sets the isbn of the book given as the book you wish to trade for
      *
-     * @param t_id the trade id
-     * @param isbn the isbn of the book you want to trade for
+     * @param t_id      the trade id
+     * @param isbn      the isbn of the book you want to trade for
      * @param userToken the token of the user
      * @return no clue
      */
@@ -427,7 +428,8 @@ public class DatabaseApi {
 
     /**
      * Gets all the textbooks im willing to trade for a certain trading_id
-     * @param t_id the trading id I want to lookup
+     *
+     * @param t_id      the trading id I want to lookup
      * @param userToken the token of the user
      * @return
      * @throws Exception
@@ -468,13 +470,13 @@ public class DatabaseApi {
     /**
      * Returns all interested traders for a specific trade_id
      *
-     * @param t_id the trade_id
+     * @param t_id      the trade_id
      * @param userToken the token of the user
      * @return ArrayList of GeneralUser of all the users interested in trading
      * @throws Exception
      */
-    public ArrayList<GeneralUser> getSpecificPotentialTrader(String t_id, String userToken) throws Exception{
-        args= new String[1];
+    public ArrayList<GeneralUser> getSpecificPotentialTrader(String t_id, String userToken) throws Exception {
+        args = new String[1];
         args[0] = t_id;
         command = "getSpecificTrader";
         token = userToken;
@@ -491,7 +493,7 @@ public class DatabaseApi {
     /**
      * Returns all interested buyers for a specific sell_id
      *
-     * @param s_id the sell_id
+     * @param s_id      the sell_id
      * @param userToken the token of the user
      * @return ArrayList of GeneralUser for all the users interested in buying
      * @throws Exception
@@ -554,7 +556,8 @@ public class DatabaseApi {
 
     /**
      * Expresses interest that the user has for buying a listed sale
-     * @param s_id the sell_id of the book the user is interested in
+     *
+     * @param s_id      the sell_id of the book the user is interested in
      * @param userToken the token of the user
      * @return the sell_id of the listed sale
      * @throws Exception
@@ -573,7 +576,8 @@ public class DatabaseApi {
 
     /**
      * Expresses interest that the user has for trading a listed trade
-     * @param t_id the trade_id of the book the user is interested in
+     *
+     * @param t_id      the trade_id of the book the user is interested in
      * @param userToken the token of the user
      * @return the trade_id of the listed trade
      * @throws Exception
@@ -659,8 +663,7 @@ public class DatabaseApi {
         jobject = jobject.getAsJsonObject("data");
         JsonArray jarray = jobject.getAsJsonArray("translations");
         jobject = jarray.get(0).getAsJsonObject();
-        String result = jobject.get("translatedText").toString();
-        return result;
+        return jobject.get("translatedText").toString();
     }
 
     private String assembleURL(String command, String[] args, String token) {

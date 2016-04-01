@@ -10,7 +10,10 @@ import android.util.Log;
 
 import com.github.coreycaplan3.bookmarket.database.DatabaseApi;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
+import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
+
+import java.util.ArrayList;
 
 import static com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.*;
 
@@ -220,7 +223,13 @@ public class GetNetworkFragment extends Fragment {
         }
 
         private void getSearchResults(DatabaseApi databaseApi, Bundle bundle) {
-
+            ArrayList<TextBook> mBooks = null;
+            try {
+                mBooks = databaseApi.textbookLookup(mQuery);
+            } catch (Exception e) {
+                Log.e(TAG, "getSearchResults: ", e);
+            }
+            bundle.putParcelableArrayList(mNetworkConstraint, mBooks);
         }
 
         private void getSellingResults(DatabaseApi databaseApi, Bundle bundle) {

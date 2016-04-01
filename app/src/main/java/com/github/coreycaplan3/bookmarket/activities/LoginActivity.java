@@ -81,6 +81,12 @@ public class LoginActivity extends AppCompatActivity implements PostNetworkCommu
             case PostNetworkConstants.CONSTRAINT_REGISTER:
                 userProfile = result.getParcelable(postConstraints);
                 if (userProfile != null) {
+                    RegisterFragment fragment = (RegisterFragment) getSupportFragmentManager()
+                            .findFragmentByTag(FragmentKeys.REGISTER_FRAGMENT);
+                    if (fragment != null) {
+                        fragment.onRegistrationSuccessful();
+                    }
+                    Keys.saveUserInformation(getApplicationContext(), userProfile);
                     Intent intent = new Intent(getApplicationContext(), TitleActivity.class);
                     intent.putExtra(IntentExtra.PROFILE, userProfile);
                     startActivity(intent);

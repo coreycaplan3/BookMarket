@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/search_bar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/colorPrimary">
+        android:layout_height="wrap_content">
 
-        <SearchView
-            android:id="@+id/search_view"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/colorPrimary">
 
-    </android.support.v7.widget.Toolbar>
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:iconifiedByDefault="false" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <ListView
         android:id="@+id/activity_search_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <ProgressBar
         android:id="@+id/search_progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:indeterminate="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

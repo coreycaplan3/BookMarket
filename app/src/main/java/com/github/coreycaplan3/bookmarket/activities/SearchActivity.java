@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import android.widget.SearchView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.coreycaplan3.bookmarket.R;
+import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkCommunicator;
+import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.PostNetworkConstraints;
 import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants;
@@ -34,8 +36,9 @@ import java.util.ArrayList;
  * Purpose of Class:
  */
 public class SearchActivity extends AppCompatActivity implements GetNetworkCommunicator,
-        OnItemClickListener, SearchView.OnQueryTextListener {
+        OnItemClickListener, SearchView.OnQueryTextListener, PostNetworkCommunicator {
 
+    private boolean mIsProgressShowing;
     private boolean mIsBuyingBook = false;
     private UserProfile mUserProfile;
     private ArrayList<TextBook> mBookData = new ArrayList<>();
@@ -47,6 +50,7 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
     private static final String BUNDLE_PROFILE = "bundleProfile";
     private static final String BUNDLE_BOOKS = "bundleBooks";
     private static final String BUNDLE_IS_BUYING = "bundleIsBuying";
+    private static final String BUNDLE_IS_PROGRESS_SHOWING = "bundleIsProgressShowing";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,9 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         mProgressBar = (ProgressBar) findViewById(R.id.search_progress_bar);
 
         restoreInstance(savedInstanceState);
+        if (mIsProgressShowing) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void restoreInstance(Bundle savedInstanceState) {
@@ -69,20 +76,21 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
             Intent intent = getIntent();
             mUserProfile = intent.getParcelableExtra(IntentExtra.PROFILE);
             mIsBuyingBook = intent.getBooleanExtra(IntentExtra.ACTIVITY_BUY, false);
-            if (mIsBuyingBook) {
-                String hint = getString(R.string.search_for_book_buy);
-                mSearchView.setQueryHint(hint);
-            } else {
-                String hint = getString(R.string.search_trade_for);
-                mSearchView.setQueryHint(hint);
-            }
+            String hint = getString(R.string.search_for_book_hint);
+            mSearchView.setQueryHint(hint);
         } else {
             mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
             mBookData = savedInstanceState.getParcelableArrayList(BUNDLE_BOOKS);
             mListView.setAdapter(new BookAdapter(mBookData));
             mIsBuyingBook = savedInstanceState.getBoolean(BUNDLE_IS_BUYING);
+            mIsProgressShowing = savedInstanceState.getBoolean(BUNDLE_IS_PROGRESS_SHOWING);
         }
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mSearchView.requestFocus();
     }
 
     @Override
@@ -115,11 +123,18 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         }
     }
 
+    @Override
+    public void onPostNetworkTaskComplete(Bundle result,
+                                          @PostNetworkConstraints String postConstraints) {
+
+    }
+
     private void onSearchComplete(Bundle result, @GetNetworkConstraints String getConstraints) {
         mBookData = result.getParcelableArrayList(getConstraints);
         BookAdapter adapter = new BookAdapter(mBookData);
         mListView.setAdapter(adapter);
         mProgressBar.setVisibility(View.GONE);
+        mIsProgressShowing = false;
         mListView.setVisibility(View.VISIBLE);
     }
 
@@ -129,6 +144,7 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
                 .findFragmentByTag(FragmentKeys.GET_NETWORK_FRAGMENT);
         fragment.startSearchTask(query);
         mProgressBar.setVisibility(View.VISIBLE);
+        mIsProgressShowing = true;
         mListView.setVisibility(View.GONE);
         return true;
     }
@@ -144,6 +160,7 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         outState.putParcelable(BUNDLE_PROFILE, mUserProfile);
         outState.putParcelableArrayList(BUNDLE_BOOKS, mBookData);
         outState.putBoolean(BUNDLE_IS_BUYING, mIsBuyingBook);
+        outState.putBoolean(BUNDLE_IS_PROGRESS_SHOWING, mIsProgressShowing);
     }
 
     private class BookAdapter implements ListAdapter {

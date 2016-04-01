@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/CardStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/activity_vertical_margin"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/recycler_desired_title_text_view"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/margin_small"
+            android:text="@string/book_details_default_title" />
+
+        <TextView
+            android:id="@+id/recycler_desired_author_text_view"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/margin_small"
+            android:text="@string/book_details_author_default" />
+
+        <TextView
+            android:id="@+id/recycler_desired_isbn_text_view"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/margin_small"
+            android:text="@string/book_details_isbn_default" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/recycler_desired_edit_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_mode_edit_black_24dp" />
+
+            <ImageView
+                android:id="@+id/recycler_desired_delete_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_mode_edit_black_24dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

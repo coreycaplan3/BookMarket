@@ -191,7 +191,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, OnC
         mIsProgressShowing = false;
         PostNetworkFragment fragment = (PostNetworkFragment) getFragmentManager()
                 .findFragmentByTag(FragmentKeys.POST_NETWORK_FRAGMENT);
-        fragment.cancelTask(PostNetworkConstants.CONSTRAINT_LOGIN);
+        if (fragment != null) {
+            fragment.cancelTask(PostNetworkConstants.CONSTRAINT_LOGIN);
+        }
     }
 
     @Override

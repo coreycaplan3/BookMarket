@@ -18,6 +18,7 @@ import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkFragment;
 import com.github.coreycaplan3.bookmarket.utilities.FormValidation;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
+import com.github.coreycaplan3.bookmarket.utilities.UiUtility;
 
 /**
  * Created by Corey on 3/31/2016.
@@ -275,6 +276,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener,
         mIsProgressShowing = false;
         mProgressDialog.dismiss();
         mEmailTextInputLayout.setError(getString(R.string.error_email_in_use));
+    }
+
+    public void onRegistrationSuccessful() {
+        mIsProgressShowing = false;
+        mProgressDialog.dismiss();
+        UiUtility.toast(getContext(), R.string.registration_successful);
     }
 
     @Override
