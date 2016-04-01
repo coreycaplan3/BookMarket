@@ -1,7 +1,5 @@
 package com.github.coreycaplan3.bookmarket.database;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -24,11 +22,7 @@ import org.json.JSONObject;
  
 import javax.net.ssl.HttpsURLConnection;
  
-import innovations.leavitt.meetup.functionality.EventLocation;
-import innovations.leavitt.meetup.functionality.GeneralUser;
-import innovations.leavitt.meetup.functionality.PlannedEvent;
-import innovations.leavitt.meetup.functionality.UserProfile;
-import innovations.leavitt.meetup.util.ParseDate;
+import com.github.coreycaplan3.bookmarket.functionality.*;
 
 /**
  * Created by Corey on 3/31/2016.
@@ -41,7 +35,7 @@ public class DatabaseApi {
 	private final String TAG = getClass().getSimpleName();
    private final String USER_AGENT = "Mozilla/5.0";
 
-	private String baseURL = "http://book-mart.mybluemix.com/api.php/"
+	private String baseURL = "http://book-mart.mybluemix.com/api.php/";
 	private String command;
 	private String[] args;
 	private String token;
@@ -85,7 +79,7 @@ public class DatabaseApi {
 		JsonObject jObject = jElement.getAsJsonObject();
 		return new GeneralUser(jObject.get("u_id").getAsString(), jObject.get("name").getAsString(), jObject.get("email").getAsString());
 	}
-	
+
     /**
      * Logs the user into Loccasion using the necessary methods
      *
@@ -190,13 +184,13 @@ public class DatabaseApi {
 	* @return the u_id of the newly created user, in case you need it
 	* @throws Exception
 	*/
-	public String registerNewUser(String full_name, String email, String password, String school) throws Exception {
+	public String makeUser(String full_name, String email, String password, String school) throws Exception {
 		args = new String[4];
 		args[0] = full_name;
 		args[1] = email;
 		args[2] = password;
 		args[3] = school;
-		command = "register";
+		command = "makeUser";
 		token = "none";
 
 		JsonElement jElement = new JsonParser().parse(sendPost(assembleURL(command, args, token)));
@@ -223,9 +217,82 @@ public class DatabaseApi {
 		Type listType = new TypeToken<List<TextBook>>() {
 		}.getType();
 
-		return new Gson().fromJson(jObject.get("books"), listType);
-		
+		return new Gson().fromJson(jObject.get("books"), listType);	
 	}
+
+	/**
+	* Searches in Selling and Trading for the book-isbn requested
+	*
+	* @param isbn the isbn of the book you want to lookup
+	* @param school (optional) if no school is selected, give an empty String (""), and we will return every book of that isbn listed
+	* @return ArrayList of TextBooks (restricted to the optional location)
+	* 
+	* @throws Exception
+	*/
+	public ArrayList<TextBook> searchSellTrade(String isbn, String school) throws Exception {
+		args = new String[2];
+		args[0] = isbn;
+		args[1] = school;
+		command = "searchSellTrade";
+		token = "none";
+
+		JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+		JsonObject jObject = jElement.getAsJsonObject();
+		Type listType = new TypeToken<List<TextBook>>() {
+		}.getType();
+
+		return new Gson().fromJson(jObject.get("books"), listType);
+	
+	}
+
+	/**
+	* Gets the trade listings that I have listed
+	*
+	* @param userToken the token of the current user
+	* @return an ArrayList of Textbooks that I have listed for trade
+	* @throws Exception
+	*/
+	public ArrayList<TextBook> getMyTradeListings(String userToken) {
+		args = new String[1];
+		args[0] = "";
+		token = userToken;
+		command = "getTradeListings";
+
+		JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+		JsonObject jObject = jElement.getAsJsonObject();
+		Type listType = new TypeToken<List<TextBook>>() {
+		}.getType();
+
+		return new Gson().fromJson(jObject.get("books"), listType);		
+	}
+
+	/**
+	* Gets the sales listings that I have listed
+	*
+	* @param userToken the token of the current user
+	* @return an ArrayList of Textbooks that I have listed for sales
+	* @throws Exception
+	*/
+	public ArrayList<TextBook> getMySalesListings(String userToken) {
+		args = new String[1];
+		args[0] = "";
+		token = userToken;
+		command = "getSalesListings";
+
+		JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+		JsonObject jObject = jElement.getAsJsonObject();
+		Type listType = new TypeToken<List<TextBook>>() {
+		}.getType();
+
+		return new Gson().fromJson(jObject.get("books"), listType);
+	}
+
+	/**
+	* Makes a Sale. Triggered when the current user has ACCEPTED an "interest"
+	*
+	* 
+	*
+	*/
 
 	/**
 	* Searches sell listings with the given parameters
