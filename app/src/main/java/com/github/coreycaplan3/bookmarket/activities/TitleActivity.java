@@ -38,6 +38,8 @@ public class TitleActivity extends AppCompatActivity implements View.OnClickList
         initiateFragment(savedInstanceState);
 
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.title_container);
             if (fragment != null) {
                 getSupportActionBar().setTitle(fragment.getTag());
@@ -64,6 +66,22 @@ public class TitleActivity extends AppCompatActivity implements View.OnClickList
                 getSupportActionBar().setTitle(fragment.getTag());
             }
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
+            finish();
+            return true;
+        } else {
+            getSupportFragmentManager().popBackStack();
+            return false;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        onSupportNavigateUp();
     }
 
     @Override
