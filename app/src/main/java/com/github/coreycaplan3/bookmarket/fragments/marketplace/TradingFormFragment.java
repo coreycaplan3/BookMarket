@@ -278,7 +278,7 @@ public class TradingFormFragment extends Fragment implements View.OnClickListene
                     fragment.startEditBookTask(textBook, mUserProfile);
                 } else {
                     textBook = new TextBook(mTitle, mAuthor, mIsbn, condition, mImage);
-                    fragment.startPostSellBookTask(textBook, mUserProfile);
+                    fragment.startPostTradeBookTask(textBook, mUserProfile);
                 }
 
                 mIsProgressShowing = true;

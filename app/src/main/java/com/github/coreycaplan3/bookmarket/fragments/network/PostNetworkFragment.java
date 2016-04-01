@@ -13,8 +13,7 @@ import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants
 import com.github.coreycaplan3.bookmarket.functionality.GeneralUser;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
-
-import java.util.ArrayList;
+import com.github.coreycaplan3.bookmarket.utilities.Keys;
 
 import static com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.*;
 
@@ -80,16 +79,17 @@ public class PostNetworkFragment extends Fragment {
         startTask(task);
     }
 
-    public void startBuyBookTask(TextBook textBook, UserProfile userProfile, GeneralUser seller) {
+    public void startBuyBookWithUserTask(TextBook textBook, UserProfile userProfile,
+                                         GeneralUser seller) {
         NetworkTask task = new NetworkTask();
-        task.performBuyBookTask(textBook, userProfile, seller);
+        task.performBuyBookTaskWithUser(textBook, userProfile, seller);
         startTask(task);
     }
 
-    public void startTradeBookTask(TextBook textBook, UserProfile userProfile,
-                                   GeneralUser seller) {
+    public void startTradeBookWithUserTask(TextBook textBook, UserProfile userProfile,
+                                           GeneralUser seller) {
         NetworkTask task = new NetworkTask();
-        task.performTradeBookTask(textBook, userProfile, seller);
+        task.performTradeBookWithUserTask(textBook, userProfile, seller);
         startTask(task);
     }
 
@@ -101,13 +101,13 @@ public class PostNetworkFragment extends Fragment {
 
     public void startPostSellBookTask(TextBook textBook, UserProfile userProfile) {
         NetworkTask task = new NetworkTask();
-        task.performPostTradeBookTask(textBook, userProfile);
+        task.performPostSellBookTask(textBook, userProfile);
         startTask(task);
     }
 
-    public void startPostTradeListTask(ArrayList<TextBook> textBookList, UserProfile userProfile) {
+    public void startPostDesiredTradeTask(TextBook textBook, UserProfile userProfile) {
         NetworkTask task = new NetworkTask();
-        task.performPostTradeListTask(textBookList, userProfile);
+        task.performPostDesiredTradeTask(textBook, userProfile);
         startTask(task);
     }
 
@@ -167,7 +167,6 @@ public class PostNetworkFragment extends Fragment {
         private GeneralUser mSeller;
         private TextBook mTextBook;
         private UserProfile mUserProfile;
-        private ArrayList<TextBook> mTextBookList;
 
         private final String TAG = getClass().getSimpleName();
 
@@ -201,16 +200,16 @@ public class PostNetworkFragment extends Fragment {
             mUserProfile = userProfile;
         }
 
-        private void performBuyBookTask(TextBook textBook, UserProfile userProfile,
-                                        GeneralUser seller) {
+        private void performBuyBookTaskWithUser(TextBook textBook, UserProfile userProfile,
+                                                GeneralUser seller) {
             mNetworkConstraint = CONSTRAINT_BUY_BOOK;
             mTextBook = textBook;
             mUserProfile = userProfile;
             mSeller = seller;
         }
 
-        private void performTradeBookTask(TextBook textBook, UserProfile userProfile,
-                                          GeneralUser seller) {
+        private void performTradeBookWithUserTask(TextBook textBook, UserProfile userProfile,
+                                                  GeneralUser seller) {
             mNetworkConstraint = CONSTRAINT_TRADE_BOOK;
             mTextBook = textBook;
             mUserProfile = userProfile;
@@ -229,10 +228,9 @@ public class PostNetworkFragment extends Fragment {
             mUserProfile = userProfile;
         }
 
-        private void performPostTradeListTask(ArrayList<TextBook> textBookList,
-                                              UserProfile userProfile) {
+        private void performPostDesiredTradeTask(TextBook textBookList, UserProfile userProfile) {
             mNetworkConstraint = CONSTRAINT_POST_DESIRED_TRADE;
-            mTextBookList = textBookList;
+            mTextBook = textBookList;
             mUserProfile = userProfile;
         }
 
@@ -254,19 +252,19 @@ public class PostNetworkFragment extends Fragment {
                     startPostSellBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_BUY_BOOK:
-                    startBuyBook(databaseApi, bundle);
+                    startBuyBookWithUser(databaseApi, bundle);
                     break;
                 case CONSTRAINT_EDIT_BOOK:
                     startEditBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_TRADE_BOOK:
-                    startTradeBook(databaseApi, bundle);
+                    startTradeBookWithUser(databaseApi, bundle);
                     break;
                 case CONSTRAINT_POST_TRADE_BOOK:
                     startPostTradeBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_POST_DESIRED_TRADE:
-                    startPostTradeList(databaseApi, bundle);
+                    startPostDesiredTradeBook(databaseApi, bundle);
                     break;
                 default:
                     Log.e(TAG, "doInBackground: ", new IllegalArgumentException("Invalid network " +
@@ -276,34 +274,58 @@ public class PostNetworkFragment extends Fragment {
         }
 
         private void startLogin(DatabaseApi databaseApi, Bundle bundle) {
-
+            UserProfile userProfile = null;
+            try {
+                userProfile = databaseApi.logIn(mEmail, mPassword);
+            } catch (Exception e) {
+                Log.e(TAG, "startLogin: ", e);
+            }
+            bundle.putParcelable(mNetworkConstraint, userProfile);
         }
 
         private void startSilentLogin(DatabaseApi databaseApi, Bundle bundle) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            boolean isValid;
+            UserProfile userProfile = null;
+            if(mConnectionToken != null) {
+                Log.e(TAG, "startSilentLogin: " + "Starting cached sign in...");
+                try {
+                    isValid = databaseApi.isValidToken(mConnectionToken);
+                    if (isValid) {
+                        userProfile = Keys.getSavedLoginInformation(getContext());
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "startSilentLogin: ", e);
+                }
             }
+            bundle.putParcelable(mNetworkConstraint, userProfile);
         }
 
         private void startRegistration(DatabaseApi databaseApi, Bundle bundle) {
-
+            UserProfile userProfile = null;
+            try {
+                String userId = databaseApi.register(mName, mEmail, mPassword, mUniversity);
+                userProfile = new UserProfile(mName, mEmail, mConnectionToken, userId, mUniversity);
+            } catch (Exception e) {
+                Log.e(TAG, "startRegistration: ", e);
+            }
+            bundle.putParcelable(mNetworkConstraint, userProfile);
         }
 
         private void startPostSellBook(DatabaseApi databaseApi, Bundle bundle) {
-
+//            try {
+//                databaseApi.postSellListing(mTextBook.getIsbn(), )
+//            }
         }
 
         private void startPostTradeBook(DatabaseApi databaseApi, Bundle bundle) {
 
         }
 
-        private void startPostTradeList(DatabaseApi databaseApi, Bundle bundle) {
+        private void startPostDesiredTradeBook(DatabaseApi databaseApi, Bundle bundle) {
 
         }
 
-        private void startBuyBook(DatabaseApi databaseApi, Bundle bundle) {
+        private void startBuyBookWithUser(DatabaseApi databaseApi, Bundle bundle) {
 
         }
 
@@ -311,7 +333,7 @@ public class PostNetworkFragment extends Fragment {
 
         }
 
-        private void startTradeBook(DatabaseApi databaseApi, Bundle bundle) {
+        private void startTradeBookWithUser(DatabaseApi databaseApi, Bundle bundle) {
 
         }
 

@@ -29,7 +29,8 @@
                     android:drawableLeft="@drawable/ic_account_circle_black_24dp"
                     android:drawablePadding="@dimen/activity_vertical_margin"
                     android:drawableStart="@drawable/ic_account_circle_black_24dp"
-                    android:hint="@string/full_name" />
+                    android:hint="@string/full_name"
+                    android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -101,7 +102,7 @@
                     android:drawablePadding="@dimen/activity_vertical_margin"
                     android:drawableStart="@drawable/ic_school_black_24dp"
                     android:hint="@string/university"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
 

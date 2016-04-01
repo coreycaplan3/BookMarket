@@ -64,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity implements DialogCallback
     @Override
     public void onDialogClick(String dialogTag, DialogInterface dialog, int which) {
         if (dialogTag.equals(SignOutDialog.DIALOG_TAG) && which == Dialog.BUTTON_POSITIVE) {
-            Keys.setUserLoginToken(this, null);
+            Keys.saveUserInformation(this, null);
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             UiUtility.toast(getApplicationContext(), R.string.sign_out_successful);

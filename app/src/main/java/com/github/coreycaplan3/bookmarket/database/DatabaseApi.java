@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -19,9 +17,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -38,7 +33,7 @@ public class DatabaseApi {
     private final String TAG = getClass().getSimpleName();
     private final String USER_AGENT = "Mozilla/5.0";
 
-    private static final String baseURL = "https://book-mart.mybluemix.com/api.php/";
+    private static final String BASE_URL = "https://book-mart.mybluemix.com/api.php/";
     private String command;
     private String[] args;
     private String token;
@@ -203,7 +198,7 @@ public class DatabaseApi {
      * @return the u_id of the newly created user, in case you need it
      * @throws Exception
      */
-    public String makeUser(String full_name, String email, String password, String school) throws Exception {
+    public String register(String full_name, String email, String password, String school) throws Exception {
         args = new String[4];
         args[0] = full_name;
         args[1] = email;
@@ -624,7 +619,7 @@ public class DatabaseApi {
     }
 
     private String sendPost(String command, String[] args, String token) throws Exception {
-        URL url = new URL(baseURL);
+        URL url = new URL(BASE_URL);
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 
         //add request header
@@ -669,7 +664,7 @@ public class DatabaseApi {
     }
 
     private String assembleURL(String command, String[] args, String token) {
-        return (this.baseURL + "/?command=" + command + "&args=" + formatArgs(args) + "&token=" + token);
+        return (BASE_URL + "?command=" + command + "&args=" + formatArgs(args) + "&token=" + token);
     }
 
     private String formatArgs(String[] args) {

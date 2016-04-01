@@ -132,9 +132,9 @@ public class BookDetailsFragment extends Fragment implements View.OnClickListene
             PostNetworkFragment fragment = (PostNetworkFragment) getFragmentManager()
                     .findFragmentByTag(FragmentKeys.POST_NETWORK_FRAGMENT);
             if (mIsSelling) {
-                fragment.startBuyBookTask(mTextBook, mUserProfile, mSeller);
+                fragment.startBuyBookWithUserTask(mTextBook, mUserProfile, mSeller);
             } else {
-                fragment.startTradeBookTask(mTextBook, mUserProfile, mSeller);
+                fragment.startTradeBookWithUserTask(mTextBook, mUserProfile, mSeller);
             }
             mIsProgressShowing = true;
             mProgressDialog.show();

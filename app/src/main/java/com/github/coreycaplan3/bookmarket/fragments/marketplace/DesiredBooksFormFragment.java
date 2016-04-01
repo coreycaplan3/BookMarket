@@ -18,6 +18,7 @@ import android.widget.EditText;
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkFragment;
+import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 import com.github.coreycaplan3.bookmarket.utilities.FormValidation;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
@@ -188,6 +189,11 @@ public class DesiredBooksFormFragment extends Fragment implements View.OnClickLi
         int id = v.getId();
         if (id == R.id.fragment_desired_form_submit_button) {
             if (isValid()) {
+                TextBook textBook = new TextBook(mTitle, mAuthor, mIsbn);
+                PostNetworkFragment fragment = (PostNetworkFragment) getFragmentManager()
+                        .findFragmentByTag(FragmentKeys.POST_NETWORK_FRAGMENT);
+                fragment.startPostDesiredTradeTask(textBook, mUserProfile);
+
                 mIsProgressShowing = true;
                 mProgressDialog.show();
             }

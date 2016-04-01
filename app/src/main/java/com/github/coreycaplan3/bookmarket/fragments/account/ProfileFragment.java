@@ -90,10 +90,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             Intent intent = new Intent(getContext(), MyListingsActivity.class);
             intent.putExtra(IntentExtra.PROFILE, mUserProfile);
             startActivity(intent);
-        } else if(id == R.id.fragment_profile_desired_trade_card) {
-
-        }
-        else if (id == R.id.fragment_profile_add_trade_card) {
+        } else if (id == R.id.fragment_profile_desired_trade_card) {
+            //todo implement me
+        } else if (id == R.id.fragment_profile_add_trade_card) {
             DesiredBooksFormFragment fragment = DesiredBooksFormFragment.newInstance(mUserProfile);
             FragmentCreator.create(fragment, FragmentKeys.ADD_DESIRED_TRADE_FRAGMENT,
                     R.id.profile_container, getFragmentManager());

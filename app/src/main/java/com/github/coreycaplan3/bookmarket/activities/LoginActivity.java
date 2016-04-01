@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity implements PostNetworkCommu
     @Override
     public void onPostNetworkTaskComplete(Bundle result,
                                           @PostNetworkConstraints String postConstraints) {
-        UserProfile userProfile = null;
+        UserProfile userProfile;
         switch (postConstraints) {
             case PostNetworkConstants.CONSTRAINT_REGISTER:
                 userProfile = result.getParcelable(postConstraints);
@@ -104,8 +104,7 @@ public class LoginActivity extends AppCompatActivity implements PostNetworkCommu
                     if (fragment != null) {
                         fragment.onSignInSuccessful();
                     }
-                    Keys.setUserLoginToken(getApplicationContext(),
-                            userProfile.getConnectionToken());
+                    Keys.saveUserInformation(getApplicationContext(), userProfile);
                     Intent intent = new Intent(getApplicationContext(), TitleActivity.class);
                     intent.putExtra(IntentExtra.PROFILE, userProfile);
                     startActivity(intent);
