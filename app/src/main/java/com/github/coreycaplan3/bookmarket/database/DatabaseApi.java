@@ -644,7 +644,7 @@ public class DatabaseApi {
             cond_constant = TextBook.CONDITION_GOOD;
         }
         else {
-            cond_constant = TextBook.CONDITION_BAD
+            cond_constant = TextBook.CONDITION_BAD;
         }
         return new TextBook(jObject.get("title").getAsString(),
                 jObject.get("author").getAsString(),
@@ -661,10 +661,10 @@ public class DatabaseApi {
      * @return a TextBook object with all the info of that trade
      * @throws Exception
      */
-    public TextBook getSaleInfo(String t_id) throws Exception{
+    public TextBook getTradeInfo(String t_id) throws Exception{
         args = new String[0];
         args[0] = t_id;
-        command = "getSalesInfo";
+        command = "getTradeInfo";
         token = "none";
 
         JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
@@ -681,7 +681,7 @@ public class DatabaseApi {
             cond_constant = TextBook.CONDITION_GOOD;
         }
         else {
-            cond_constant = TextBook.CONDITION_BAD
+            cond_constant = TextBook.CONDITION_BAD;
         }
         return new TextBook(jObject.get("title").getAsString(),
                 jObject.get("author").getAsString(),
