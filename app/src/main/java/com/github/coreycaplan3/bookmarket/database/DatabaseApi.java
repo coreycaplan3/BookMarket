@@ -59,14 +59,14 @@ public class DatabaseApi {
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
         JsonObject jObject = jElement.getAsJsonObject();
         Log.e(TAG, "connect: " + jObject.get("token").getAsString());
+
         return jObject.get("token").getAsString();
     }
 
     /**
      * Gets the user's info, based on the {@code userId} supplied.
      *
-     * @param userID The user's unique user ID that is used to identify him/her in the Loccasion
-     *               server.
+     * @param userID The user's unique user ID that is used to identify him/her.
      * @return a {@link GeneralUser} object with the id, name, and email of the user
      * @throws Exception
      */
@@ -113,7 +113,8 @@ public class DatabaseApi {
         token = "none";
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
         JsonObject jObject = jElement.getAsJsonObject();
-        return jObject.get("userid").toString();
+
+        return jObject.get("u_id").toString();
     }
 
     /**
@@ -130,6 +131,7 @@ public class DatabaseApi {
         token = "none";
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
         JsonObject jObject = jElement.getAsJsonObject();
+
         return jObject.get("valid").getAsString().equals("true");
     }
 
@@ -226,18 +228,18 @@ public class DatabaseApi {
     }
 
     /**
-     * Searches in Selling and Trading for the book-isbn requested
+     * Searches in Selling for the book you want to lookup
      *
      * @param isbn   the isbn of the book you want to lookup
      * @param school (optional) if no school is selected, give an empty String (""), and we will return every book of that isbn listed
      * @return ArrayList of TextBooks (restricted to the optional location)
      * @throws Exception
      */
-    public ArrayList<TextBook> searchSellTrade(String isbn, String school) throws Exception {
+    public ArrayList<TextBook> searchSell(String isbn, String school) throws Exception {
         args = new String[2];
         args[0] = isbn;
         args[1] = school;
-        command = "searchSellTrade";
+        command = "searchSell";
         token = "none";
 
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
@@ -246,7 +248,29 @@ public class DatabaseApi {
         }.getType();
 
         return new Gson().fromJson(jObject.get("books"), listType);
+    }
 
+    /**
+     * Searches in Trading for the book you want to lookup
+     *
+     * @param isbn the isbn of the book you want to lookup
+     * @param school (optional) if no school is selected, give an empty String (""), and we will return every book of that isbn listed
+     * @return ArrayList of Textbooks (restricted to the optional location)
+     * @throws Exception
+     */
+    public ArrayList<TextBook> searchTrade(String isbn, String school) throws Exception {
+        args = new String[2];
+        args[0] = isbn;
+        args[1] = school;
+        command = "searchTrade";
+        token = "none";
+
+        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        JsonObject jObject = jElement.getAsJsonObject();
+        Type listType = new TypeToken<List<TextBook>>() {
+        }.getType();
+
+        return new Gson().fromJson(jObject.get("books"), listType);
     }
 
     /**
@@ -292,15 +316,48 @@ public class DatabaseApi {
     }
 
     /**
-     * Makes a Sale. Triggered when the current user has ACCEPTED an "interest"
+     * Makes a Sale. Triggered when the current user has ACCEPTED an "sale interest"
      *
-     * @param userToken the id of the user
      * @param sellingID the selling_id of the listing
+     * @param userToken the token of the user
+     * @return the id of the buyer
      *
     */
-    public String makeSale(String userToken, String sellingID)
-    {
-        return "true";
+    public String makeSale(String sellingID, String userToken) throws Exception {
+        args = new String[1];
+        args[0] = sellingID;
+        command = "makeSale";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
+        JsonObject jObject = jElement.getAsJsonObject();
+
+        return jObject.get("buyer_id").getAsString();
+    }
+
+    /**
+     * Makes a Trade.  Triggered when the current user has ACCEPTED a "trade interest"
+     *
+     * @param tradingID the trading_id of the listing
+     * @param userToken the token of the user
+     * @return the id of the other trader
+     * @throws Exception
+     */
+    public String makeTrade(String tradingID, String userToken) throws Exception {
+        args = new String[1];
+        args[0] = tradingID;
+        command = "makeTrade";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
+        JsonObject jObject = jElement.getAsJsonObject();
+
+        return jObject.get("trader_id").getAsString();
+    }
+
+
+    public ArrayList<TextBook> getPotentialTraders(String userToken) {
+
     }
 
     //Sends get request, returns response
