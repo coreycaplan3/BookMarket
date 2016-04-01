@@ -100,7 +100,7 @@ public class DatabaseApi {
     /**
      * Returns the user ID associated with a given email address
      *
-     * @param userToken The user's token
+     * @param email The user's email
      * @return The user ID associated with the given email address.
      * @throws Exception
      */
