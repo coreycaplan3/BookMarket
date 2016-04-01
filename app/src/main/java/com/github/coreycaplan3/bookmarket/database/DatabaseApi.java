@@ -1,5 +1,6 @@
 package com.github.coreycaplan3.bookmarket.database;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -142,14 +143,20 @@ public class DatabaseApi {
      * @param price     the price the user wishes to list the book at
      * @param condition the physical condition of the book
      * @param userToken token of the user who will be making the sell listing
+     * @param title the title of the book
+     * @param author the author of the book
+     * @param image a photo of the book
      * @return the sell_id, in case you need it for something.
      * @throws Exception
      */
-    public String postSellListing(String isbn, String price, String condition, String userToken) throws Exception {
-        args = new String[3];
+    public String postSellListing(String isbn, String price, String condition, String title, String author, Bitmap image, String userToken) throws Exception {
+        args = new String[6];
         args[0] = isbn;
         args[1] = price;
         args[2] = condition;
+        args[3] = title;
+        args[4] = author;
+        args[5] = image.toString();
         command = "postSell";
         token = userToken;
 
@@ -165,13 +172,19 @@ public class DatabaseApi {
      * @param isbn      the isbn of the book you want to list for trade
      * @param condition the physical condition of the book you want to sell
      * @param userToken token of the user who will be making the sell listing
+     * @param title the title of the book
+     * @param author the author of the book
+     * @param image a photo of the book
      * @return t_id the id of the trade in case you need
      * @throws Exception
      */
-    public String postTradeListing(String isbn, String condition, String userToken) throws Exception {
-        args = new String[2];
+    public String postTradeListing(String isbn, String condition, String title, String author, Bitmap image, String userToken) throws Exception {
+        args = new String[5];
         args[0] = isbn;
         args[1] = condition;
+        args[2] = title;
+        args[3] = author;
+        args[4] = image.toString();
         command = "postTrade";
         token = userToken;
 
