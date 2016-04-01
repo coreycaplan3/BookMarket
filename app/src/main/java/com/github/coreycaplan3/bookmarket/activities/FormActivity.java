@@ -10,7 +10,6 @@ import android.view.View;
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.marketplace.SellingFormFragment;
-import com.github.coreycaplan3.bookmarket.fragments.marketplace.DesiredBooksForm;
 import com.github.coreycaplan3.bookmarket.fragments.marketplace.TradingFormFragment;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkConstants.GetNetworkConstraints;
@@ -54,7 +53,7 @@ public class FormActivity extends AppCompatActivity implements View.OnClickListe
 
             Intent intent = getIntent();
             mUserProfile = intent.getParcelableExtra(IntentExtra.PROFILE);
-            mIsSelling = intent.getBooleanExtra(IntentExtra.ACTIVITY_SELL, false);
+            mIsSelling = intent.getBooleanExtra(IntentExtra.ACTIVITY_SELLING, false);
             if (mIsSelling) {
                 FragmentCreator.create(SellingFormFragment.newInstance(mUserProfile), SELL_FORM_FRAGMENT,
                         R.id.title_container, getSupportFragmentManager());

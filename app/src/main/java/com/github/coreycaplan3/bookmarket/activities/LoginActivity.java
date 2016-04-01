@@ -21,6 +21,7 @@ import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
 import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
+import com.github.coreycaplan3.bookmarket.utilities.Keys;
 
 import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
 
@@ -104,6 +105,8 @@ public class LoginActivity extends AppCompatActivity implements PostNetworkCommu
                     if (fragment != null) {
                         fragment.onSignInSuccessful();
                     }
+                    Keys.setUserLoginToken(getApplicationContext(),
+                            userProfile.getConnectionToken());
                     Intent intent = new Intent(getApplicationContext(), TitleActivity.class);
                     intent.putExtra(IntentExtra.PROFILE, userProfile);
                     startActivity(intent);

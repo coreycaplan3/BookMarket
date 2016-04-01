@@ -56,7 +56,7 @@ public class BookDetailsActivity extends AppCompatActivity implements GetNetwork
             mUserProfile = intent.getParcelableExtra(IntentExtra.PROFILE);
             mTextBook = intent.getParcelableExtra(IntentExtra.BOOK);
             mSeller = intent.getParcelableExtra(IntentExtra.SELLER);
-            mIsSelling = intent.getBooleanExtra(IntentExtra.ACTIVITY_SELL, false);
+            mIsSelling = intent.getBooleanExtra(IntentExtra.ACTIVITY_SELLING, false);
             BookDetailsFragment fragment = BookDetailsFragment.newInstance(mTextBook, mUserProfile,
                     mSeller, mIsSelling);
             FragmentCreator.create(fragment, FragmentKeys.BOOK_DETAILS_FRAGMENT,

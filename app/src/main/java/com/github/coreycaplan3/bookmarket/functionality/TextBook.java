@@ -18,6 +18,10 @@ public class TextBook implements Parcelable {
     private String author;
     private String isbn;
     private double price;
+    @Nullable
+    private String sellingId;
+    @Nullable
+    private String tradingId;
     @Condition
     int condition;
     private Bitmap picture;
@@ -31,6 +35,7 @@ public class TextBook implements Parcelable {
     public @interface Condition {
     }
 
+    @SuppressWarnings("unused")
     public static TextBook getDummyTextbook() {
         return new TextBook("Database System Concepts 6th Edition",
                 "Abraham Silberschatz, Henry F. Korth, S. Sudarshan",
@@ -50,10 +55,30 @@ public class TextBook implements Parcelable {
         this.picture = picture;
     }
 
-    public TextBook(String title, String author, String isbn) {
+    /**
+     * Constructor making book for notification.
+     *
+     * @param title          The title of the book.
+     * @param author         The author of the book.
+     * @param isbn           The ISBN of the book.
+     * @param notificationId The id of the notification, either selling or trading depending on the
+     *                       {@code isSelling} flag.
+     * @param picture        The picture of the book.
+     * @param isSelling      True if the notification is for a book being sold. False if it is for a
+     *                       book being traded.
+     */
+    @SuppressWarnings("NullableProblems")
+    public TextBook(String title, String author, String isbn, String notificationId, Bitmap picture,
+                    boolean isSelling) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.picture = picture;
+        if (isSelling) {
+            sellingId = notificationId;
+        } else {
+            tradingId = notificationId;
+        }
     }
 
     public String getTitle() {
@@ -70,6 +95,16 @@ public class TextBook implements Parcelable {
 
     public double getPrice() {
         return price;
+    }
+
+    @Nullable
+    public String getSellingId() {
+        return sellingId;
+    }
+
+    @Nullable
+    public String getTradingId() {
+        return tradingId;
     }
 
     @Condition
@@ -89,6 +124,8 @@ public class TextBook implements Parcelable {
         price = in.readDouble();
         condition = in.readInt();
         picture = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
+        sellingId = in.readString();
+        tradingId = in.readString();
     }
 
     @Override
@@ -104,6 +141,8 @@ public class TextBook implements Parcelable {
         dest.writeDouble(price);
         dest.writeInt(condition);
         dest.writeValue(picture);
+        dest.writeString(sellingId);
+        dest.writeString(tradingId);
     }
 
     @SuppressWarnings("unused")

@@ -80,7 +80,7 @@ public class TitleActivity extends AppCompatActivity implements View.OnClickList
         } else if (id == R.id.title_sell_card) {
             Intent intent = new Intent(getApplicationContext(), FormActivity.class);
             intent.putExtra(IntentExtra.PROFILE, mUserProfile);
-            intent.putExtra(IntentExtra.ACTIVITY_SELL, true);
+            intent.putExtra(IntentExtra.ACTIVITY_SELLING, true);
             startActivity(intent);
         } else if (id == R.id.title_account_card) {
             Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);

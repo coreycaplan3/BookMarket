@@ -18,12 +18,14 @@ public interface FragmentKeys {
     String TRADE_FORM_FRAGMENT = "Trade a Book";
     String SELL_FORM_FRAGMENT = "Sell a Textbook";
     String REGISTER_FRAGMENT = "Register";
+    String NOTIFICATIONS_FRAGMENT = "Notifications";
 
     String POST_NETWORK_FRAGMENT = "postNetworkFragment";
     String GET_NETWORK_FRAGMENT = "getNetworkFragment";
 
     @StringDef({LOGIN_FRAGMENT, TITLE_FRAGMENT, BOOKS_MARKET_LIST_FRAGMENT, BOOK_DETAILS_FRAGMENT,
-            TRADE_TITLE_FRAGMENT, TRADE_FORM_FRAGMENT, SELL_FORM_FRAGMENT, REGISTER_FRAGMENT})
+            TRADE_TITLE_FRAGMENT, TRADE_FORM_FRAGMENT, SELL_FORM_FRAGMENT, REGISTER_FRAGMENT,
+            NOTIFICATIONS_FRAGMENT})
     @interface FragmentTag {
     }
 

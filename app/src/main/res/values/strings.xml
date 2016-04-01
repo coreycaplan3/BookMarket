@@ -68,5 +68,8 @@
     <string name="notify_trader">Notifying Trader…</string>
     <string name="seller_notified">Seller notified!</string>
     <string name="trader_notified">Trader notified!</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="title_activity_my_listings">MyListingsActivity</string>
+    <string name="sign_out_message">Are you sure you want to sign out from Book Mart?</string>
 
 </resources>
