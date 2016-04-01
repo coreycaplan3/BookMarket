@@ -24,8 +24,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.github.coreycaplan3.bookmarket.functionality.*;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by Corey on 3/31/2016.
  * Project: BookMarket
@@ -453,47 +451,25 @@ public class DatabaseApi {
         return new Gson().fromJson(jObject.get("books"), listType);
     }
 
-    /**
-     * Gets all the potential traders of a user
-     *
-     * @param userToken the token of the user
-     * @return ArrayList of GeneralUser that contains EVERY interested trader
-     * @throws Exception
-     */
-    public ArrayList<GeneralUser> getAllPotentialTraders(String userToken) throws Exception{
-        args = new String[1];
-        args[0] = "";
-        command = "getAllPotentialTraders";
-        token = userToken;
-        ArrayList<GeneralUser> allTraders = new ArrayList<GeneralUser>();
-        ArrayList<TextBook> tradeBooks = getMyTradeListings(userToken);
-        for (TextBook book : tradeBooks) {
-            allTraders.addAll(getSpecificPotentialTrader(book.getTradingId(), userToken));
-        }
 
-        return allTraders;
-    }
+//    public ArrayList<GeneralUser> getAllPotentialTraders(String userToken) throws Exception{
+//        args = new String[1];
+//        args[0] = "";
+//        command = "getAllPotentialTraders";
+//        token = userToken;
+//        ArrayList<GeneralUser> allTraders = new ArrayList<GeneralUser>();
+//        ArrayList<TextBook> tradeBooks = getMyTradeListings(userToken);
+//        for (TextBook book : tradeBooks) {
+//            allTraders.add(getSpecificPotentialTrader(book.get));
+//        }
+//        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+//        JsonObject jObject = jElement.getAsJsonObject();
+//        Type listType = new TypeToken<List<TextBook>>() {
+//        }.getType();
+//
+//        return new Gson().fromJson(jObject.get("books"), listType);
+//    }
 
-    /**
-     * Gets all the potential buyers of a user
-     *
-     * @param userToken the token of the user
-     * @return ArrayList of GeneralUser that contains EVERY interested buyer
-     * @throws Exception
-     */
-    public ArrayList<GeneralUser> getAllPotentialBuyers(String userToken) throws Exception{
-        args = new String[1];
-        args[0] = "";
-        command = "getAllPotentialTraders";
-        token = userToken;
-        ArrayList<GeneralUser> allBuyers = new ArrayList<GeneralUser>();
-        ArrayList<TextBook> tradeBooks = getMySalesListings(userToken);
-        for (TextBook book : tradeBooks) {
-            allBuyers.addAll(getSpecificPotentialBuyer(book.getSellingId(), userToken));
-        }
-
-        return allBuyers;
-    }
     /**
      * Returns all interested traders for a specific trade_id
      *
@@ -621,78 +597,6 @@ public class DatabaseApi {
         return jObject.get("t_id").getAsString();
     }
 
-    /**
-     * Gets the TextBook info for a specific sale listing
-     * @param s_id the sale id
-     * @return a TextBook object with all the info of that sale
-     * @throws Exception
-     */
-    public TextBook getSaleInfo(String s_id) throws Exception{
-        args = new String[0];
-        args[0] = s_id;
-        command = "getSalesInfo";
-        token = "none";
-
-        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
-        JsonObject jObject = jElement.getAsJsonObject();
-        int condition = jObject.get("condition").getAsInt();
-        int cond_constant;
-        if(condition == 0) {
-            cond_constant = TextBook.CONDITION_NEW;
-        }
-        else if(condition == 1) {
-            cond_constant = TextBook.CONDITION_LIKE_NEW;
-        }
-        else if(condition == 2) {
-            cond_constant = TextBook.CONDITION_GOOD;
-        }
-        else {
-            cond_constant = TextBook.CONDITION_BAD;
-        }
-        return new TextBook(jObject.get("title").getAsString(),
-                jObject.get("author").getAsString(),
-                jObject.get("isbn").getAsString(),
-                jObject.get("price").getAsDouble(),
-                cond_constant,
-                null,
-                jObject.get("s_id").getAsString());
-    }
-
-    /**
-     * Gets the TextBook info for a specific trade listing
-     * @param t_id the trade id
-     * @return a TextBook object with all the info of that trade
-     * @throws Exception
-     */
-    public TextBook getTradeInfo(String t_id) throws Exception{
-        args = new String[0];
-        args[0] = t_id;
-        command = "getTradeInfo";
-        token = "none";
-
-        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
-        JsonObject jObject = jElement.getAsJsonObject();
-        int condition = jObject.get("condition").getAsInt();
-        int cond_constant;
-        if(condition == 0) {
-            cond_constant = TextBook.CONDITION_NEW;
-        }
-        else if(condition == 1) {
-            cond_constant = TextBook.CONDITION_LIKE_NEW;
-        }
-        else if(condition == 2) {
-            cond_constant = TextBook.CONDITION_GOOD;
-        }
-        else {
-            cond_constant = TextBook.CONDITION_BAD;
-        }
-        return new TextBook(jObject.get("title").getAsString(),
-                jObject.get("author").getAsString(),
-                jObject.get("isbn").getAsString(),
-                cond_constant,
-                null,
-                jObject.get("t_id").getAsString());
-    }
     //Sends get request, returns response
     private String sendGet(String url) throws Exception {
 
