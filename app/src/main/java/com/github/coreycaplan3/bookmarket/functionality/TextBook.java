@@ -123,12 +123,22 @@ public class TextBook implements Parcelable {
     }
 
     /**
-     * Constructor for posting a textbook to your trades
+     * Constructor for posting a textbook to your desired trades
      */
     public TextBook(String title, String author, String isbn) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+    }
+
+    /**
+     * Constructor for editing a textbook in your desired trades
+     */
+    public TextBook(String title, String author, String isbn, String tradingId) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.tradingId = tradingId;
     }
 
     /**

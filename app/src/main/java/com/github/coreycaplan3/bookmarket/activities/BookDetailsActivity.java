@@ -90,7 +90,7 @@ public class BookDetailsActivity extends AppCompatActivity implements GetNetwork
     @Override
     public void onPostNetworkTaskComplete(Bundle result,
                                           @PostNetworkConstraints String postConstraints) {
-        if (postConstraints.equals(PostNetworkConstants.CONSTRAINT_TRADE_BOOK)) {
+        if (postConstraints.equals(PostNetworkConstants.CONSTRAINT_TRADE_BOOK_WITH_OTHER)) {
             BookDetailsFragment fragment = (BookDetailsFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.book_details_container);
             if (fragment != null) {

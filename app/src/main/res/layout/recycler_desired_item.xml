@@ -36,23 +36,32 @@
             android:padding="@dimen/margin_small"
             android:text="@string/book_details_isbn_default" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="end|center_vertical">
 
             <ImageView
                 android:id="@+id/recycler_desired_edit_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/margin_small"
+                android:padding="@dimen/margin_small"
                 android:src="@drawable/ic_mode_edit_black_24dp" />
 
             <ImageView
                 android:id="@+id/recycler_desired_delete_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_mode_edit_black_24dp" />
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/margin_small"
+                android:layout_toLeftOf="@id/recycler_desired_edit_image_view"
+                android:layout_toStartOf="@id/recycler_desired_edit_image_view"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_delete_black_24dp" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

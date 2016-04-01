@@ -33,9 +33,11 @@ import com.github.coreycaplan3.bookmarket.utilities.UiUtility;
 public class DesiredBooksFormFragment extends Fragment implements View.OnClickListener, Dialog.OnCancelListener {
 
     private boolean mIsProgressShowing = false;
+    private boolean mIsEditingBook = false;
     private String mTitle;
     private String mAuthor;
     private String mIsbn;
+    private String mTradeId;
 
     private UserProfile mUserProfile;
 
@@ -49,12 +51,13 @@ public class DesiredBooksFormFragment extends Fragment implements View.OnClickLi
 
     private ProgressDialog mProgressDialog;
 
-    private static final String BUNDLE_PROGRESS_SHOWING = "bundleProgressShowing";
+    private static final String BUNDLE_IS_PROGRESS_SHOWING = "bundleProgressShowing";
     private static final String BUNDLE_PROFILE = "bundleProfile";
-    private static final String BUNDLE_IMAGE = "bundleImage";
     private static final String BUNDLE_TITLE = "bundleTitle";
     private static final String BUNDLE_AUTHOR = "bundleAuthor";
     private static final String BUNDLE_ISBN = "bundleIsbn";
+    private static final String BUNDLE_TRADE_ID = "bundleTradeId";
+    private static final String BUNDLE_IS_EDITING_BOOK = "bundleBook";
 
     private static final int MINIMUM_LENGTH = 3;
 
@@ -67,14 +70,14 @@ public class DesiredBooksFormFragment extends Fragment implements View.OnClickLi
     }
 
     public static DesiredBooksFormFragment newInstance(UserProfile userProfile, String title,
-                                                       String author, String isbn, Bitmap image) {
+                                                       String author, String isbn, String tradeId) {
         DesiredBooksFormFragment fragment = new DesiredBooksFormFragment();
         Bundle arguments = new Bundle();
         arguments.putParcelable(BUNDLE_PROFILE, userProfile);
         arguments.putString(BUNDLE_TITLE, title);
         arguments.putString(BUNDLE_AUTHOR, author);
         arguments.putString(BUNDLE_ISBN, isbn);
-        arguments.putParcelable(BUNDLE_IMAGE, image);
+        arguments.putString(BUNDLE_TRADE_ID, tradeId);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -83,17 +86,20 @@ public class DesiredBooksFormFragment extends Fragment implements View.OnClickLi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            mIsProgressShowing = savedInstanceState.getBoolean(BUNDLE_PROGRESS_SHOWING);
+            mIsProgressShowing = savedInstanceState.getBoolean(BUNDLE_IS_PROGRESS_SHOWING);
             mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
-            mTitle = getArguments().getString(BUNDLE_TITLE);
-            mAuthor = getArguments().getString(BUNDLE_AUTHOR);
-            mIsbn = getArguments().getString(BUNDLE_ISBN);
-            mIsbn = getArguments().getString(BUNDLE_ISBN);
+            mTitle = savedInstanceState.getString(BUNDLE_TITLE);
+            mAuthor = savedInstanceState.getString(BUNDLE_AUTHOR);
+            mIsbn = savedInstanceState.getString(BUNDLE_ISBN);
+            mTradeId = savedInstanceState.getString(BUNDLE_TRADE_ID);
+            mIsEditingBook = savedInstanceState.getBoolean(BUNDLE_IS_EDITING_BOOK);
         } else if (getArguments() != null) {
             mUserProfile = getArguments().getParcelable(BUNDLE_PROFILE);
             mTitle = getArguments().getString(BUNDLE_TITLE);
             mAuthor = getArguments().getString(BUNDLE_AUTHOR);
             mIsbn = getArguments().getString(BUNDLE_ISBN);
+            mTradeId = getArguments().getString(BUNDLE_TRADE_ID);
+            mIsEditingBook = mIsbn != null;
         }
     }
 
@@ -125,7 +131,11 @@ public class DesiredBooksFormFragment extends Fragment implements View.OnClickLi
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setOnCancelListener(this);
-        mProgressDialog.setMessage(getString(R.string.adding_to_my_trades));
+        if (mIsEditingBook) {
+            mProgressDialog.setMessage(getString(R.string.editing_my_trade));
+        } else {
+            mProgressDialog.setMessage(getString(R.string.adding_to_my_trades));
+        }
         if (mIsProgressShowing) {
             mProgressDialog.show();
         }
@@ -189,10 +199,15 @@ public class DesiredBooksFormFragment extends Fragment implements View.OnClickLi
         int id = v.getId();
         if (id == R.id.fragment_desired_form_submit_button) {
             if (isValid()) {
-                TextBook textBook = new TextBook(mTitle, mAuthor, mIsbn);
                 PostNetworkFragment fragment = (PostNetworkFragment) getFragmentManager()
                         .findFragmentByTag(FragmentKeys.POST_NETWORK_FRAGMENT);
-                fragment.startPostDesiredTradeTask(textBook, mUserProfile);
+                if (mIsEditingBook) {
+                    TextBook textBook = new TextBook(mTitle, mAuthor, mIsbn);
+                    fragment.startEditDesiredTradeTask(textBook, mUserProfile);
+                } else {
+                    TextBook textBook = new TextBook(mTitle, mAuthor, mIsbn);
+                    fragment.startPostDesiredTradeTask(textBook, mUserProfile);
+                }
 
                 mIsProgressShowing = true;
                 mProgressDialog.show();
@@ -246,14 +261,21 @@ public class DesiredBooksFormFragment extends Fragment implements View.OnClickLi
         UiUtility.toast(getContext(), R.string.post_successful);
     }
 
+    public void onEditBookSuccessful() {
+        mIsProgressShowing = false;
+        mProgressDialog.dismiss();
+        UiUtility.toast(getContext(), R.string.edit_successful);
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(BUNDLE_PROGRESS_SHOWING, mIsProgressShowing);
+        outState.putBoolean(BUNDLE_IS_PROGRESS_SHOWING, mIsProgressShowing);
         outState.putParcelable(BUNDLE_PROFILE, mUserProfile);
         outState.putString(BUNDLE_TITLE, mTitle);
         outState.putString(BUNDLE_AUTHOR, mAuthor);
         outState.putString(BUNDLE_ISBN, mIsbn);
+        outState.putBoolean(BUNDLE_IS_EDITING_BOOK, mIsEditingBook);
     }
 
 }

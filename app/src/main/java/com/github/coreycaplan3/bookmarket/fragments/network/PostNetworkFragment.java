@@ -73,9 +73,9 @@ public class PostNetworkFragment extends Fragment {
         startTask(task);
     }
 
-    public void startEditBookTask(TextBook textBook, UserProfile userProfile) {
+    public void startEditSellBookTask(TextBook textBook, UserProfile userProfile) {
         NetworkTask task = new NetworkTask();
-        task.performEditBookTask(textBook, userProfile);
+        task.performEditSellBookTask(textBook, userProfile);
         startTask(task);
     }
 
@@ -93,21 +93,51 @@ public class PostNetworkFragment extends Fragment {
         startTask(task);
     }
 
-    public void startPostTradeBookTask(TextBook textBook, UserProfile userProfile) {
-        NetworkTask task = new NetworkTask();
-        task.performPostTradeBookTask(textBook, userProfile);
-        startTask(task);
-    }
-
     public void startPostSellBookTask(TextBook textBook, UserProfile userProfile) {
         NetworkTask task = new NetworkTask();
         task.performPostSellBookTask(textBook, userProfile);
         startTask(task);
     }
 
+    public void startPostTradeBookTask(TextBook textBook, UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performPostTradeBookTask(textBook, userProfile);
+        startTask(task);
+    }
+
+    public void startEditTradeBookTask(TextBook textBook, UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performEditTradeBookTask(textBook, userProfile);
+        startTask(task);
+    }
+
     public void startPostDesiredTradeTask(TextBook textBook, UserProfile userProfile) {
         NetworkTask task = new NetworkTask();
         task.performPostDesiredTradeTask(textBook, userProfile);
+        startTask(task);
+    }
+
+    public void startEditDesiredTradeTask(TextBook textBook, UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performEditDesiredTradeTask(textBook, userProfile);
+        startTask(task);
+    }
+
+    public void startDeleteTradeTask(TextBook textBook, UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performDeleteTrade(textBook, userProfile);
+        startTask(task);
+    }
+
+    public void startDeleteSellTask(TextBook textBook, UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performDeleteSell(textBook, userProfile);
+        startTask(task);
+    }
+
+    public void startDeleteDesiredTradeTask(TextBook textBook, UserProfile userProfile) {
+        NetworkTask task = new NetworkTask();
+        task.performDeleteDesiredTrade(textBook, userProfile);
         startTask(task);
     }
 
@@ -194,15 +224,9 @@ public class PostNetworkFragment extends Fragment {
             mUniversity = university;
         }
 
-        private void performEditBookTask(TextBook textBook, UserProfile userProfile) {
-            mNetworkConstraint = CONSTRAINT_EDIT_BOOK;
-            mTextBook = textBook;
-            mUserProfile = userProfile;
-        }
-
         private void performBuyBookTaskWithUser(TextBook textBook, UserProfile userProfile,
                                                 GeneralUser seller) {
-            mNetworkConstraint = CONSTRAINT_BUY_BOOK;
+            mNetworkConstraint = CONSTRAINT_BUY_BOOK_WITH_OTHER;
             mTextBook = textBook;
             mUserProfile = userProfile;
             mSeller = seller;
@@ -210,7 +234,7 @@ public class PostNetworkFragment extends Fragment {
 
         private void performTradeBookWithUserTask(TextBook textBook, UserProfile userProfile,
                                                   GeneralUser seller) {
-            mNetworkConstraint = CONSTRAINT_TRADE_BOOK;
+            mNetworkConstraint = CONSTRAINT_TRADE_BOOK_WITH_OTHER;
             mTextBook = textBook;
             mUserProfile = userProfile;
             mSeller = seller;
@@ -222,14 +246,50 @@ public class PostNetworkFragment extends Fragment {
             mUserProfile = userProfile;
         }
 
+        private void performEditTradeBookTask(TextBook textBook, UserProfile userProfile) {
+            mNetworkConstraint = CONSTRAINT_EDIT_TRADE_BOOK;
+            mTextBook = textBook;
+            mUserProfile = userProfile;
+        }
+
         private void performPostSellBookTask(TextBook textBook, UserProfile userProfile) {
             mNetworkConstraint = CONSTRAINT_POST_SELL_BOOK;
             mTextBook = textBook;
             mUserProfile = userProfile;
         }
 
+        private void performEditSellBookTask(TextBook textBook, UserProfile userProfile) {
+            mNetworkConstraint = CONSTRAINT_EDIT_SELL_BOOK;
+            mTextBook = textBook;
+            mUserProfile = userProfile;
+        }
+
         private void performPostDesiredTradeTask(TextBook textBookList, UserProfile userProfile) {
             mNetworkConstraint = CONSTRAINT_POST_DESIRED_TRADE;
+            mTextBook = textBookList;
+            mUserProfile = userProfile;
+        }
+
+        private void performEditDesiredTradeTask(TextBook textBook, UserProfile userProfile) {
+            mNetworkConstraint = CONSTRAINT_EDIT_DESIRED_TRADE;
+            mTextBook = textBook;
+            mUserProfile = userProfile;
+        }
+
+        private void performDeleteSell(TextBook textBook, UserProfile userProfile) {
+            mNetworkConstraint = CONSTRAINT_DELETE_SELL_BOOK;
+            mTextBook = textBook;
+            mUserProfile = userProfile;
+        }
+
+        private void performDeleteTrade(TextBook textBookList, UserProfile userProfile) {
+            mNetworkConstraint = CONSTRAINT_DELETE_TRADE_BOOK;
+            mTextBook = textBookList;
+            mUserProfile = userProfile;
+        }
+
+        private void performDeleteDesiredTrade(TextBook textBookList, UserProfile userProfile) {
+            mNetworkConstraint = CONSTRAINT_DELETE_DESIRED_TRADE_BOOK;
             mTextBook = textBookList;
             mUserProfile = userProfile;
         }
@@ -251,20 +311,35 @@ public class PostNetworkFragment extends Fragment {
                 case CONSTRAINT_POST_SELL_BOOK:
                     startPostSellBook(databaseApi, bundle);
                     break;
-                case CONSTRAINT_BUY_BOOK:
-                    startBuyBookWithUser(databaseApi, bundle);
-                    break;
-                case CONSTRAINT_EDIT_BOOK:
-                    startEditBook(databaseApi, bundle);
-                    break;
-                case CONSTRAINT_TRADE_BOOK:
-                    startTradeBookWithUser(databaseApi, bundle);
+                case CONSTRAINT_EDIT_SELL_BOOK:
+                    startEditSellBook(databaseApi, bundle);
                     break;
                 case CONSTRAINT_POST_TRADE_BOOK:
                     startPostTradeBook(databaseApi, bundle);
                     break;
+                case CONSTRAINT_EDIT_TRADE_BOOK:
+                    startEditTradeBook(databaseApi, bundle);
+                    break;
                 case CONSTRAINT_POST_DESIRED_TRADE:
                     startPostDesiredTradeBook(databaseApi, bundle);
+                    break;
+                case CONSTRAINT_EDIT_DESIRED_TRADE:
+                    startEditDesiredTrade(databaseApi, bundle);
+                    break;
+                case CONSTRAINT_BUY_BOOK_WITH_OTHER:
+                    startBuyBookWithUser(databaseApi, bundle);
+                    break;
+                case CONSTRAINT_TRADE_BOOK_WITH_OTHER:
+                    startTradeBookWithUser(databaseApi, bundle);
+                    break;
+                case CONSTRAINT_DELETE_SELL_BOOK:
+                    startDeleteSell(databaseApi, bundle);
+                    break;
+                case CONSTRAINT_DELETE_TRADE_BOOK:
+                    startDeleteTrade(databaseApi, bundle);
+                    break;
+                case CONSTRAINT_DELETE_DESIRED_TRADE_BOOK:
+                    startDeleteDesiredTrade(databaseApi, bundle);
                     break;
                 default:
                     Log.e(TAG, "doInBackground: ", new IllegalArgumentException("Invalid network " +
@@ -286,7 +361,7 @@ public class PostNetworkFragment extends Fragment {
         private void startSilentLogin(DatabaseApi databaseApi, Bundle bundle) {
             boolean isValid;
             UserProfile userProfile = null;
-            if(mConnectionToken != null) {
+            if (mConnectionToken != null) {
                 Log.e(TAG, "startSilentLogin: " + "Starting cached sign in...");
                 try {
                     isValid = databaseApi.isValidToken(mConnectionToken);
@@ -317,7 +392,15 @@ public class PostNetworkFragment extends Fragment {
 //            }
         }
 
+        private void startEditSellBook(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
         private void startPostTradeBook(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
+        private void startEditTradeBook(DatabaseApi databaseApi, Bundle bundle) {
 
         }
 
@@ -325,11 +408,11 @@ public class PostNetworkFragment extends Fragment {
 
         }
 
-        private void startBuyBookWithUser(DatabaseApi databaseApi, Bundle bundle) {
+        private void startEditDesiredTrade(DatabaseApi databaseApi, Bundle bundle) {
 
         }
 
-        private void startEditBook(DatabaseApi databaseApi, Bundle bundle) {
+        private void startBuyBookWithUser(DatabaseApi databaseApi, Bundle bundle) {
 
         }
 
@@ -337,7 +420,15 @@ public class PostNetworkFragment extends Fragment {
 
         }
 
-        private void startSellBook(DatabaseApi databaseApi, Bundle bundle) {
+        private void startDeleteSell(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
+        private void startDeleteTrade(DatabaseApi databaseApi, Bundle bundle) {
+
+        }
+
+        private void startDeleteDesiredTrade(DatabaseApi databaseApi, Bundle bundle) {
 
         }
 

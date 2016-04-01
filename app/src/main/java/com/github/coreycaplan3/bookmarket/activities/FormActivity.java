@@ -21,6 +21,10 @@ import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
+import com.github.coreycaplan3.bookmarket.utilities.UiUtility;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
 
@@ -33,6 +37,8 @@ public class FormActivity extends AppCompatActivity implements View.OnClickListe
     private UserProfile mUserProfile;
     @Nullable
     private TextBook mTextBookToEdit;
+
+    private static final int RC_BARCODE_CAPTURE = 9001;
 
     private static final String BUNDLE_SELLING = TAG + "selling";
     private static final String BUNDLE_PROFILE = TAG + "profile";
@@ -83,14 +89,14 @@ public class FormActivity extends AppCompatActivity implements View.OnClickListe
             if (mIsSelling) {
                 if (mTextBookToEdit == null) {
                     FragmentCreator.create(SellingFormFragment.newInstance(mUserProfile), SELL_FORM_FRAGMENT,
-                            R.id.title_container, getSupportFragmentManager());
+                            R.id.form_container, getSupportFragmentManager());
                 } else {
                     String condition = TextBook.getCondition(mTextBookToEdit.getCondition(), this);
                     FragmentCreator.create(SellingFormFragment.newInstance(mUserProfile,
                             mTextBookToEdit.getTitle(), mTextBookToEdit.getAuthor(),
                             mTextBookToEdit.getIsbn(), mTextBookToEdit.getPicture(),
                             mTextBookToEdit.getPrice(), condition, mTextBookToEdit.getSellingId()),
-                            SELL_FORM_FRAGMENT, R.id.title_container, getSupportFragmentManager());
+                            SELL_FORM_FRAGMENT, R.id.form_container, getSupportFragmentManager());
                 }
             } else {
                 if (mTextBookToEdit == null) {
@@ -109,6 +115,45 @@ public class FormActivity extends AppCompatActivity implements View.OnClickListe
             mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
             mIsSelling = savedInstanceState.getBoolean(BUNDLE_SELLING);
             mTextBookToEdit = savedInstanceState.getParcelable(BUNDLE_BOOK);
+        }
+    }
+
+
+    /**
+     * Called when an activity you launched exits, giving you the requestCode
+     * you started it with, the resultCode it returned, and any additional
+     * data from it.  The <var>resultCode</var> will be
+     * {@link #RESULT_CANCELED} if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     * <p/>
+     * <p>You will receive this call immediately before onResume() when your
+     * activity is re-starting.
+     * <p/>
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode  The integer result code returned by the child activity
+     *                    through its setResult().
+     * @param data        An Intent, which can return result data to the caller
+     *                    (various data can be attached to Intent "extras").
+     * @see #startActivityForResult
+     * @see #createPendingResult
+     * @see #setResult(int)
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_BARCODE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(CameraActivity.BarcodeObject);
+                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                } else {
+                    UiUtility.snackbar(findViewById(R.id.form_container), R.string.barcode_failure,
+                            null);
+                    Log.d(TAG, "No barcode captured, intent data is null");
+                }
+            }
         }
     }
 
@@ -133,7 +178,7 @@ public class FormActivity extends AppCompatActivity implements View.OnClickListe
     public void onPostNetworkTaskComplete(Bundle result,
                                           @PostNetworkConstraints String postConstraints) {
         switch (postConstraints) {
-            case PostNetworkConstants.CONSTRAINT_EDIT_BOOK:
+            case PostNetworkConstants.CONSTRAINT_EDIT_SELL_BOOK:
                 mTextBookToEdit = result.getParcelable(postConstraints);
                 if (mIsSelling) {
                     SellingFormFragment fragment = (SellingFormFragment) getSupportFragmentManager()

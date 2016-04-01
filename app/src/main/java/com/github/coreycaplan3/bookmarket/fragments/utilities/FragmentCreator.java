@@ -19,11 +19,6 @@ import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.FragmentTag;
  */
 public final class FragmentCreator {
 
-    private static final int ENTER_ANIMATION = R.anim.right_to_center;
-    private static final int EXIT_ANIMATION = R.anim.center_to_left;
-    private static final int POP_ENTER_ANIMATION = R.anim.left_to_center;
-    private static final int POP_EXIT_ANIMATION = R.anim.center_to_right;
-
     private FragmentCreator() {
     }
 
@@ -32,8 +27,8 @@ public final class FragmentCreator {
         return fragmentManager.beginTransaction()
                 .replace(containerId, fragment, tag)
                 .addToBackStack(tag)
-                .setCustomAnimations(ENTER_ANIMATION, EXIT_ANIMATION, POP_ENTER_ANIMATION,
-                        POP_EXIT_ANIMATION)
+                .setCustomAnimations(R.anim.right_to_center, R.anim.center_to_left,
+                        R.anim.left_to_center, R.anim.center_to_right)
                 .commit();
     }
 

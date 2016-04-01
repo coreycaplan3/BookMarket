@@ -304,7 +304,7 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
                 if (mIsEditingBook) {
                     textBook = new TextBook(mTitle, mAuthor, mIsbn, Double.parseDouble(mPrice),
                             condition, mImage, mSellId);
-                    fragment.startEditBookTask(textBook, mUserProfile);
+                    fragment.startEditSellBookTask(textBook, mUserProfile);
                 } else {
                     textBook = new TextBook(mTitle, mAuthor, mIsbn, Double.parseDouble(mPrice),
                             condition, mImage);
@@ -357,10 +357,10 @@ public class SellingFormFragment extends Fragment implements View.OnClickListene
             isValid = false;
         }
 
-        if (mImage == null) {
-            int color = getContext().getResources().getColor(android.R.color.holo_red_light);
-            mImageContainer.setCardBackgroundColor(color);
-        }
+//        if (mImage == null) {
+//            int color = getContext().getResources().getColor(android.R.color.holo_red_light);
+//            mImageContainer.setCardBackgroundColor(color);
+//        }
         return isValid;
     }
 

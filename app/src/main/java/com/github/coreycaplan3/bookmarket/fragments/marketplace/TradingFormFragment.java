@@ -275,7 +275,7 @@ public class TradingFormFragment extends Fragment implements View.OnClickListene
                 TextBook textBook;
                 if (mIsEditingBook) {
                     textBook = new TextBook(mTitle, mAuthor, mIsbn, condition, mImage, mTradeId);
-                    fragment.startEditBookTask(textBook, mUserProfile);
+                    fragment.startEditTradeBookTask(textBook, mUserProfile);
                 } else {
                     textBook = new TextBook(mTitle, mAuthor, mIsbn, condition, mImage);
                     fragment.startPostTradeBookTask(textBook, mUserProfile);
@@ -321,10 +321,10 @@ public class TradingFormFragment extends Fragment implements View.OnClickListene
             isValid = false;
         }
 
-        if (mImage == null) {
-            int color = getContext().getResources().getColor(android.R.color.holo_red_light);
-            mImageContainer.setCardBackgroundColor(color);
-        }
+//        if (mImage == null) {
+//            int color = getContext().getResources().getColor(android.R.color.holo_red_light);
+//            mImageContainer.setCardBackgroundColor(color);
+//        }
         return isValid;
     }
 

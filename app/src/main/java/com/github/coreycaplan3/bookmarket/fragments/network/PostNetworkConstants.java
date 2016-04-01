@@ -16,8 +16,11 @@ import java.lang.annotation.RetentionPolicy;
 public interface PostNetworkConstants {
 
     @StringDef({CONSTRAINT_LOGIN, CONSTRAINT_SILENT_LOGIN, CONSTRAINT_REGISTER,
-            CONSTRAINT_EDIT_BOOK, CONSTRAINT_BUY_BOOK, CONSTRAINT_TRADE_BOOK,
-            CONSTRAINT_POST_DESIRED_TRADE, CONSTRAINT_POST_TRADE_BOOK, CONSTRAINT_POST_SELL_BOOK})
+            CONSTRAINT_EDIT_SELL_BOOK, CONSTRAINT_BUY_BOOK_WITH_OTHER,
+            CONSTRAINT_TRADE_BOOK_WITH_OTHER, CONSTRAINT_EDIT_DESIRED_TRADE,
+            CONSTRAINT_POST_DESIRED_TRADE, CONSTRAINT_POST_TRADE_BOOK,
+            CONSTRAINT_POST_SELL_BOOK, CONSTRAINT_EDIT_TRADE_BOOK, CONSTRAINT_DELETE_SELL_BOOK,
+            CONSTRAINT_DELETE_TRADE_BOOK, CONSTRAINT_DELETE_DESIRED_TRADE_BOOK})
     @Retention(RetentionPolicy.SOURCE)
     @interface PostNetworkConstraints {
     }
@@ -34,15 +37,25 @@ public interface PostNetworkConstants {
 
     String CONSTRAINT_REGISTER = "postNetworkConstraintRegister";
 
-    String CONSTRAINT_EDIT_BOOK = "postNetworkConstraintEditBook";
+    String CONSTRAINT_BUY_BOOK_WITH_OTHER = "postNetworkConstraintBuyBook";
 
-    String CONSTRAINT_BUY_BOOK = "postNetworkConstraintBuyBook";
-
-    String CONSTRAINT_TRADE_BOOK = "postNetworkConstraintTradeBook";
+    String CONSTRAINT_TRADE_BOOK_WITH_OTHER = "postNetworkConstraintTradeBook";
 
     String CONSTRAINT_POST_TRADE_BOOK = "postNetworkConstraintPostTradeBook";
 
+    String CONSTRAINT_EDIT_TRADE_BOOK = "postNetworkConstraintEditTradeBook";
+
     String CONSTRAINT_POST_DESIRED_TRADE = "postNetworkConstraintPostTradeList";
 
+    String CONSTRAINT_EDIT_DESIRED_TRADE = "postNetworkConstraintEditTradeList";
+
     String CONSTRAINT_POST_SELL_BOOK = "postNetworkConstraintPostSellBook";
+
+    String CONSTRAINT_EDIT_SELL_BOOK = "postNetworkConstraintEditSellBook";
+
+    String CONSTRAINT_DELETE_SELL_BOOK = "postNetworkConstraintDeleteSellBook";
+
+    String CONSTRAINT_DELETE_TRADE_BOOK = "postNetworkConstraintDeleteTradeBook";
+
+    String CONSTRAINT_DELETE_DESIRED_TRADE_BOOK = "postNetworkConstraintDeleteDesiredTradeBook";
 }

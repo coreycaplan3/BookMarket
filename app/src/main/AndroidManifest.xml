@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.coreycaplan3.bookmarket">
-
+    package="com.github.coreycaplan3.bookmarket" >
+C
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".application.BookApplication"
@@ -10,24 +11,25 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.TitleActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|adjustPan" />
-
         <activity
             android:name=".activities.BookMarketListActivity"
             android:label="@string/title_activity_book_marketplace"
             android:parentActivityName=".activities.TitleActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize|adjustPan">
+            android:windowSoftInputMode="adjustResize|adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.coreycaplan3.bookmarket.activities.TitleActivity" />
         </activity>
 
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".SampleSearchActivity" />
@@ -36,7 +38,7 @@
             android:name=".activities.SearchActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize|adjustPan">
+            android:windowSoftInputMode="adjustResize|adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -48,53 +50,52 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|adjustPan" />
-
         <activity
             android:name=".activities.BookDetailsActivity"
             android:label="@string/title_activity_book_details"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|adjustPan" />
-
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name=".activities.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:parentActivityName=".activities.TitleActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize|adjustPan">
+            android:windowSoftInputMode="adjustResize|adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.coreycaplan3.bookmarket.activities.TitleActivity" />
         </activity>
-
         <activity
             android:name=".activities.FormActivity"
             android:label="@string/title_activity_form"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|adjustPan" />
-
         <activity
             android:name=".activities.MyListingsActivity"
             android:label="@string/title_activity_my_listings"
             android:parentActivityName=".activities.ProfileActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize|adjustPan">
+            android:windowSoftInputMode="adjustResize|adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.coreycaplan3.bookmarket.activities.ProfileActivity" />
+        </activity>
+        <activity
+            android:name=".activities.CameraActivity"
+            android:label="@string/title_activity_camera"
+            android:theme="@style/AppTheme" >
         </activity>
     </application>
 

@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.activities.MyListingsActivity;
+import com.github.coreycaplan3.bookmarket.adapters.DesiredTradesAdapter;
 import com.github.coreycaplan3.bookmarket.dialogs.SignOutDialog;
+import com.github.coreycaplan3.bookmarket.fragments.marketplace.DesiredBooksFragment;
 import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.marketplace.DesiredBooksFormFragment;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
@@ -43,6 +45,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
+        } else {
+            mUserProfile = getArguments().getParcelable(BUNDLE_PROFILE);
+        }
     }
 
     @Nullable
@@ -70,11 +77,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.fragment_profile_notifications_card) {
@@ -91,7 +93,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             intent.putExtra(IntentExtra.PROFILE, mUserProfile);
             startActivity(intent);
         } else if (id == R.id.fragment_profile_desired_trade_card) {
-            //todo implement me
+            DesiredBooksFragment fragment = DesiredBooksFragment.newInstance(mUserProfile);
+            FragmentCreator.create(fragment, FragmentKeys.VIEW_DESIRED_TRADES_FRAGMENT,
+                    R.id.profile_container, getFragmentManager());
         } else if (id == R.id.fragment_profile_add_trade_card) {
             DesiredBooksFormFragment fragment = DesiredBooksFormFragment.newInstance(mUserProfile);
             FragmentCreator.create(fragment, FragmentKeys.ADD_DESIRED_TRADE_FRAGMENT,
@@ -103,5 +107,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         } else {
             Log.e(TAG, "onClick: ", new IllegalArgumentException("Found: " + id));
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_PROFILE, mUserProfile);
     }
 }
