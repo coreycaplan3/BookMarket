@@ -84,10 +84,10 @@ public class TradingFormFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
-    public static DesiredBooksForm newInstance(UserProfile userProfile, String title,
-                                               String author, String isbn, Bitmap image,
-                                               double price, String condition) {
-        DesiredBooksForm fragment = new DesiredBooksForm();
+    public static DesiredBooksFormFragment newInstance(UserProfile userProfile, String title,
+                                                       String author, String isbn, Bitmap image,
+                                                       double price, String condition) {
+        DesiredBooksFormFragment fragment = new DesiredBooksFormFragment();
         Bundle arguments = new Bundle();
         arguments.putParcelable(BUNDLE_PROFILE, userProfile);
         arguments.putString(BUNDLE_TITLE, title);

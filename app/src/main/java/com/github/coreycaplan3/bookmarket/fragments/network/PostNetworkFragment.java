@@ -231,7 +231,7 @@ public class PostNetworkFragment extends Fragment {
 
         private void performPostTradeListTask(ArrayList<TextBook> textBookList,
                                               UserProfile userProfile) {
-            mNetworkConstraint = CONSTRAINT_POST_TRADE_LIST;
+            mNetworkConstraint = CONSTRAINT_POST_DESIRED_TRADE;
             mTextBookList = textBookList;
             mUserProfile = userProfile;
         }
@@ -265,7 +265,7 @@ public class PostNetworkFragment extends Fragment {
                 case CONSTRAINT_POST_TRADE_BOOK:
                     startPostTradeBook(databaseApi, bundle);
                     break;
-                case CONSTRAINT_POST_TRADE_LIST:
+                case CONSTRAINT_POST_DESIRED_TRADE:
                     startPostTradeList(databaseApi, bundle);
                     break;
                 default:

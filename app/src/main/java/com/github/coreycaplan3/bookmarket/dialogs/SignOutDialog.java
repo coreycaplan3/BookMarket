@@ -25,7 +25,7 @@ import com.github.coreycaplan3.bookmarket.R;
  */
 public class SignOutDialog extends DialogFragment implements View.OnClickListener {
 
-    private final String TAG = getClass().getSimpleName();
+    private static final String TAG = SignOutDialog.class.getSimpleName();
     @StringRes
     private int mTitle;
     @StringRes
@@ -33,6 +33,8 @@ public class SignOutDialog extends DialogFragment implements View.OnClickListene
     private DialogCallback mListener;
     private static final String BUNDLE_TITLE = "dialogTitle";
     private static final String BUNDLE_MESSAGE = "dialogMessage";
+
+    public static final String DIALOG_TAG = TAG;
 
     /**
      * Sets the message to be displayed by this sign out dialog.

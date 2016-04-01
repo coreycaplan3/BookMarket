@@ -92,6 +92,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, OnC
         if (mIsProgressShowing) {
             mProgressDialog.show();
         }
+
         return view;
     }
 

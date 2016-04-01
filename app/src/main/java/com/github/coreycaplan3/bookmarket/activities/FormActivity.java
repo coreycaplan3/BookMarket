@@ -26,6 +26,7 @@ public class FormActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = TitleActivity.class.getSimpleName();
 
     private boolean mIsSelling;
+    private boolean mIsAddingTradeBook;
     private UserProfile mUserProfile;
 
     private static final String BUNDLE_SELLING = TAG + "selling";
@@ -44,10 +45,10 @@ public class FormActivity extends AppCompatActivity implements View.OnClickListe
             fab.setOnClickListener(this);
         }
 
-        initiateFragment(savedInstanceState);
+        restoreInstance(savedInstanceState);
     }
 
-    private void initiateFragment(Bundle savedInstanceState) {
+    private void restoreInstance(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             FragmentCreator.createNetworks(getSupportFragmentManager());
 

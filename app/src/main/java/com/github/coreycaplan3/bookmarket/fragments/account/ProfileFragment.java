@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.activities.MyListingsActivity;
+import com.github.coreycaplan3.bookmarket.dialogs.SignOutDialog;
 import com.github.coreycaplan3.bookmarket.fragments.FragmentCreator;
+import com.github.coreycaplan3.bookmarket.fragments.marketplace.DesiredBooksFormFragment;
 import com.github.coreycaplan3.bookmarket.functionality.UserProfile;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
 import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
@@ -54,9 +56,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .findViewById(R.id.fragment_profile_book_sellings_card);
         CardView tradeListingsCardView = (CardView) view
                 .findViewById(R.id.fragment_profile_book_trades_card);
+        CardView addTradeCardView = (CardView) view
+                .findViewById(R.id.fragment_profile_add_trade_card);
         CardView signOutCardView = (CardView) view
                 .findViewById(R.id.fragment_profile_sign_out_card);
 
+        notificationsCardView.setOnClickListener(this);
+        bookListingsCardView.setOnClickListener(this);
+        tradeListingsCardView.setOnClickListener(this);
+        addTradeCardView.setOnClickListener(this);
+        signOutCardView.setOnClickListener(this);
         return view;
     }
 
@@ -81,8 +90,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             Intent intent = new Intent(getContext(), MyListingsActivity.class);
             intent.putExtra(IntentExtra.PROFILE, mUserProfile);
             startActivity(intent);
+        } else if (id == R.id.fragment_profile_add_trade_card) {
+            DesiredBooksFormFragment fragment = DesiredBooksFormFragment.newInstance(mUserProfile);
+            FragmentCreator.create(fragment, FragmentKeys.ADD_DESIRED_TRADE_FRAGMENT,
+                    R.id.profile_container, getFragmentManager());
         } else if (id == R.id.fragment_profile_sign_out_card) {
-
+            SignOutDialog dialog = SignOutDialog.newInstance(R.string.sign_out_title,
+                    R.string.sign_out_message);
+            dialog.show(getFragmentManager(), SignOutDialog.DIALOG_TAG);
         } else {
             Log.e(TAG, "onClick: ", new IllegalArgumentException("Found: " + id));
         }

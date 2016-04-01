@@ -1,10 +1,14 @@
 package com.github.coreycaplan3.bookmarket.functionality;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.github.coreycaplan3.bookmarket.R;
 
 /**
  * Created by Corey on 3/31/2016.
@@ -14,6 +18,7 @@ import android.support.annotation.Nullable;
  */
 public class TextBook implements Parcelable {
 
+    private static final String TAG = TextBook.class.getSimpleName();
     private String title;
     private String author;
     private String isbn;
@@ -42,6 +47,27 @@ public class TextBook implements Parcelable {
                 "978–0–07–352332–3", 129.95, CONDITION_NEW, null);
     }
 
+    public static String getCondition(@Condition int condition, Context context) {
+        String returnValue = context.getString(R.string.string_new);
+        switch (condition) {
+            case CONDITION_NEW:
+                break;
+            case CONDITION_LIKE_NEW:
+                returnValue = context.getString(R.string.like_new);
+                break;
+            case CONDITION_GOOD:
+                returnValue = context.getString(R.string.good);
+                break;
+            case CONDITION_BAD:
+                returnValue = context.getString(R.string.bad);
+                break;
+            default:
+                Log.e(TAG, "getCondition: ", new IllegalArgumentException("Found: " + condition));
+                break;
+        }
+        return returnValue;
+    }
+
     /**
      * Constructor for selling a textbook
      */
@@ -53,6 +79,15 @@ public class TextBook implements Parcelable {
         this.price = price;
         this.condition = condition;
         this.picture = picture;
+    }
+
+    /**
+     * Constructor for posting a textbook to your trades
+     */
+    public TextBook(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
     }
 
     /**

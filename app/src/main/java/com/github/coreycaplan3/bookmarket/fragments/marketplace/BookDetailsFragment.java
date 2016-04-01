@@ -106,7 +106,7 @@ public class BookDetailsFragment extends Fragment implements View.OnClickListene
             priceTextView.setVisibility(View.GONE);
             button.setText(R.string.trade);
         }
-        conditionTextView.setText(getCondition());
+        conditionTextView.setText(TextBook.getCondition(mTextBook.getCondition(), getContext()));
         titleTextView.setText(mTextBook.getTitle());
         authorTextView.setText(mTextBook.getAuthor());
         isbnTextView.setText(mTextBook.getIsbn());
@@ -124,25 +124,6 @@ public class BookDetailsFragment extends Fragment implements View.OnClickListene
             mProgressDialog.show();
         }
         return view;
-    }
-
-    private String getCondition() {
-        String condition = getString(R.string.string_new);
-        switch (mTextBook.getCondition()) {
-            case TextBook.CONDITION_NEW:
-                condition = getString(R.string.string_new);
-                break;
-            case TextBook.CONDITION_LIKE_NEW:
-                condition = getString(R.string.like_new);
-                break;
-            case TextBook.CONDITION_GOOD:
-                condition = getString(R.string.good);
-                break;
-            case TextBook.CONDITION_BAD:
-                condition = getString(R.string.bad);
-                break;
-        }
-        return condition;
     }
 
     @Override

@@ -64,14 +64,36 @@
                 style="@style/TextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableLeft="@drawable/ic_handshake_small"
+                android:drawableLeft="@drawable/ic_hand_shake_24dp"
                 android:drawablePadding="@dimen/activity_vertical_margin"
-                android:drawableStart="@drawable/ic_handshake_small"
+                android:drawableStart="@drawable/ic_hand_shake_24dp"
                 android:gravity="center"
                 android:padding="@dimen/activity_vertical_margin"
                 android:text="@string/my_trades" />
 
         </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/fragment_profile_add_trade_card"
+            style="@style/ClickableCardStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small">
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_add_box_black_24dp"
+                android:drawablePadding="@dimen/activity_vertical_margin"
+                android:drawableStart="@drawable/ic_add_box_black_24dp"
+                android:gravity="center"
+                android:padding="@dimen/activity_vertical_margin"
+                android:text="@string/add_to_my_tades" />
+
+        </android.support.v7.widget.CardView>
+
 
         <android.support.v7.widget.CardView
             android:id="@+id/fragment_profile_sign_out_card"
@@ -85,9 +107,9 @@
                 style="@style/TextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableLeft="@drawable/ic_exit"
+                android:drawableLeft="@drawable/ic_exit_24dp"
                 android:drawablePadding="@dimen/activity_vertical_margin"
-                android:drawableStart="@drawable/ic_exit"
+                android:drawableStart="@drawable/ic_exit_24dp"
                 android:gravity="center"
                 android:padding="@dimen/activity_vertical_margin"
                 android:text="@string/sign_out" />

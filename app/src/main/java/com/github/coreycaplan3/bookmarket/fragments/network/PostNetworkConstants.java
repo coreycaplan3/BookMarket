@@ -17,7 +17,7 @@ public interface PostNetworkConstants {
 
     @StringDef({CONSTRAINT_LOGIN, CONSTRAINT_SILENT_LOGIN, CONSTRAINT_REGISTER,
             CONSTRAINT_EDIT_BOOK, CONSTRAINT_BUY_BOOK, CONSTRAINT_TRADE_BOOK,
-            CONSTRAINT_POST_TRADE_LIST, CONSTRAINT_POST_TRADE_BOOK, CONSTRAINT_POST_SELL_BOOK})
+            CONSTRAINT_POST_DESIRED_TRADE, CONSTRAINT_POST_TRADE_BOOK, CONSTRAINT_POST_SELL_BOOK})
     @Retention(RetentionPolicy.SOURCE)
     @interface PostNetworkConstraints {
     }
@@ -42,7 +42,7 @@ public interface PostNetworkConstants {
 
     String CONSTRAINT_POST_TRADE_BOOK = "postNetworkConstraintPostTradeBook";
 
-    String CONSTRAINT_POST_TRADE_LIST = "postNetworkConstraintPostTradeList";
+    String CONSTRAINT_POST_DESIRED_TRADE = "postNetworkConstraintPostTradeList";
 
     String CONSTRAINT_POST_SELL_BOOK = "postNetworkConstraintPostSellBook";
 }

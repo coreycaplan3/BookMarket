@@ -66,10 +66,15 @@
     <string name="error_email_in_use">This email is already in use</string>
     <string name="notify_seller">Notifying Seller…</string>
     <string name="notify_trader">Notifying Trader…</string>
+    <string name="adding_to_my_trades">Adding textbook to my trades…</string>
     <string name="seller_notified">Seller notified!</string>
     <string name="trader_notified">Trader notified!</string>
     <string name="sign_out">Sign Out</string>
     <string name="title_activity_my_listings">MyListingsActivity</string>
     <string name="sign_out_message">Are you sure you want to sign out from Book Mart?</string>
+    <string name="add_to_my_tades">Add to My Tades</string>
+    <string name="sign_out_title">Sign Out?</string>
+    <string name="sign_out_successful">Successfully signed out!</string>
+    <string name="post_successful">Post successful!</string>
 
 </resources>
