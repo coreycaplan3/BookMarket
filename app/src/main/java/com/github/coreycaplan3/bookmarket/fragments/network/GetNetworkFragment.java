@@ -203,7 +203,6 @@ public class GetNetworkFragment extends Fragment {
         @Override
         protected Bundle doInBackground(Void... params) {
             Bundle bundle = new Bundle();
-            //TODO implement logic for each api call
             DatabaseApi databaseApi = new DatabaseApi();
             switch (mNetworkConstraint) {
                 case GET_CONSTRAINT_SEARCH:

@@ -72,10 +72,29 @@ public class ProfileActivity extends AppCompatActivity implements DialogCallback
 
     @Override
     public void onBackStackChanged() {
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.profile_container);
-            getSupportActionBar().setTitle(fragment.getTag());
+            if (fragment != null) {
+                getSupportActionBar().setTitle(fragment.getTag());
+            }
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
+            finish();
+            return true;
+        } else {
+            getSupportFragmentManager().popBackStack();
+            return false;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onSupportNavigateUp();
     }
 
     @Override

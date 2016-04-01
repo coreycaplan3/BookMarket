@@ -10,7 +10,6 @@ import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 /**
  * Created by Corey on 4/1/2016.
@@ -21,6 +20,7 @@ import java.util.zip.Inflater;
 public class SearchAdapter extends RecyclerView.Adapter {
 
     private ArrayList<TextBook> mBookList;
+    private TextBookViewHolder.OnViewHolderClickListener mClickListener;
 
     public SearchAdapter(ArrayList<TextBook> bookList) {
         mBookList = bookList;
@@ -43,14 +43,22 @@ public class SearchAdapter extends RecyclerView.Adapter {
         return mBookList == null ? 0 : mBookList.size();
     }
 
-    private class SearchViewHolder extends RecyclerView.ViewHolder {
+    private class SearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mSearchTextView;
 
         public SearchViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mSearchTextView = (TextView) itemView.findViewById(R.id.search_item_title_text_view);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mClickListener != null) {
+                mClickListener.onViewHolderClicked(getLayoutPosition());
+            }
         }
     }
 

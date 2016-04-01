@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.adapters.SearchAdapter;
+import com.github.coreycaplan3.bookmarket.adapters.TextBookViewHolder;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkCommunicator;
 import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkConstants.PostNetworkConstraints;
 import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
@@ -40,7 +41,8 @@ import java.util.ArrayList;
  * Purpose of Class:
  */
 public class SearchActivity extends AppCompatActivity implements GetNetworkCommunicator,
-        OnItemClickListener, SearchView.OnQueryTextListener, PostNetworkCommunicator {
+        OnItemClickListener, SearchView.OnQueryTextListener, PostNetworkCommunicator,
+        TextBookViewHolder.OnViewHolderClickListener {
 
     private boolean mIsProgressShowing;
     private boolean mIsBuyingBook = false;
@@ -136,8 +138,8 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
 
     private void onSearchComplete(Bundle result, @GetNetworkConstraints String getConstraints) {
         mBookData = result.getParcelableArrayList(getConstraints);
-        if(mBookData == null) {
-            Log.e("onSearchComplete: ", "NULL!!!" );
+        if (mBookData == null) {
+            Log.e("onSearchComplete: ", "NULL!!!");
         }
         mRecyclerView.setAdapter(new SearchAdapter(mBookData));
         mProgressBar.setVisibility(View.GONE);
@@ -170,4 +172,12 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
         outState.putBoolean(BUNDLE_IS_PROGRESS_SHOWING, mIsProgressShowing);
     }
 
+    @Override
+    public void onViewHolderClicked(int layoutPosition) {
+        if (mIsBuyingBook) {
+
+        } else {
+
+        }
+    }
 }

@@ -232,11 +232,19 @@ public class DatabaseApi {
         token = "none";
 
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
-        JsonObject jObject = jElement.getAsJsonObject();
-        Type listType = new TypeToken<List<TextBook>>() {
-        }.getType();
-
-        return new Gson().fromJson(jObject.get("books"), listType);
+        JsonArray jsonArray = jElement.getAsJsonArray();
+        ArrayList<TextBook> arrayList = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jObject = jsonArray.get(i).getAsJsonObject();
+            String isbn = jObject.get("isbn").getAsString();
+            String title = jObject.get("title").getAsString();
+            String author = jObject.get("author").getAsString();
+            arrayList.add(new TextBook(title, author, isbn));
+        }
+        for (int i = 0; i < arrayList.size(); i++) {
+            Log.e(TAG, "textbookLookup: " + arrayList.get(i).toString());
+        }
+        return arrayList;
     }
 
     /**
