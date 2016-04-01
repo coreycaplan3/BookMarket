@@ -90,7 +90,7 @@ public class DatabaseApi {
     public UserProfile logIn(String email, String password) throws Exception {
         String userToken = connect(email, password);
         String userId = getId(email);
-        GeneralUser user = getUserInfo(email);
+        GeneralUser user = getUserInfo(userId);
         return new UserProfile(user.getDisplayName(), email, userToken, userId,
                 user.getUniversity());
     }
@@ -98,15 +98,15 @@ public class DatabaseApi {
     /**
      * Returns the user ID associated with a given email address
      *
-     * @param email The user's email address.
+     * @param userToken The user's token
      * @return The user ID associated with the given email address.
      * @throws Exception
      */
     public String getId(String email) throws Exception {
         args = new String[1];
         command = "getID";
-        args[0] = email;
-        token = "none";
+        args[0] = "";
+        token = email;
         JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
         JsonObject jObject = jElement.getAsJsonObject();
 
