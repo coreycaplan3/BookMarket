@@ -274,6 +274,48 @@ public class DatabaseApi {
     }
 
     /**
+     * Searches for all TextBooks for sale at a desired school
+     *
+     * @param school the school at which we wish to search for textbooks
+     * @return ArrayList of TextBooks for sale
+     * @throws Exception
+     */
+    public ArrayList<TextBook> getSellingForSchool(String school) throws Exception {
+        args = new String[1];
+        args[0] = school;
+        command = "searchSchoolSales";
+        token = "none";
+
+        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        JsonObject jObject = jElement.getAsJsonObject();
+        Type listType = new TypeToken<List<TextBook>>() {
+        }.getType();
+
+        return new Gson().fromJson(jObject.get("books"), listType);
+    }
+
+    /**
+     * Searches for all TextBooks for trade at the desired school
+     *
+     * @param school the school at which we wish to search for textbooks
+     * @return ArrayList of TextBooks for trade
+     * @throws Exception
+     */
+    public ArrayList<TextBook> getTradingForSchool(String school) throws Exception {
+        args = new String[1];
+        args[0] = school;
+        command = "searchSchoolTrades";
+        token = "none";
+
+        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        JsonObject jObject = jElement.getAsJsonObject();
+        Type listType = new TypeToken<List<TextBook>>() {
+        }.getType();
+
+        return new Gson().fromJson(jObject.get("books"), listType);
+    }
+
+    /**
      * Gets the trade listings that I have listed
      *
      * @param userToken the token of the current user
@@ -354,23 +396,192 @@ public class DatabaseApi {
 
         return jObject.get("trader_id").getAsString();
     }
-//
-//    /**
-//     * Sets the isbn of the book given as the book you wish to trade for
-//     *
-//     * @param t_id the trade id
-//     * @param isbn the isbn of the book you want to trade for
-//     * @param userToken the token of the user
-//     * @return no clue
-//     */
-////    public String tradeFor(String t_id, String isbn, String userToken)
-////    {
-////
-////    }
 
-//    public ArrayList<TextBook> getPotentialTraders(String userToken) {
+    /**
+     * Sets the isbn of the book given as the book you wish to trade for
+     *
+     * @param t_id the trade id
+     * @param isbn the isbn of the book you want to trade for
+     * @param userToken the token of the user
+     * @return no clue
+     */
+    public String tradeFor(String t_id, String isbn, String userToken) throws Exception {
+        args = new String[2];
+        args[0] = t_id;
+        args[1] = isbn;
+        command = "tradeFor";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
+        JsonObject jObject = jElement.getAsJsonObject();
+
+        return jObject.get("t_id").getAsString();
+    }
+
+    /**
+     * Gets all the textbooks im willing to trade for a certain trading_id
+     * @param t_id the trading id I want to lookup
+     * @param userToken the token of the user
+     * @return
+     * @throws Exception
+     */
+    public ArrayList<TextBook> getTradingForList(String t_id, String userToken) throws Exception {
+        args = new String[1];
+        args[0] = t_id;
+        command = "getTradingForList";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        JsonObject jObject = jElement.getAsJsonObject();
+        Type listType = new TypeToken<List<TextBook>>() {
+        }.getType();
+
+        return new Gson().fromJson(jObject.get("books"), listType);
+    }
+
+
+//    public ArrayList<GeneralUser> getAllPotentialTraders(String userToken) throws Exception{
+//        args = new String[1];
+//        args[0] = "";
+//        command = "getAllPotentialTraders";
+//        token = userToken;
+//        ArrayList<GeneralUser> allTraders = new ArrayList<GeneralUser>();
+//        ArrayList<TextBook> tradeBooks = getMyTradeListings(userToken);
+//        for (TextBook book : tradeBooks) {
+//            allTraders.add(getSpecificPotentialTrader(book.get));
+//        }
+//        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+//        JsonObject jObject = jElement.getAsJsonObject();
+//        Type listType = new TypeToken<List<TextBook>>() {
+//        }.getType();
 //
+//        return new Gson().fromJson(jObject.get("books"), listType);
 //    }
+
+    /**
+     * Returns all interested traders for a specific trade_id
+     *
+     * @param t_id the trade_id
+     * @param userToken the token of the user
+     * @return ArrayList of GeneralUser of all the users interested in trading
+     * @throws Exception
+     */
+    public ArrayList<GeneralUser> getSpecificPotentialTrader(String t_id, String userToken) throws Exception{
+        args= new String[1];
+        args[0] = t_id;
+        command = "getSpecificTrader";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        JsonObject jObject = jElement.getAsJsonObject();
+        Type listType = new TypeToken<List<GeneralUser>>() {
+        }.getType();
+
+        return new Gson().fromJson(jObject.get("traders"), listType);
+
+    }
+
+    /**
+     * Returns all interested buyers for a specific sell_id
+     *
+     * @param s_id the sell_id
+     * @param userToken the token of the user
+     * @return ArrayList of GeneralUser for all the users interested in buying
+     * @throws Exception
+     */
+    public ArrayList<GeneralUser> getSpecificPotentialBuyer(String s_id, String userToken) throws Exception {
+        args = new String[1];
+        args[0] = s_id;
+        command = "getSpecificBuyer";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        JsonObject jObject = jElement.getAsJsonObject();
+        Type listType = new TypeToken<List<GeneralUser>>() {
+        }.getType();
+
+        return new Gson().fromJson(jObject.get("traders"), listType);
+    }
+
+    /**
+     * Gets a list of TextBooks that I have expressed interest in buying
+     *
+     * @param userToken the token of the user
+     * @return ArrayList of TextBooks I expressed interest in
+     * @throws Exception
+     */
+    public ArrayList<TextBook> getMyIntrestedSales(String userToken) throws Exception {
+        args = new String[1];
+        args[0] = "";
+        command = "getMyInterestedSales";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        JsonObject jObject = jElement.getAsJsonObject();
+        Type listType = new TypeToken<List<TextBook>>() {
+        }.getType();
+
+        return new Gson().fromJson(jObject.get("books"), listType);
+    }
+
+    /**
+     * Gets a list of TextBooks that I have expressed interest in trading
+     *
+     * @param userToken the token of the user
+     * @return ArrayList of TextBooks I expressed interest in
+     * @throws Exception
+     */
+    public ArrayList<TextBook> getMyIntrestedTrades(String userToken) throws Exception {
+        args = new String[1];
+        args[0] = "";
+        command = "getMyInterestedTrades";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendGet(assembleURL(command, args, token)));
+        JsonObject jObject = jElement.getAsJsonObject();
+        Type listType = new TypeToken<List<TextBook>>() {
+        }.getType();
+
+        return new Gson().fromJson(jObject.get("books"), listType);
+    }
+
+    /**
+     * Expresses interest that the user has for buying a listed sale
+     * @param s_id the sell_id of the book the user is interested in
+     * @param userToken the token of the user
+     * @return the sell_id of the listed sale
+     * @throws Exception
+     */
+    public String expressBuyerInterest(String s_id, String userToken) throws Exception {
+        args = new String[1];
+        args[0] = s_id;
+        command = "expressBuyerInterest";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
+        JsonObject jObject = jElement.getAsJsonObject();
+
+        return jObject.get("s_id").getAsString();
+    }
+
+    /**
+     * Expresses interest that the user has for trading a listed trade
+     * @param t_id the trade_id of the book the user is interested in
+     * @param userToken the token of the user
+     * @return the trade_id of the listed trade
+     * @throws Exception
+     */
+    public String expressTradingInterest(String t_id, String userToken) throws Exception {
+        args = new String[1];
+        args[0] = t_id;
+        command = "expressTraderInterest";
+        token = userToken;
+
+        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
+        JsonObject jObject = jElement.getAsJsonObject();
+
+        return jObject.get("t_id").getAsString();
+    }
 
     //Sends get request, returns response
     private String sendGet(String url) throws Exception {
