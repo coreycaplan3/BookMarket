@@ -38,7 +38,7 @@ public class DatabaseApi {
     private final String TAG = getClass().getSimpleName();
     private final String USER_AGENT = "Mozilla/5.0";
 
-    private String baseURL = "http://book-mart.mybluemix.com/api.php/";
+    private String baseURL = "https://book-mart.mybluemix.com/api.php/";
     private String command;
     private String[] args;
     private String token;
@@ -184,7 +184,6 @@ public class DatabaseApi {
         args[1] = condition;
         args[2] = title;
         args[3] = author;
-        args[4] = image.toString();
         command = "postTrade";
         token = userToken;
 
