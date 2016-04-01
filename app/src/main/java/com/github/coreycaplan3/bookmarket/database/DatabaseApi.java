@@ -65,7 +65,7 @@ public class DatabaseApi {
     /**
      * Gets the user's info, based on the {@code userId} supplied.
      *
-     * @param userId The user's unique user ID that is used to identify him/her in the Loccasion
+     * @param userID The user's unique user ID that is used to identify him/her in the Loccasion
      *               server.
      * @return a {@link GeneralUser} object with the id, name, and email of the user
      * @throws Exception
@@ -151,8 +151,8 @@ public class DatabaseApi {
         command = "postSell";
         token = userToken;
 
-        JsonElement jElement = new JsonParser().parse(sendPost(assembleURL(command, args, token)));
-        JsonObkect jObject = jElement.getAsJsonObject();
+        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
+        JsonObject jObject = jElement.getAsJsonObject();
 
         return jObject.get("s_id").getAsString();
     }
@@ -171,10 +171,10 @@ public class DatabaseApi {
         args[0] = isbn;
         args[1] = condition;
         command = "postTrade";
-        token = usertoken;
+        token = userToken;
 
-        JsonElement jElement = new JsonParser().parse(sendPost(assembleURL(command, args, token)));
-        JsonObkect jObject = jElement.getAsJsonObject();
+        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
+        JsonObject jObject = jElement.getAsJsonObject();
 
         return jObject.get("t_id").getAsString();
     }
@@ -198,7 +198,7 @@ public class DatabaseApi {
         command = "makeUser";
         token = "none";
 
-        JsonElement jElement = new JsonParser().parse(sendPost(assembleURL(command, args, token)));
+        JsonElement jElement = new JsonParser().parse(sendPost(command, args, token));
         JsonObject jObject = jElement.getAsJsonObject();
 
         return jObject.get("u_id").getAsString();
@@ -211,7 +211,7 @@ public class DatabaseApi {
      * @return ArrayList of TextBooks
      * @throws Exception
      */
-    public ArraList<TextBook> textbookLookup(String lookupString) throws Exception {
+    public ArrayList<TextBook> textbookLookup(String lookupString) throws Exception {
         args = new String[1];
         args[0] = lookupString;
         command = "textbookLookup";
@@ -294,19 +294,14 @@ public class DatabaseApi {
     /**
      * Makes a Sale. Triggered when the current user has ACCEPTED an "interest"
      *
+     * @param userToken the id of the user
+     * @param sellingID the selling_id of the listing
      *
-     *
-     */
-
-    /**
-     * Searches sell listings with the given parameters
-     *
-     * @param isbn   the isbn of the book one is looking for
-     * @param title  the title of the book one is looking for
-     * @param author the author of the book one is looking for
-     * @param school (optional)
-     * @return an ArrayList of SellingObjects
-     */
+    */
+    public String makeSale(String userToken, String sellingID)
+    {
+        return "true";
+    }
 
     //Sends get request, returns response
     private String sendGet(String url) throws Exception {
