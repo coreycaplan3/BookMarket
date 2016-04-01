@@ -354,11 +354,23 @@ public class DatabaseApi {
 
         return jObject.get("trader_id").getAsString();
     }
+//
+//    /**
+//     * Sets the isbn of the book given as the book you wish to trade for
+//     *
+//     * @param t_id the trade id
+//     * @param isbn the isbn of the book you want to trade for
+//     * @param userToken the token of the user
+//     * @return no clue
+//     */
+////    public String tradeFor(String t_id, String isbn, String userToken)
+////    {
+////
+////    }
 
-
-    public ArrayList<TextBook> getPotentialTraders(String userToken) {
-
-    }
+//    public ArrayList<TextBook> getPotentialTraders(String userToken) {
+//
+//    }
 
     //Sends get request, returns response
     private String sendGet(String url) throws Exception {
