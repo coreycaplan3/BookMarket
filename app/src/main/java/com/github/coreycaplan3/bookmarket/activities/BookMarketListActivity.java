@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.github.coreycaplan3.bookmarket.R;
 import com.github.coreycaplan3.bookmarket.adapters.TextBookClickListener;
+import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkFragment;
 import com.github.coreycaplan3.bookmarket.fragments.utilities.FragmentCreator;
 import com.github.coreycaplan3.bookmarket.fragments.marketplace.BookMarketListFragment;
 import com.github.coreycaplan3.bookmarket.fragments.network.GetNetworkCommunicator;
@@ -21,9 +23,12 @@ import com.github.coreycaplan3.bookmarket.utilities.IntentExtra;
 
 import java.util.ArrayList;
 
+import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
+
 public class BookMarketListActivity extends AppCompatActivity implements TextBookClickListener,
         GetNetworkCommunicator, PostNetworkCommunicator {
 
+    private static final String TAG = BookMarketListActivity.class.getSimpleName();
     private boolean mIsBuyingBooks;
     private String mBookIsbn;
     private UserProfile mUserProfile;
@@ -60,13 +65,31 @@ public class BookMarketListActivity extends AppCompatActivity implements TextBoo
             FragmentCreator.createNetworks(getSupportFragmentManager());
             BookMarketListFragment fragment = BookMarketListFragment.newInstance(mBookIsbn,
                     mTextBookList, mUserProfile, mIsBuyingBooks);
-            FragmentCreator.create(fragment, FragmentKeys.BOOKS_MARKET_LIST_FRAGMENT,
+            FragmentCreator.create(fragment, BOOKS_MARKET_LIST_FRAGMENT,
                     R.id.book_marketplace_container, getSupportFragmentManager());
         } else {
             mBookIsbn = savedInstanceState.getString(BUNDLE_ISBN);
             mUserProfile = savedInstanceState.getParcelable(BUNDLE_PROFILE);
             mTextBookList = savedInstanceState.getParcelableArrayList(BUNDLE_BOOKS);
             mIsBuyingBooks = savedInstanceState.getBoolean(BUNDLE_BUYING_BOOKS);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getBooks();
+    }
+
+    private void getBooks() {
+        if (mBookIsbn.equals("test")) {
+            GetNetworkFragment fragment = (GetNetworkFragment) getSupportFragmentManager()
+                    .findFragmentByTag(GET_NETWORK_FRAGMENT);
+            fragment.getTextbookFromIsbn("9780077238469");
+            fragment.getTextbookFromIsbn("9789380386355");
+            fragment.getTextbookFromIsbn("9781861002204");
+            fragment.getTextbookFromIsbn("9788445074879");
+            fragment.getTextbookFromIsbn("9781405091046");
         }
     }
 
@@ -107,6 +130,20 @@ public class BookMarketListActivity extends AppCompatActivity implements TextBoo
             BookMarketListFragment fragment = (BookMarketListFragment)
                     getSupportFragmentManager().findFragmentById(R.id.book_marketplace_container);
             fragment.onBooksRefreshed(mTextBookList);
+        } else if(getConstraints.equals(GetNetworkConstants.GET_CONSTRAINT_BARCODE_AUTOCOMPLETE)) {
+            TextBook textBook = result.getParcelable(getConstraints);
+            if(textBook == null) {
+                Log.e(TAG, "onGetNetworkTaskComplete: " + "null book!");
+                return;
+            }
+            double price = Math.random()* 25 + 100;
+            @TextBook.Condition
+            int random = (int) (Math.random() * 4);
+            textBook = new TextBook(textBook.getTitle(), textBook.getAuthor(),
+                    textBook.getIsbn(), price, random, textBook.getPicture());
+            BookMarketListFragment fragment = (BookMarketListFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.book_marketplace_container);
+            fragment.onBooksRefreshed(textBook);
         }
     }
 

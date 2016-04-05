@@ -149,6 +149,15 @@ public class SearchActivity extends AppCompatActivity implements GetNetworkCommu
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if (query.equals("test")) {
+            Intent intent = new Intent(getApplicationContext(), BookMarketListActivity.class);
+            intent.putExtra(IntentExtra.ACTIVITY_BUY, mIsBuyingBook);
+            intent.putExtra(IntentExtra.PROFILE, mUserProfile);
+            intent.putExtra(IntentExtra.ISBN, "test");
+            startActivity(intent);
+            finish();
+            return true;
+        }
         GetNetworkFragment fragment = (GetNetworkFragment) getSupportFragmentManager()
                 .findFragmentByTag(FragmentKeys.GET_NETWORK_FRAGMENT);
         fragment.startSearchTask(query);

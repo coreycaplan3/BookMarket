@@ -10,6 +10,8 @@ import com.github.coreycaplan3.bookmarket.fragments.network.PostNetworkFragment;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys;
 import com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.FragmentTag;
 
+import static com.github.coreycaplan3.bookmarket.utilities.FragmentKeys.*;
+
 /**
  * Created by Corey on 3/31/2016.
  * Project: BookMarket
@@ -36,8 +38,8 @@ public final class FragmentCreator {
         PostNetworkFragment postNetworkFragment = PostNetworkFragment.newInstance();
         GetNetworkFragment getNetworkFragment = GetNetworkFragment.newInstance();
         return fragmentManager.beginTransaction()
-                .add(postNetworkFragment, FragmentKeys.POST_NETWORK_FRAGMENT)
-                .add(getNetworkFragment, FragmentKeys.GET_NETWORK_FRAGMENT)
+                .add(postNetworkFragment, POST_NETWORK_FRAGMENT)
+                .add(getNetworkFragment, GET_NETWORK_FRAGMENT)
                 .commit();
     }
 

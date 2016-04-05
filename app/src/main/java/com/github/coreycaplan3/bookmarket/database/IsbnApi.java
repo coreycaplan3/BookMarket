@@ -4,8 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.github.coreycaplan3.bookmarket.application.BookApplication;
 import com.github.coreycaplan3.bookmarket.functionality.TextBook;
 import com.google.gson.JsonArray;
@@ -13,9 +18,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -25,7 +34,7 @@ import javax.net.ssl.HttpsURLConnection;
  * <p></p>
  * Purpose of Class:
  */
-public class IsbnApi {
+public class IsbnApi implements Response.ErrorListener {
 
     private static final String TAG = IsbnApi.class.getSimpleName();
 
@@ -36,24 +45,28 @@ public class IsbnApi {
     }
 
     public TextBook getTextBookFromIsbn(String isbn) throws Exception {
-        JsonElement jElement = new JsonParser().parse(sendGet(BASE_URL + isbn));
-        JsonObject jObject = jElement.getAsJsonObject();
-        JsonArray jsonArray = jObject.getAsJsonArray("items");
-        jObject = (JsonObject) jsonArray.get(0);
-        JsonObject volumeInfo = jObject.getAsJsonObject("volumeInfo");
-        String title = volumeInfo.get("title").getAsString();
+//        JsonElement jElement = new JsonParser().parse(sendGet());
+        RequestFuture<JSONObject> requestFuture = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, BASE_URL + isbn, null,
+                requestFuture, requestFuture);
+        BookApplication.getInstance().getRequestQueue().add(request);
+        JSONObject jObject = requestFuture.get(10, TimeUnit.SECONDS);
+        JSONArray jsonArray = jObject.getJSONArray("items");
+        jObject = (JSONObject) jsonArray.get(0);
+        JSONObject volumeInfo = jObject.getJSONObject("volumeInfo");
+        String title = volumeInfo.get("title").toString();
         String authors = "";
-        JsonArray authorsArray = volumeInfo.getAsJsonArray("authors");
-        for (int i = 0; i < authorsArray.size(); i++) {
-            if (i == authorsArray.size() - 1) {
-                authors += authorsArray.get(i).getAsString();
+        JSONArray authorsArray = volumeInfo.getJSONArray("authors");
+        for (int i = 0; i < authorsArray.length(); i++) {
+            if (i == authorsArray.length() - 1) {
+                authors += authorsArray.get(i).toString();
             } else {
-                authors += authorsArray.get(i).getAsString() + " ";
+                authors += authorsArray.get(i).toString() + " ";
             }
         }
-        String imageUrl = volumeInfo.getAsJsonObject("imageLinks")
-                .getAsJsonPrimitive("smallThumbnail").getAsString();
-//        Log.e(TAG, "getTextBookFromIsbn: " + title + " " + authors + " " + imageUrl);
+        String imageUrl = volumeInfo.getJSONObject("imageLinks")
+                .getString("smallThumbnail");
+        Log.e(TAG, "getTextBookFromIsbn: " + title + " " + authors + " " + imageUrl);
         return new TextBook(title, authors, isbn, imageUrl, false);
     }
 
@@ -84,4 +97,8 @@ public class IsbnApi {
         return response.toString();
     }
 
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+    }
 }

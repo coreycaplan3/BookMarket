@@ -114,9 +114,10 @@ public class BookMarketListFragment extends Fragment implements OnRefreshListene
 
     @Override
     public void onRefresh() {
+        mRefreshLayout.setRefreshing(false);
         GetNetworkFragment fragment = (GetNetworkFragment) getFragmentManager()
                 .findFragmentByTag(FragmentKeys.GET_NETWORK_FRAGMENT);
-        fragment.startGetBooksTask(mBookIsbn);
+//        fragment.startGetBooksTask(mBookIsbn);
     }
 
     public void onBooksRefreshed(@Nullable ArrayList<TextBook> textBookList) {
@@ -124,6 +125,22 @@ public class BookMarketListFragment extends Fragment implements OnRefreshListene
             return;
         }
         mTextBookList = textBookList;
+        mProgressBar.setVisibility(View.GONE);
+        Adapter adapter = new BookMarketListAdapter(getContext(), mTextBookList,
+                mTextBookClickListener, mIsBuyingBooks);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mRefreshLayout.setRefreshing(false);
+    }
+
+    public void onBooksRefreshed(@Nullable TextBook textBook) {
+        if (textBook == null) {
+            return;
+        }
+        if(mTextBookList == null) {
+            mTextBookList = new ArrayList<>();
+        }
+        mTextBookList.add(textBook);
         mProgressBar.setVisibility(View.GONE);
         Adapter adapter = new BookMarketListAdapter(getContext(), mTextBookList,
                 mTextBookClickListener, mIsBuyingBooks);
